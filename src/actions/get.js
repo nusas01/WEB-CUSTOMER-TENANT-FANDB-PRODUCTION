@@ -3,6 +3,7 @@ import {
     getProductsCustomerSlice, 
     logoutCustomerSlice, 
     getDataCustomerSlice, 
+    getNumberTableCustomerSlice,
     getTransactionOnGoingCustomerSlice, 
     getTransactionsHistoryCustomerSlice, 
     getPaymentMethodsCustomerSlice,
@@ -55,7 +56,6 @@ export const fetchNonceCustomer = async (dispatch) => {
       {
         headers: {
           'API_KEY': process.env.REACT_APP_API_KEY,
-          "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
         },
         withCredentials: true,
       }
@@ -94,8 +94,7 @@ export const fetchProductsCustomer = () => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_PRODUCTS_CUSTOMER_URL}`, {
               withCredentials: true,
               headers: {
-                  'API_KEY': process.env.REACT_APP_API_KEY,
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
+                'API_KEY': process.env.REACT_APP_API_KEY,
               },
               params: params,
           })
@@ -140,7 +139,6 @@ export const fetchGetDataCustomer = () => {
                 withCredentials: true,
                 headers: {
                     'API_KEY': process.env.REACT_APP_API_KEY,
-                    "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
                 },
             })
             dispatch(fetchSuccessGetDataCustomer(response?.data))
@@ -172,6 +170,56 @@ export const fetchGetDataCustomer = () => {
     }
 }
 
+const {successFetchNumberTableCustomer, errorFetchNumberTableCustomer, setLoadingNumberTableCustomer} = getNumberTableCustomerSlice.actions
+export const fetchNumberTableCustomer = (id) => {
+  return async (dispatch, getState) => {
+    const { statusExpiredToken } = getState().statusExpiredTokenState;
+    if (statusExpiredToken) return; 
+
+    dispatch(setLoadingNumberTableCustomer(true))
+    try {
+      const nonce_data = await customerCollectFingerprintAsync(dispatch);
+
+      const params = {
+        nonce: nonce_data.nonce,
+        value: nonce_data.value,
+        iv: nonce_data.iv,
+        id: id,
+      }
+
+      const response = await axiosInstance.get(`${process.env.REACT_APP_NUMBER_TABLE_URL}`, {
+          withCredentials: true,
+          headers: {
+              'API_KEY': process.env.REACT_APP_API_KEY,
+              "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
+          },
+          params: params,
+      })
+      dispatch(successFetchNumberTableCustomer(response?.data))
+    } catch (error) {
+      if (error.response?.data?.code === "TOKEN_EXPIRED") {
+          dispatch(setStatusExpiredToken(true))
+      }
+
+      if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
+        dispatch(setStatusExpiredInternalToken(true));
+      }
+
+      if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
+        dispatch(setStatusExpiredUserToken(true));
+      }
+
+      if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
+        dispatch(setStatusServiceMaintenance(true));
+      }
+
+      dispatch(errorFetchNumberTableCustomer(error.response?.data?.error))
+    } finally {
+      dispatch(setLoadingNumberTableCustomer(false))
+    }
+  }
+}
+
 const {setLoadingGetTransactionOnGoingCustomer, fetchSuccessGetTransactionOnGoingCustomer, fetchErrorGetTransactionOnGoingCustomer} = getTransactionOnGoingCustomerSlice.actions;
 export const fetchTransactionOnGoingCustomer = () => {
     return async (dispatch, getState) => {
@@ -184,7 +232,6 @@ export const fetchTransactionOnGoingCustomer = () => {
                 withCredentials: true,
                 headers: {
                     'API_KEY': process.env.REACT_APP_API_KEY,
-                    "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
                   },
             })
             dispatch(fetchSuccessGetTransactionOnGoingCustomer(response.data))
@@ -228,7 +275,6 @@ export const fetchTransactionHistoryCustomer = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         const grouped = groupByDate(response?.data || []);
@@ -273,7 +319,6 @@ export const fetchDetailTransactionHistoryCustomer = (id) => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
           params: {
             id: id,
@@ -330,7 +375,6 @@ export const fetchSearchTransactionInternal = (searchQuery, currentPage, isLoadM
         withCredentials: true, 
         headers: {
           'API_KEY': process.env.REACT_APP_API_KEY,
-          "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
         },
         params: {
           key: searchQuery,
@@ -377,7 +421,6 @@ export const fetchPaymentMethodsCustomer = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         dispatch(fetchSuccessGetPaymentMethodsCustomer(response?.data))
@@ -422,8 +465,7 @@ export const logoutCustomer = () => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_LOGOUT_CUSTOMER_URL}`, {
               withCredentials: true,
               headers: {
-                  "API_KEY": process.env.REACT_APP_API_KEY,
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
+                "API_KEY": process.env.REACT_APP_API_KEY,
               }
           })
           dispatch(logoutSuccessCustomer(response?.data?.success))
@@ -463,8 +505,7 @@ export const loginStatusCustomer = () => {
         const response = await axiosInstance.get(`${process.env.REACT_APP_LOGIN_STATUS_CUSTOMER}`, {
             withCredentials: true,
             headers: {
-                "API_KEY": process.env.REACT_APP_API_KEY,
-                "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
+              "API_KEY": process.env.REACT_APP_API_KEY,  
             }
         })
         dispatch(setLoginStatusCustomer(response?.data?.loggedIn))
@@ -499,7 +540,6 @@ export const fetchNonceInternal = async () => {
       {
         headers: {
           'API_KEY': process.env.REACT_APP_API_KEY,
-          "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
         },
         withCredentials: true,
       }
@@ -521,8 +561,7 @@ export const loginStatusInternal = () => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_LOGIN_STATUS_INTERNAL}`, {
               withCredentials: true,
               headers: {
-                  "API_KEY": process.env.REACT_APP_API_KEY,
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
+                "API_KEY": process.env.REACT_APP_API_KEY,
               }
           })
           dispatch(setLoginStatusInternal(response?.data.loggedIn))
@@ -559,8 +598,7 @@ export const logoutInternal = () => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_LOGOUT_INTERNAL_URL}`, {
               withCredentials: true,
               headers: {
-                  "API_KEY": process.env.REACT_APP_API_KEY,
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
+                "API_KEY": process.env.REACT_APP_API_KEY,
               }
           })
           dispatch(logoutSuccessInternal(response?.data.success))
@@ -600,9 +638,8 @@ export const fetchTransactionCashOnGoingInternal = () => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_GET_TRANSACTION_CASH_ON_GOING_INTERNAL_URL}`, { 
               withCredentials: true,
               headers: {
-                  'API_KEY': process.env.REACT_APP_API_KEY,
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
-                },
+                'API_KEY': process.env.REACT_APP_API_KEY,
+              },
           })
           dispatch(fetchSuccessTransactionCashInternal(response.data || []))
       } catch(error) {
@@ -644,9 +681,8 @@ export const fetchTransactionNonCashOnGoingInternal = () => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_GET_TRANSACTION_NON_CASH_ON_GOING_INTERNAL_URL}`, { 
               withCredentials: true,
               headers: {
-                  'API_KEY': process.env.REACT_APP_API_KEY,
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
-                },
+                'API_KEY': process.env.REACT_APP_API_KEY,
+              },
           })
           dispatch(fetchSuccessTransactionNonCashInternal(response?.data || []))
       } catch(error) {
@@ -704,7 +740,6 @@ export const fetchTransactionHistory = (data, isLoadMore = false) => {
                     withCredentials: true,
                     headers: {
                         'API_KEY': process.env.REACT_APP_API_KEY, 
-                        "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
                     },
                     params: {
                         ...data,
@@ -764,9 +799,8 @@ export const checkTransactionNonCashInternal = (data) => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_GET_CHECK_TRANSACTION_INTERNAL_URL}`, { 
               withCredentials: true,
               headers: {
-                  'API_KEY': process.env.REACT_APP_API_KEY, 
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
-                },
+                'API_KEY': process.env.REACT_APP_API_KEY,
+              },
               params: data,
           })
           dispatch(checkTransactionNonCashSuccess(response.data))
@@ -806,9 +840,8 @@ export const fetchGetAllCreateTransactionInternal = () => {
           const response = await axiosInstance.get(`${process.env.REACT_APP_GET_CREATE_TRANSACTION_INTERNAL_URL}`, { 
               withCredentials: true,
               headers: {
-                  'API_KEY': process.env.REACT_APP_API_KEY,
-                  "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
-                }
+                'API_KEY': process.env.REACT_APP_API_KEY,
+              }
           })
           dispatch(fetchSuccessGetAllCreateTransactionInternal(response.data))
       } catch(error) {
@@ -857,7 +890,6 @@ export const fetchPaymentMethodsInternal = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY, 
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         dispatch(fetchSuccessGetPaymentMethodsInternal(response?.data))
@@ -901,7 +933,6 @@ export const fetchCategoryInternal = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         dispatch(fetchSuccessCategoryInternal(response?.data))
@@ -942,7 +973,6 @@ export const fetchCategoryAndProductInternal = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         const message = {
@@ -987,7 +1017,6 @@ export const fetchLabaRugiInternal = (startDate, endDate) => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY, 
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
           params: {
             start_date: startDate, 
@@ -1031,7 +1060,6 @@ export const fetchNeracaInternal = (startDate, endDate) => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
           params: {
             start_date: startDate, 
@@ -1075,7 +1103,6 @@ export const fetchGeneralJournalByEventAllInternal = (startDate, endDate) => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY, 
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
           params: {
             start_date: startDate,
@@ -1130,7 +1157,6 @@ export const fetchGeneralJournalByEventPerDayInternal = (startDate, endDate, pag
                 withCredentials: true,
                 headers: {
                     'API_KEY': process.env.REACT_APP_API_KEY,
-                    "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
                 },
                 params: {
                     start_date: startDate,
@@ -1193,7 +1219,6 @@ export const fetchGeneralJournalVoidInternal = (startDate, endDate, page = 1, is
         withCredentials: true,
         headers: {
           'API_KEY': process.env.REACT_APP_API_KEY,
-          "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
         },
         params: {
           start_date: startDate,
@@ -1242,7 +1267,6 @@ export const fetchGeneralJournalDrafInternal = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         dispatch(fetchSuccessGeneralJournalDrafInternal(response?.data))
@@ -1283,7 +1307,6 @@ export const fetchAssetsStoreInternal = (data) => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         dispatch(fetchSuccessAssetsStoreInternal(response?.data))
@@ -1324,7 +1347,6 @@ export const fetchOrdersInternal = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           }
         })
         dispatch(fetchSuccessOrdersInternal(response?.data?.data))
@@ -1375,7 +1397,6 @@ export const fetchOrdersFinishedInternal = (startDate, endDate, page, isLoadMore
         withCredentials: true,
         headers: {
           'API_KEY': process.env.REACT_APP_API_KEY,
-          "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
         },
         params: {
           start_date: startDate,
@@ -1435,7 +1456,6 @@ export const fetchSearchOrderInternal = (searchQuery, currentPage, isLoadMore = 
       withCredentials: true,
       headers: {
         'API_KEY': process.env.REACT_APP_API_KEY,
-        "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
       },
       params: {
         key: searchQuery,
@@ -1486,7 +1506,6 @@ export const fetchTablesInternal = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         dispatch(fetchSuccessTablesInternal({ 
@@ -1530,7 +1549,6 @@ export const fetchDataEmployeeInternal = () => {
           withCredentials: true,
           headers: {
             'API_KEY': process.env.REACT_APP_API_KEY,
-            "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
           },
         })
         dispatch(fetchSuccessDataEmployeeInternal(response?.data))
@@ -1571,7 +1589,6 @@ export const fetchAllEmployees = () => {
         withCredentials: true,
         headers: {
           'API_KEY': process.env.REACT_APP_API_KEY,
-          "API_KEY_MAINTANANCE": process.env.REACT_APP_API_KEY_MAINTANANCE,
         },
       })
       dispatch(setEmployees(response?.data || []))
