@@ -34,7 +34,7 @@ export const UpdateProductInternal = (data) => async (dispatch) => {
     const configJson = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -75,7 +75,7 @@ export const UpdateGeneralJournalInternal = (data) => async (dispatch, getState)
     const configJson = {
         headers: {
             "Content-Type": "application/json",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -137,7 +137,7 @@ export const voidGeneralJournalInternal  = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "application/json",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -174,7 +174,7 @@ export const updatePaymentMethodsInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "application/json",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -216,9 +216,8 @@ export const updateEmployee = (formData) => {
     try {
         const response = await axiosInstance.put(process.env.REACT_APP_EMPLOYEE, formData, {
             headers: {
-            "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
-            
+                "Content-Type": "multipart/form-data",
+                "x-api-key": process.env.REACT_APP_API_KEY,
             },
             withCredentials: true,
         })

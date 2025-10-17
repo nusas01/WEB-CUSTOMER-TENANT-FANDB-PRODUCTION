@@ -34,7 +34,7 @@ export const changePasswordCustomer = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -75,7 +75,7 @@ export const setPasswordCustomer = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -116,7 +116,7 @@ export const setUsernameCustomer = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -156,7 +156,7 @@ export const buyTransactionCashOnGoingInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "application/json",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -197,7 +197,7 @@ export const availableProductInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -232,7 +232,7 @@ export const toProgressOrderInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -270,7 +270,7 @@ export const toFinishedOrderInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -312,7 +312,7 @@ export const updateDataEmployeeInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
             // "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -353,7 +353,7 @@ export const updateChangePasswordInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
@@ -393,7 +393,7 @@ export const changePasswordEmployee = (data) => async (dispatch) => {
     const config = {
         headers: {
             "Content-Type": "multipart/form-data",
-            "API_KEY": process.env.REACT_APP_API_KEY,
+            "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
     }
