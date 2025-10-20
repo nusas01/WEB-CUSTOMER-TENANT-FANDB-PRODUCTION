@@ -431,7 +431,7 @@ function Home() {
               {/* Left Padding Spacer */}
               <div className={`flex-shrink-0 transition-all duration-300 ${showLeftArrow ? 'w-8' : 'w-0'}`} />
               
-              {datas.map((item) => {
+              {Array.isArray(datas) && datas.map((item) => {
               const isActive = activeCategory === item.category_name;
               const Icon = getIconByCategory(item.category_name);
 

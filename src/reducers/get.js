@@ -17,7 +17,7 @@ export const getProductsCustomerSlice = createSlice({
             state.loading = action.payload
         },
         successFetchProducts: (state, action) => {
-            state.datas = action.payload
+            state.datas = action.payload || []
             state.error = null
         },
         errorFetchProducts: (state, action) => {
