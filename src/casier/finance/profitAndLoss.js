@@ -1,23 +1,23 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Calendar, TrendingUp, Settings, TrendingDown, Maximize, Menu, Minimize, DollarSign, FileText, Filter, AlertCircle, Database } from 'lucide-react';
-import { formatCurrency, useFullscreen, useElementHeight } from '../../helper/helper';
-import Sidebar from '../../component/sidebar';
+import React, { useEffect, useState, useRef } from 'react'
+import { Calendar, TrendingUp, Settings, TrendingDown, Maximize, Menu, Minimize, DollarSign, FileText, Filter, AlertCircle, Database } from 'lucide-react'
+import { formatCurrency, useFullscreen, useElementHeight } from '../../helper/helper'
+import Sidebar from '../../component/sidebar'
 import { fetchLabaRugiInternal } from '../../actions/get'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
 import { filterDateLabaRugiInternalSlice, navbarInternalSlice } from '../../reducers/reducers'
-import { ToastPortal, Toast } from '../../component/alert';
-import { SpinnerRelative } from '../../helper/spinner';
+import { ToastPortal, Toast } from '../../component/alert'
+import { SpinnerRelative } from '../../helper/spinner'
 import { getLabaRugiInternalSlice } from '../../reducers/get'
-import { useNavigate } from 'react-router-dom';
-import { AccessDeniedModal } from '../../component/model';
+import { useNavigate } from 'react-router-dom'
+import { AccessDeniedModal } from '../../component/model'
 
 const ProfitAndLoss = ({isFullScreen, fullscreenchange}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [spinner, setSpinner] = useState(false)
-  const [dateRangeError, setDateRangeError] = useState("");
-  const [toast, setToast] = useState(null);
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
+  const [dateRangeError, setDateRangeError] = useState("")
+  const [toast, setToast] = useState(null)
+  const [showAccessDenied, setShowAccessDenied] = useState(false)
 
   const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
   useEffect(() => {
@@ -27,7 +27,7 @@ const ProfitAndLoss = ({isFullScreen, fullscreenchange}) => {
   }, [dataEmployeeInternal])
 
   // handle sidebar and elemant header yang responsice
-  const { ref: headerRef, height: headerHeight } = useElementHeight();
+  const { ref: headerRef, height: headerHeight } = useElementHeight()
   const { setIsOpen } = navbarInternalSlice.actions
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -44,7 +44,7 @@ const ProfitAndLoss = ({isFullScreen, fullscreenchange}) => {
       setToast({
         message: errorLabaRugiIntenal,
         type: 'error'
-      });
+      })
     }
   }, [errorLabaRugiIntenal])
 
@@ -59,54 +59,54 @@ const ProfitAndLoss = ({isFullScreen, fullscreenchange}) => {
   }, [])
 
   const handleFilterDate = () => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = new Date(startDate)
+    const end = new Date(endDate)
     
-    const maxRange = 366 * 24 * 60 * 60 * 1000; // 366 hari (tahun kabisat)
-    const diff = end - start;
+    const maxRange = 366 * 24 * 60 * 60 * 1000 // 366 hari (tahun kabisat)
+    const diff = end - start
 
     if (diff > maxRange) {
-      setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.");
+      setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.")
     } else if (start > end) {
-      setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.");
+      setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.")
     } else {
-      setDateRangeError("");
+      setDateRangeError("")
       dispatch(fetchLabaRugiInternal(startDate, endDate))
     }
   }
 
   useEffect(() => {
     if (startDate && endDate) {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
+      const start = new Date(startDate)
+      const end = new Date(endDate)
       
-      const maxRange = 366 * 24 * 60 * 60 * 1000; // 366 hari (tahun kabisat)
-      const diff = end - start;
+      const maxRange = 366 * 24 * 60 * 60 * 1000 // 366 hari (tahun kabisat)
+      const diff = end - start
 
       if (diff > maxRange) {
-        setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.");
+        setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.")
       } else if (start > end) {
-        setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.");
+        setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.")
       } else {
-        setDateRangeError("");
+        setDateRangeError("")
       }
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate])
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0
-    }).format(amount || 0);
-  };
+    }).format(amount || 0)
+  }
 
   // Check if data is empty or null
   const isDataEmpty = dataLabaRugiInternal.length || 
     (dataLabaRugiInternal.total_pendapatan === 0 && 
      dataLabaRugiInternal.laba_kotor === 0 && 
      dataLabaRugiInternal.total_beban === 0 && 
-     dataLabaRugiInternal.laba_bersih === 0);
+     dataLabaRugiInternal.laba_bersih === 0)
 
      
   // Empty State Component
@@ -143,7 +143,7 @@ const ProfitAndLoss = ({isFullScreen, fullscreenchange}) => {
         </div>
       </div>
     </div>
-  );
+  )
 
   // Summary Cards with Empty State
   const SummaryCards = () => (
@@ -204,7 +204,7 @@ const ProfitAndLoss = ({isFullScreen, fullscreenchange}) => {
         </div>
       </div>
     </div>
-  );
+  )
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-2 sm:p-4 md:p-6">
@@ -475,15 +475,15 @@ const ProfitAndLoss = ({isFullScreen, fullscreenchange}) => {
         </div>   
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default function ProfitLossStatement() {
   const [activeMenu, setActiveMenu] = useState("profit-and-loss")
   
   // maxsimaz minimaz layar
-  const contentRef = useRef(null);
-  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+  const contentRef = useRef(null)
+  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
   // handle sidebar and elemant header yang responsice
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)

@@ -1,5 +1,5 @@
 import "../style/empty.css"
-import { FileX, ShoppingBag, Clock, AlertCircle } from 'lucide-react';
+import { FileX, ShoppingBag, Clock, AlertCircle } from 'lucide-react'
 
 export function EmptyComponent({ gambar, title, desc }) {
     return (
@@ -8,7 +8,7 @@ export function EmptyComponent({ gambar, title, desc }) {
             <h1>{title}</h1>
             <p>{desc}</p>
         </div>
-    );
+    )
 }
 
 
@@ -20,9 +20,9 @@ export const EmptyHistory = ({ icon = "FileX", title, desc }) => {
         Clock: Clock,
         AlertCircle: AlertCircle,
         // Add more icons as needed
-    };
+    }
     
-    const IconComponent = iconMap[icon] || FileX;
+    const IconComponent = iconMap[icon] || FileX
     
     return (
         <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">

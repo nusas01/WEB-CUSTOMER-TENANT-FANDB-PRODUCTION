@@ -80,12 +80,12 @@ function Cart({ closeCart }) {
     useEffect(() => {
         if (methodWithTransacion && dataPaymentMethodCustomer.length > 0) {
             setIsPaymentMethod(true)
-            const paymentSection = document.getElementById('payment-method');
+            const paymentSection = document.getElementById('payment-method')
             if (paymentSection) {
                 paymentSection.scrollIntoView({ 
                     behavior: "smooth",
                     block: "start" 
-                });
+                })
             }
             setMethodWithTransacion(false)
         }
@@ -228,27 +228,27 @@ function Cart({ closeCart }) {
 
     const handleQuantityChange = (quantity, id, harga) => {
         if (quantity === 0 || isNaN(quantity)) {
-            quantity = '';
+            quantity = ''
         }
-        const amountPrice = quantity * harga;
+        const amountPrice = quantity * harga
         const item = {id, amountPrice, quantity}
         dispatch(updateItem(item))
     }
 
     const handleUpdateIncerement = (id, harga, quantity) => {
-        quantity = Number(quantity) + 1;
-        const amountPrice = quantity * harga;
-        const item = {id, amountPrice, quantity};
-        dispatch(updateItem(item));
+        quantity = Number(quantity) + 1
+        const amountPrice = quantity * harga
+        const item = {id, amountPrice, quantity}
+        dispatch(updateItem(item))
     }
 
     const handleUpdateDecrement = (id, harga, quantity) => {
-        quantity = Number(quantity) - 1;
+        quantity = Number(quantity) - 1
         if (quantity === 0) {
-            setIdModelNotifDelete(id);
-            quantity = 1;
+            setIdModelNotifDelete(id)
+            quantity = 1
         }
-        const amountPrice = quantity * harga;
+        const amountPrice = quantity * harga
         const item = {id, amountPrice, quantity}
         dispatch(updateItem(item))
     }
@@ -261,11 +261,11 @@ function Cart({ closeCart }) {
 
     const handleShowNotes = (id) => {
         if (notesId === id) {
-            setNotesId('');
+            setNotesId('')
         } else {
-            setNotesId(id); 
+            setNotesId(id) 
         }
-    };
+    }
 
     const handleInputPhoneNumberEwallet = (number) => {
         setDataTransaction((prev) => ({
@@ -277,11 +277,11 @@ function Cart({ closeCart }) {
 
     const {tableId, orderTakeAway, isClose} = useSelector((state) => state.persisted.orderType)
     if (orderTakeAway === null && tableId === null) {
-        const q = new URLSearchParams(location.search);
-        const orderTakeAways = q.get("order_type_take_away") === "true";
-        const tableIds = q.get("table_id");
+        const q = new URLSearchParams(location.search)
+        const orderTakeAways = q.get("order_type_take_away") === "true"
+        const tableIds = q.get("table_id")
 
-        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }));
+        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }))
     }
 
     useEffect(() => {
@@ -339,26 +339,26 @@ function Cart({ closeCart }) {
 
     useEffect(() => {
         if (message) {
-            dispatch(clearCart());
-            dispatch(resetCreateTransactionCustomer());
+            dispatch(clearCart())
+            dispatch(resetCreateTransactionCustomer())
             dispatch(fetchTransactionOnGoingCustomer()).then(() => { 
                 if (paymentMethod !== "EWALLET" || message?.data?.channel_code === "OVO") {
-                    navigate("/activity/pembayaran", { state: { detailOrder: message?.data } });
-                    return;
+                    navigate("/activity/pembayaran", { state: { detailOrder: message?.data } })
+                    return
                 }
 
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
                 const redirectUrl = isMobile 
                     ? message.data?.redirect_url_mobile 
-                    : message.data?.redirect_url_mobile;
+                    : message.data?.redirect_url_mobile
             
                 if (redirectUrl) {
-                    window.open(redirectUrl, "_blank"); 
-                    navigate("/activity", { state: { filterActivity: "on going" }});
+                    window.open(redirectUrl, "_blank") 
+                    navigate("/activity", { state: { filterActivity: "on going" }})
                 }
-            });
+            })
         }
-    }, [message]);
+    }, [message])
 
     useEffect(() => {
         if (error) {
@@ -407,7 +407,7 @@ function Cart({ closeCart }) {
         setSpinnerTrannsaction(loadingOnGoingTransaction)
     }, [loadingOnGoingTransaction])
 
-    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer);
+    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
 
     const {data} = useSelector((state) => state.persisted.dataCustomer)
     useEffect(() => {
@@ -435,12 +435,12 @@ function Cart({ closeCart }) {
         
         if (dataTransaction.payment_method === null || channelCode === null) {
             setIsPaymentMethod(true)
-            const paymentSection = document.getElementById('payment-method');
+            const paymentSection = document.getElementById('payment-method')
             if (paymentSection) {
                 paymentSection.scrollIntoView({ 
                     behavior: "smooth",
                     block: "start" 
-                });
+                })
             }
             return
         }
@@ -460,13 +460,13 @@ function Cart({ closeCart }) {
     }
 
      // get table id or order_tye_take_away = true from query
-    const location = useLocation();
+    const location = useLocation()
     if (orderTakeAway === null && tableId === null) {
-        const q = new URLSearchParams(location.search);
-        const orderTakeAways = q.get("order_type_take_away") === "true";
-        const tableIds = q.get("table_id");
+        const q = new URLSearchParams(location.search)
+        const orderTakeAways = q.get("order_type_take_away") === "true"
+        const tableIds = q.get("table_id")
 
-        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }));
+        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }))
     }
 
     
@@ -802,7 +802,7 @@ function Cart({ closeCart }) {
         {/* bottom navbar buat mobile */}
         <BottomNavbar/>
     </div>
-    );
+    )
 }
 
 const renderMethods = ({methods = [], channelCode, handleChoicePaymentMethod}) => {
@@ -829,7 +829,7 @@ const renderMethods = ({methods = [], channelCode, handleChoicePaymentMethod}) =
           <span className="choice-payment"></span>
         </label>
       </div>
-    ));
-  };
+    ))
+  }
 
-export default Cart;
+export default Cart

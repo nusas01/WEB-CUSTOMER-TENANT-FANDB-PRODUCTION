@@ -1,5 +1,5 @@
-import React from "react";
-import Chart from "react-apexcharts";
+import React from "react"
+import Chart from "react-apexcharts"
 
 const DonutChart = ({ data, labels, colors }) => {
   const options = {
@@ -29,7 +29,7 @@ const DonutChart = ({ data, labels, colors }) => {
       enabled: true,
     },
     colors: colors,
-  };
+  }
 
   return (
     <div>
@@ -49,6 +49,6 @@ const DonutChart = ({ data, labels, colors }) => {
         </div>
     </div>
   ) 
-};
+}
 
-export default DonutChart;
+export default DonutChart

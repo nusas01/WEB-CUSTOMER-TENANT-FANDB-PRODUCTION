@@ -32,7 +32,7 @@ import {logoutInternalSlice} from "../reducers/get"
 import {SpinnerFixed} from "../helper/spinner"
 import {useDeviceDetection} from "../helper/helper"
 import {navbarInternalSlice} from "../reducers/reducers"
-import {Toast, ToastPortal} from "./alert";
+import {Toast, ToastPortal} from "./alert"
 
 const menuItems = [
   { Icon: ScanBarcode, title: "Transactions", path: '/internal/admin/transaction', key: 'Transaction', requiresManager: false, inDevelopment: false },
@@ -43,24 +43,24 @@ const menuItems = [
   { Icon: BarChart3, title: "Statistics", path: '/internal/admin/statistics', key: 'statistics', requiresManager: true, inDevelopment: true },
   { Icon: User, title: "Employees", path: '/internal/admin/employees', key: 'Employees', requiresManager: true, inDevelopment: false},
   { Icon: Settings, title: "Settings", path: '/internal/admin/settings', key: 'settings', requiresManager: false, inDevelopment: false }
-];
+]
 
 const financeSubItems = [
   { title: "General Journal", path: '/internal/admin/general-journal', key: 'general-journal', inDevelopment: true },
   { title: "Profit And Loss", path: '/internal/admin/profit-and-loss', key: 'profit-and-loss', inDevelopment: true },
   { title: "Neraca", path: '/internal/admin/neraca', key: 'neraca', inDevelopment: true }
-];
+]
 
 // Tooltip Component
 const Tooltip = ({ children, content, show, position = "right" }) => {
-  const [tooltipStyle, setTooltipStyle] = useState({});
-  const [showTooltip, setShowTooltip] = useState(false);
-  const menuRef = useRef(null);
+  const [tooltipStyle, setTooltipStyle] = useState({})
+  const [showTooltip, setShowTooltip] = useState(false)
+  const menuRef = useRef(null)
 
   const handleMouseEnter = () => {
-    if (!show || !content) return;
+    if (!show || !content) return
     
-    const rect = menuRef.current?.getBoundingClientRect();
+    const rect = menuRef.current?.getBoundingClientRect()
     if (rect) {
       const style = position === "right" 
         ? {
@@ -76,18 +76,18 @@ const Tooltip = ({ children, content, show, position = "right" }) => {
             top: `${rect.top - 8}px`,
             transform: 'translate(-50%, -100%)',
             zIndex: 2000
-          };
+          }
       
-      setTooltipStyle(style);
-      setShowTooltip(true);
+      setTooltipStyle(style)
+      setShowTooltip(true)
     }
-  };
+  }
 
   const handleMouseLeave = () => {
-    setShowTooltip(false);
-  };
+    setShowTooltip(false)
+  }
 
-  if (!show || !content) return children;
+  if (!show || !content) return children
   
   return (
     <>
@@ -112,35 +112,35 @@ const Tooltip = ({ children, content, show, position = "right" }) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
 const Sidebar = ({activeMenu}) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [spinner, setSpinner] = useState(false)
   const [toast, setToast] = useState(false)
-  const [openFinance, setOpenFinance] = useState(false);
+  const [openFinance, setOpenFinance] = useState(false)
 
   const location = useLocation()
   
-  useDeviceDetection();
+  useDeviceDetection()
   const { setIsOpen } = navbarInternalSlice.actions
   const {isOpen, isMobileDeviceType} = useSelector((state) => state.persisted.navbarInternal)
 
   // data employee
   const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
-  const isManager = dataEmployeeInternal?.position === 'Manager';
+  const isManager = dataEmployeeInternal?.position === 'Manager'
 
   const handleNavigate = (value, requiresManager = false, inDevelopment = false) => {
     // Check if the menu requires manager role and user is not a manager
     if (requiresManager && !isManager) {
-      return; // Don't navigate if access is denied
+      return // Don't navigate if access is denied
     }
 
     // Check if the menu is in development
     if (inDevelopment) {
-      return; // Don't navigate if in development
+      return // Don't navigate if in development
     }
 
     navigate(value)
@@ -152,15 +152,15 @@ const Sidebar = ({activeMenu}) => {
 
   useEffect(() => {
     if (location.pathname.includes('/internal/admin/general-journal')) {
-      setOpenFinance(true);
+      setOpenFinance(true)
     }
 
     if (location.pathname.includes('/internal/admin/profit-and-loss')) {
-      setOpenFinance(true);
+      setOpenFinance(true)
     }
 
     if (location.pathname.includes('/internal/admin/neraca')) {
-      setOpenFinance(true);
+      setOpenFinance(true)
     }
   }, [location.pathname])
 
@@ -201,8 +201,8 @@ const Sidebar = ({activeMenu}) => {
   }, [error])
 
   const handleOverlayClick = () => {
-    dispatch(setIsOpen(false));
-  };
+    dispatch(setIsOpen(false))
+  }
 
   // Render Desktop Sidebar
   const renderDesktopSidebar = () => (
@@ -224,8 +224,8 @@ const Sidebar = ({activeMenu}) => {
       <nav className="flex-1 px-4 py-6 overflow-y-auto">
         <div className="space-y-2">
           {menuItems.map((item) => {
-            const isDisabled = item.requiresManager && !isManager; 
-            const tooltipContent = item.inDevelopment ? "Fitur ini sedang dalam pengembangan" : isDisabled ? "Role Anda tidak dapat mengakses fitur ini" : null;
+            const isDisabled = item.requiresManager && !isManager 
+            const tooltipContent = item.inDevelopment ? "Fitur ini sedang dalam pengembangan" : isDisabled ? "Role Anda tidak dapat mengakses fitur ini" : null
             
             return (
               <Tooltip key={item.key} content={tooltipContent} show={isDisabled || item.inDevelopment} position="right">
@@ -256,7 +256,7 @@ const Sidebar = ({activeMenu}) => {
                   )}
                 </div>
               </Tooltip>
-            );
+            )
           })}
 
           {/* Finance Section */}
@@ -280,8 +280,8 @@ const Sidebar = ({activeMenu}) => {
             {openFinance && (
               <div className="ml-8 mt-2 space-y-1">
                 {financeSubItems.map((subItem) => {
-                  const isDisabled = subItem.inDevelopment;
-                  const tooltipContent = isDisabled ? "Fitur ini sedang dalam pengembangan" : null;
+                  const isDisabled = subItem.inDevelopment
+                  const tooltipContent = isDisabled ? "Fitur ini sedang dalam pengembangan" : null
 
                   return (
                     <Tooltip key={subItem.key} content={tooltipContent} show={isDisabled} position="right">
@@ -301,7 +301,7 @@ const Sidebar = ({activeMenu}) => {
                         )}
                       </div>
                     </Tooltip>
-                  );
+                  )
                 })}
               </div>
             )}
@@ -320,7 +320,7 @@ const Sidebar = ({activeMenu}) => {
         </button>
       </div>
     </div>
-  );
+  )
 
   // Render Mobile/Tablet Header
   const renderMobileHeader = () => (
@@ -338,7 +338,7 @@ const Sidebar = ({activeMenu}) => {
         <Menu className="w-6 h-6 text-gray-700" />
       </button>
     </div>
-  );
+  )
 
   // Render Mobile/Tablet Sidebar
   const renderMobileSidebar = () => (
@@ -378,8 +378,8 @@ const Sidebar = ({activeMenu}) => {
         <nav className="flex-1 px-6 py-6 overflow-y-auto">
           <div className="space-y-3">
             {menuItems.map((item) => {
-              const isDisabled = item.requiresManager && !isManager;
-              const tooltipContent = item.inDevelopment ? "Fitur ini sedang dalam pengembangan" : isDisabled ? "Role Anda tidak dapat mengakses fitur ini" : null;
+              const isDisabled = item.requiresManager && !isManager
+              const tooltipContent = item.inDevelopment ? "Fitur ini sedang dalam pengembangan" : isDisabled ? "Role Anda tidak dapat mengakses fitur ini" : null
               
               return (
                 <Tooltip key={item.key} content={tooltipContent} show={isDisabled || item.inDevelopment} position="top">
@@ -410,7 +410,7 @@ const Sidebar = ({activeMenu}) => {
                     )}
                   </div>
                 </Tooltip>
-              );
+              )
             })}
 
             {/* Finance Section Mobile */}
@@ -436,8 +436,8 @@ const Sidebar = ({activeMenu}) => {
               {openFinance && (
                 <div className="ml-8 mt-3 space-y-2">
                   {financeSubItems.map((subItem) => {
-                    const isDisabled = subItem.inDevelopment;
-                    const tooltipContent = isDisabled ? "Fitur ini sedang dalam pengembangan" : null;
+                    const isDisabled = subItem.inDevelopment
+                    const tooltipContent = isDisabled ? "Fitur ini sedang dalam pengembangan" : null
 
                     return (
                       <Tooltip key={subItem.key} content={tooltipContent} show={isDisabled} position="top">
@@ -457,7 +457,7 @@ const Sidebar = ({activeMenu}) => {
                           )}
                         </div>
                       </Tooltip>
-                    );
+                    )
                   })}
                 </div>
               )}
@@ -477,7 +477,7 @@ const Sidebar = ({activeMenu}) => {
         </div>
       </div>
     </div>
-  );
+  )
 
   return (  
     <>
@@ -510,14 +510,14 @@ const Sidebar = ({activeMenu}) => {
       {/* Loading Spinner */}
       {spinner && <SpinnerFixed colors="fill-blue-500" />}
     </>
-  );
-};
+  )
+}
 
 const NavItem = ({ Icon, title, className = "", isDisabled = false }) => (
   <div className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition ${className}`}>
     <Icon className={`w-5 h-5 ${isDisabled ? 'text-gray-400' : ''}`} />
     <span className={`text-sm font-medium ${isDisabled ? 'text-gray-400' : ''}`}>{title}</span>
   </div>
-);
+)
 
-export default Sidebar;
+export default Sidebar

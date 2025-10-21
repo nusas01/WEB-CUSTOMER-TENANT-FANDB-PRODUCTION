@@ -50,14 +50,14 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
   const dispatch = useDispatch()
   const [spinner, setSpinner] = useState(false)
   const [spinnerRelatif, setSpinnerRelatif] = useState(false)
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
 
    const [initialFetchDone, setInitialFetchDone] = useState({
     cash: false,
     nonCash: false,
     history: false
-  });
+  })
 
 
   // get transaction cash on going
@@ -69,10 +69,10 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
 
   useEffect(() => {
   if (filterTransaction === "methodCash" && dataTransactionCashInternal.length === 0) {
-      dispatch(fetchTransactionCashOnGoingInternal());
-      setInitialFetchDone(prev => ({...prev, cash: true}));
+      dispatch(fetchTransactionCashOnGoingInternal())
+      setInitialFetchDone(prev => ({...prev, cash: true}))
     }
-  }, []);
+  }, [])
 
   // get transaction non cash on going
   const { removeTransactionNonCashOnGoingInternalById } = transactionNonCashOnGoingInternalSlice.actions
@@ -84,10 +84,10 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
 
   useEffect(() => {
       if (filterTransaction === "methodNonCash" && dataTransactionNonCashInternal.length === 0) {
-        dispatch(fetchTransactionNonCashOnGoingInternal());
-        setInitialFetchDone(prev => ({...prev, nonCash: true}));
+        dispatch(fetchTransactionNonCashOnGoingInternal())
+        setInitialFetchDone(prev => ({...prev, nonCash: true}))
       }
-  }, []);
+  }, [])
 
 
   // buy transaction cash on going
@@ -194,7 +194,7 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
     hasMore,
     totalCount: totalCountFilter,
     totalRevenue: totalRevenueFilter,
-  } = useSelector((state) => state.persisted.transactionHistoryInternal);
+  } = useSelector((state) => state.persisted.transactionHistoryInternal)
 
   useEffect(() => {
     if (dataTransactionHistoryInternal.length > 0) {
@@ -205,10 +205,10 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
 
   const loadMoreCallback = useCallback(() => {
     if (filterTransaction === "methodFilterTransaction") {
-      dispatch(setIncrementPage());
-      dispatch(loadMoreTransactionHistory());
+      dispatch(setIncrementPage())
+      dispatch(loadMoreTransactionHistory())
     }
-  }, [filterTransaction]);
+  }, [filterTransaction])
 
   // hook untuk infinite scroll mobile device
   const { ref: observerRef } = useInfiniteScroll({
@@ -231,7 +231,7 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
       startTime: '',
       endTime: '',
       dateError: null
-  });
+  })
   
 
   // handle untuk ketika data filter transaction masih ada maka set button ke button filter
@@ -252,11 +252,11 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
   // Handlers untuk update state
   const handleMethodChange = (method) => {
       setFilters(prev => ({...prev, method}))
-  };
+  }
 
   const handleStatusChange = (status) => {
       setFilters(prev => ({...prev, status}))
-  };
+  }
 
   const handleDateChange = (type, value) => {
       setFilters(prev => ({
@@ -275,10 +275,10 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
       startTime: '',
       endTime: '',
       dateError: null
-      });
+      })
       dispatch(resetTransactionHitoryInternal())
       dispatch(resetData())
-  };
+  }
 
   const handleApply = () => {
       const newErrors = {}
@@ -447,18 +447,18 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
     useOutsideClick({
         ref: modalBayarRef,
         callback: () => {
-            setOpenModelBuyPaymentCash(false);
-            handleCloseConfirmationModalError();
-            handleCloseConfirmationModalSuccess();
-            setValidationErrors({});
+            setOpenModelBuyPaymentCash(false)
+            handleCloseConfirmationModalError()
+            handleCloseConfirmationModalSuccess()
+            setValidationErrors({})
             setDataPaymentCash({
                 transaction_id: null,
                 amount_price: 0,
                 money_received: 0,
-            });
+            })
         },
         isActive: openModelBuyPaymentCash
-      });
+      })
 
 
   const handleCloseConfirmationModalError = () => {
@@ -478,23 +478,23 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
   
   // handle amount dan count dari data by filter
   useEffect(() => {
-    let data = [];
+    let data = []
 
     if (filteredData?.length > 0) {
-      data = filteredData;
+      data = filteredData
     } else if (filterTransaction === "methodCash") {
-      data = dataTransactionCashInternal || [];
+      data = dataTransactionCashInternal || []
     } else if (filterTransaction === "methodNonCash") {
-      data = dataTransactionNonCashInternal || [];
+      data = dataTransactionNonCashInternal || []
     } else if (filterTransaction === "methodFilterTransaction") {
-      data = dataTransactionHistoryInternal || [];
+      data = dataTransactionHistoryInternal || []
     }
 
-    const total = data.reduce((sum, t) => sum + (t.amount_price || 0), 0);
+    const total = data.reduce((sum, t) => sum + (t.amount_price || 0), 0)
 
     if (totalCountFilter === 0) {
-      setTotalAmount(total);
-      setTotalCount(data.length);
+      setTotalAmount(total)
+      setTotalCount(data.length)
     }
   }, [
     filteredData,
@@ -502,7 +502,7 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
     dataTransactionNonCashInternal,
     dataTransactionHistoryInternal,
     filterTransaction
-  ]);
+  ])
 
 
   // handle refersh tansaction
@@ -522,7 +522,7 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
   }
   
   // handle sidebar dan element header yang responsive 
-  const { ref: headerRef, height: headerHeight } = useElementHeight();
+  const { ref: headerRef, height: headerHeight } = useElementHeight()
   const { setIsOpen } = navbarInternalSlice.actions
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -1170,7 +1170,7 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TransactionTable;
+export default TransactionTable

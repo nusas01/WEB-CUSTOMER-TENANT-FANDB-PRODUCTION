@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react'
 import { 
   Users, 
   Hash,
@@ -27,12 +27,12 @@ import {
   Settings,
   Maximize,
   Minimize,
-} from 'lucide-react';
-import Sidebar from '../component/sidebar';
-import { useElementHeight, useFullscreen, formatDateTime } from '../helper/helper';
-import { useDispatch, useSelector } from 'react-redux';
-import { navbarInternalSlice } from '../reducers/reducers';
-import { useLocation, useNavigate } from 'react-router-dom';
+} from 'lucide-react'
+import Sidebar from '../component/sidebar'
+import { useElementHeight, useFullscreen, formatDateTime } from '../helper/helper'
+import { useDispatch, useSelector } from 'react-redux'
+import { navbarInternalSlice } from '../reducers/reducers'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   Toast, 
   ToastPortal
@@ -60,31 +60,31 @@ import {
 } from '../reducers/delete'
 import { 
   DeleteEmployeeConfirmation,
-} from '../component/model';
+} from '../component/model'
 import { 
   fetchAllEmployees,
-} from '../actions/get';
-import { AccessDeniedModal } from '../component/model';
+} from '../actions/get'
+import { AccessDeniedModal } from '../component/model'
 
 const EmployeeManagement = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const location = useLocation();
-    const [sortOption, setSortOption] = useState('name');
-    const [roleFilter, setRoleFilter] = useState('all');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [toast, setToast] = useState(null);
-    const [error, setError] = useState({});
-    const [showAccessDenied, setShowAccessDenied] = useState(false);
+    const location = useLocation()
+    const [sortOption, setSortOption] = useState('name')
+    const [roleFilter, setRoleFilter] = useState('all')
+    const [searchQuery, setSearchQuery] = useState('')
+    const [toast, setToast] = useState(null)
+    const [error, setError] = useState({})
+    const [showAccessDenied, setShowAccessDenied] = useState(false)
 
     // Fullscreen functionality
-    const contentRef = useRef(null);
-    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+    const contentRef = useRef(null)
+    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
     const { setIsOpen } = navbarInternalSlice.actions
     const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
-    const { ref: headerRef, height: headerHeight } = useElementHeight();
+    const { ref: headerRef, height: headerHeight } = useElementHeight()
 
     // data employee
     const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
@@ -139,9 +139,9 @@ const EmployeeManagement = () => {
     }, [successUpdateEmployee])
 
     // Handle change password employee
-    const [expandedPassword, setExpandedPassword] = useState(null);
-    const [passwordData, setPasswordData] = useState({});
-    const [showPassword, setShowPassword] = useState({});
+    const [expandedPassword, setExpandedPassword] = useState(null)
+    const [passwordData, setPasswordData] = useState({})
+    const [showPassword, setShowPassword] = useState({})
     const {resetChangePasswordEmployee} = changePasswordEmployeeSlice.actions
     const {successChangePasswordEmployee, errorChangePasswordEmployee, errorFieldsChangePasswordEmployee, loadingChangePasswordEmployee} = useSelector((state) => state.changePasswordEmployeeState)
 
@@ -151,8 +151,8 @@ const EmployeeManagement = () => {
             type: "success",
             message: successChangePasswordEmployee
         })
-        setPasswordData({});
-        setExpandedPassword(null);
+        setPasswordData({})
+        setExpandedPassword(null)
         setShowPassword({})
         }
     }, [successChangePasswordEmployee])
@@ -168,23 +168,23 @@ const EmployeeManagement = () => {
 
     const togglePasswordForm = (employeeId) => {
         if (expandedPassword === employeeId) {
-        setExpandedPassword(null);
+        setExpandedPassword(null)
         // Reset form data when closing
         setPasswordData(prev => ({
             ...prev,
             [employeeId]: { newPassword: '', confirmPassword: '' }
-        }));
+        }))
         } else {
-        setExpandedPassword(employeeId);
+        setExpandedPassword(employeeId)
         // Initialize form data
         if (!passwordData[employeeId]) {
             setPasswordData(prev => ({
             ...prev,
             [employeeId]: { newPassword: '', confirmPassword: '' }
-            }));
+            }))
         }
         }
-    };
+    }
 
     const handlePasswordChange = (employeeId, field, value) => {
         setPasswordData(prev => ({
@@ -193,26 +193,26 @@ const EmployeeManagement = () => {
             ...prev[employeeId],
             [field]: value
         }
-        }));
-    };
+        }))
+    }
 
     const togglePasswordVisibility = (employeeId, field) => {
         setShowPassword(prev => ({
         ...prev,
         [`${employeeId}-${field}`]: !prev[`${employeeId}-${field}`]
-        }));
-    };
+        }))
+    }
 
     const handlePasswordUpdate = (employeeId) => {
-        const data = passwordData[employeeId];
+        const data = passwordData[employeeId]
         
         // 1. Cek wajib diisi
         if (!data.newPassword || !data.confirmPassword) {
         setError(prev => ({
             ...prev,
             change_Password: 'Semua field password harus diisi',
-        }));
-        return;
+        }))
+        return
         }
 
         // 2. Cek password sama
@@ -220,26 +220,26 @@ const EmployeeManagement = () => {
         setError(prev => ({
             ...prev,
             change_Password: 'Password baru dan konfirmasi password tidak cocok',
-        }));
-        return;
+        }))
+        return
         }
 
-        const newPass = data.newPassword;
+        const newPass = data.newPassword
 
         // 3. Cek panjang password
         if (newPass.length < 6) {
         setError(prev => ({
             ...prev,
             change_Password: 'Password minimal 6 karakter',
-        }));
-        return;
+        }))
+        return
         }
         if (newPass.length > 50) {
         setError(prev => ({
             ...prev,
             change_Password: 'Password maksimal 50 karakter',
-        }));
-        return;
+        }))
+        return
         }
 
         // 4. Cek minimal 1 huruf kapital
@@ -247,8 +247,8 @@ const EmployeeManagement = () => {
         setError(prev => ({
             ...prev,
             change_Password: 'Password harus mengandung minimal 1 huruf kapital',
-        }));
-        return;
+        }))
+        return
         }
 
         // 5. Cek minimal 1 angka
@@ -256,8 +256,8 @@ const EmployeeManagement = () => {
         setError(prev => ({
             ...prev,
             change_Password: 'Password harus mengandung minimal 1 angka',
-        }));
-        return;
+        }))
+        return
         }
 
         // 6. Cek minimal 1 karakter unik (simbol)
@@ -265,13 +265,13 @@ const EmployeeManagement = () => {
         setError(prev => ({
             ...prev,
             change_Password: 'Password harus mengandung minimal 1 simbol',
-        }));
-        return;
+        }))
+        return
         }
 
         setError({})
         dispatch(changePasswordEmployee({id: employeeId, password: data.newPassword}))
-    };
+    }
 
     // Handle delete employee store
     const [deleteEmployeeId, setDeleteEmployeeId] = useState(null)
@@ -304,38 +304,38 @@ const EmployeeManagement = () => {
     }, [errorDeleteEmployee])
 
     const calculateAge = (dateOfBirth) => {
-        const today = new Date();
-        const birth = new Date(dateOfBirth);
-        let age = today.getFullYear() - birth.getFullYear();
-        const monthDiff = today.getMonth() - birth.getMonth();
+        const today = new Date()
+        const birth = new Date(dateOfBirth)
+        let age = today.getFullYear() - birth.getFullYear()
+        const monthDiff = today.getMonth() - birth.getMonth()
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-        age--;
+        age--
         }
-        return age;
-    };
+        return age
+    }
 
     // Filter employees based on search and filter criteria
     const filteredEmployees = employees
         .filter(emp => {
         // Role filter
-        const matchesRole = roleFilter === 'all' || emp.position === roleFilter;
+        const matchesRole = roleFilter === 'all' || emp.position === roleFilter
         
         // Search filter (name or email)
         const matchesSearch = searchQuery === '' || 
             emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            emp.email.toLowerCase().includes(searchQuery.toLowerCase());
+            emp.email.toLowerCase().includes(searchQuery.toLowerCase())
         
-        return matchesRole && matchesSearch;
+        return matchesRole && matchesSearch
         })
         .sort((a, b) => {
-        if (sortOption === 'name') return a.name.localeCompare(b.name);
-        if (sortOption === 'position') return a.position.localeCompare(b.position);
-        if (sortOption === 'salary') return b.salery - a.salery; // Fixed: salery not salary
-        return 0;
-        });
+        if (sortOption === 'name') return a.name.localeCompare(b.name)
+        if (sortOption === 'position') return a.position.localeCompare(b.position)
+        if (sortOption === 'salary') return b.salery - a.salery // Fixed: salery not salary
+        return 0
+        })
     
-    const managerCount = employees.filter(emp => emp.position === 'Manager').length;
-    const staffCount = employees.filter(emp => emp.position === 'Staff').length;
+    const managerCount = employees.filter(emp => emp.position === 'Manager').length
+    const staffCount = employees.filter(emp => emp.position === 'Staff').length
 
     return (
         <div className='flex relative bg-gray-50'>
@@ -784,10 +784,10 @@ const EmployeeManagement = () => {
             </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default EmployeeManagement;
+export default EmployeeManagement
 
 const PasswordInfo = () => {
   return (
@@ -802,5 +802,5 @@ const PasswordInfo = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

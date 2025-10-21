@@ -20,7 +20,7 @@ import {
 import { useRef } from "react"
 import  ImagePaymentMethod  from '../helper/imagePaymentMethod'
 import { useDispatch } from "react-redux"
-import { createPortal } from "react-dom";
+import { createPortal } from "react-dom"
 
 export const OrderTypeInvalidAlert = ({ onClose }) => {
   const modalRef = useRef(null)
@@ -285,18 +285,18 @@ export const ConfirmationModal = ({
   message, 
   type,
 }) => {
-  let icon;
-  let buttonColorClass;
+  let icon
+  let buttonColorClass
 
   if (type === "success") {
-    icon = <CheckCircle className="h-16 w-16 text-green-500" />;
-    buttonColorClass = "bg-green-600 hover:bg-green-700 focus:ring-green-500";
+    icon = <CheckCircle className="h-16 w-16 text-green-500" />
+    buttonColorClass = "bg-green-600 hover:bg-green-700 focus:ring-green-500"
   } else if (type === "pending") {
-    icon = <Clock className="h-16 w-16 text-yellow-500" />;
-    buttonColorClass = "bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500";
+    icon = <Clock className="h-16 w-16 text-yellow-500" />
+    buttonColorClass = "bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500"
   } else {
-    icon = <XCircle className="h-16 w-16 text-red-500" />;
-    buttonColorClass = "bg-red-600 hover:bg-red-700 focus:ring-red-500";
+    icon = <XCircle className="h-16 w-16 text-red-500" />
+    buttonColorClass = "bg-red-600 hover:bg-red-700 focus:ring-red-500"
   }
 
   return (
@@ -321,16 +321,16 @@ export const ConfirmationModal = ({
 
   
 export const CashPaymentModal = forwardRef(({ data, setData, onClose, onBayar, ref }) => {
-  const [uangDiterima, setUangDiterima] = useState("");
-  const [kembalian, setKembalian] = useState(0);
+  const [uangDiterima, setUangDiterima] = useState("")
+  const [kembalian, setKembalian] = useState(0)
 
   const formatRupiah = (value) => {
-    return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
+    return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+  }
 
   const parseRupiah = (formattedValue) => {
-    return parseInt(formattedValue.replace(/\./g, "")) || 0;
-  };
+    return parseInt(formattedValue.replace(/\./g, "")) || 0
+  }
 
   const handleInputChange = (e) => {
     const rawValue = e.target.value
@@ -350,11 +350,11 @@ export const CashPaymentModal = forwardRef(({ data, setData, onClose, onBayar, r
 
 
   const handleConfirmBayar = () => {
-    if (kembalian < 0 || uangDiterima === "") return;
+    if (kembalian < 0 || uangDiterima === "") return
 
     onBayar()
     setUangDiterima("")
-  };
+  }
 
   return (
     <div ref={ref} className="fixed inset-0 z-80 flex items-center justify-center bg-black bg-opacity-40 px-4">
@@ -405,7 +405,7 @@ export const CashPaymentModal = forwardRef(({ data, setData, onClose, onBayar, r
         </div>
       </div>
     </div>
-  );
+  )
 })
 
 
@@ -497,7 +497,7 @@ export const DeleteConfirmationModal = ({ onConfirm, onCancel, colorsType }) => 
   const confirmButtonClass =
     colorsType === 'internal'
       ? 'bg-gray-800 hover:bg-gray-900'
-      : 'bg-green-600 hover:bg-green-700';
+      : 'bg-green-600 hover:bg-green-700'
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
@@ -521,8 +521,8 @@ export const DeleteConfirmationModal = ({ onConfirm, onCancel, colorsType }) => 
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 
 export const VoidJournalConfirmationModal = ({
@@ -561,22 +561,22 @@ export const VoidJournalConfirmationModal = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const DeleteConfirmationModalTable = ({ submit, onClose }) => {
-  const modalRef = useRef(null);
+  const modalRef = useRef(null)
 
   // Tutup modal saat klik di luar area
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
+        onClose()
       }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [onClose])
 
   return (
     <div className="fixed inset-0 z-100 bg-black bg-opacity-50 flex items-center justify-center">
@@ -608,49 +608,49 @@ export const DeleteConfirmationModalTable = ({ submit, onClose }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const InvalidAmountModal = ({ onClose, colorsType = "internal", fetchData, resetChart }) => {
-  const modalRef = useRef(null);
-  const dispatch = useDispatch();
+  const modalRef = useRef(null)
+  const dispatch = useDispatch()
 
   // Handle click outside to close modal
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
+        onClose()
       }
-    };
+    }
 
     // Add event listener
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     
     // Cleanup event listener
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [onClose]);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [onClose])
 
   // Handle escape key
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
+    }
 
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener('keydown', handleEscape)
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [onClose]);
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [onClose])
 
   const handleRefreshBrowser = () => {
-    dispatch(fetchData());
-    resetChart();
+    dispatch(fetchData())
+    resetChart()
     onClose()
-  };
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-100 p-4">
@@ -744,50 +744,50 @@ export const InvalidAmountModal = ({ onClose, colorsType = "internal", fetchData
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
   
 
 export const CashPaymentUnavailableModal = ({ onClose, colorsType = "internal", fetchData, resetChart }) => {
-  const modalRef = useRef(null);
-  const dispatch = useDispatch();
+  const modalRef = useRef(null)
+  const dispatch = useDispatch()
 
   // Handle click outside to close modal
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
+        onClose()
       }
-    };
+    }
 
     // Add event listener
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     
     // Cleanup event listener
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [onClose]);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [onClose])
 
   // Handle escape key
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
+    }
 
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener('keydown', handleEscape)
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [onClose]);
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [onClose])
 
   const handleRefreshData = () => {
-    dispatch(fetchData());
-    resetChart();
-    onClose();
-  };
+    dispatch(fetchData())
+    resetChart()
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-100 p-4">
@@ -882,59 +882,59 @@ export const CashPaymentUnavailableModal = ({ onClose, colorsType = "internal", 
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const Toast = ({ message, type, onClose, duration = 3000 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
-  const toastRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false)
+  const [isLeaving, setIsLeaving] = useState(false)
+  const toastRef = useRef(null)
 
   // Handle auto close after duration
   useEffect(() => {
-    setTimeout(() => setIsVisible(true), 50);
+    setTimeout(() => setIsVisible(true), 50)
 
     const timer = setTimeout(() => {
-      setIsLeaving(true);
-      setTimeout(onClose, 300);
-    }, duration);
+      setIsLeaving(true)
+      setTimeout(onClose, 300)
+    }, duration)
 
-    return () => clearTimeout(timer);
-  }, [onClose, duration]);
+    return () => clearTimeout(timer)
+  }, [onClose, duration])
 
   // Handle click outside to close
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (toastRef.current && !toastRef.current.contains(event.target)) {
-        setIsLeaving(true);
-        setTimeout(onClose, 300);
+        setIsLeaving(true)
+        setTimeout(onClose, 300)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [onClose])
 
   const handleClose = () => {
-    setIsLeaving(true);
-    setTimeout(onClose, 300);
-  };
+    setIsLeaving(true)
+    setTimeout(onClose, 300)
+  }
 
   const getStyles = () => {
-    const baseStyles = "backdrop-blur-lg border shadow-2xl";
+    const baseStyles = "backdrop-blur-lg border shadow-2xl"
 
     if (type === "success") {
-      return `${baseStyles} bg-emerald-500/90 border-emerald-400/50 text-white`;
+      return `${baseStyles} bg-emerald-500/90 border-emerald-400/50 text-white`
     } else {
-      return `${baseStyles} bg-red-500/90 border-red-400/50 text-white`;
+      return `${baseStyles} bg-red-500/90 border-red-400/50 text-white`
     }
-  };
+  }
 
   const getIcon = () => {
     return type === "success"
       ? <CheckCircle className="w-5 h-5 flex-shrink-0" />
-      : <XCircle className="w-5 h-5 flex-shrink-0" />;
-  };
+      : <XCircle className="w-5 h-5 flex-shrink-0" />
+  }
 
   return (
     <div
@@ -971,19 +971,19 @@ export const Toast = ({ message, type, onClose, duration = 3000 }) => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const ToastPortal = ({ children }) => {
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
+    setMounted(true)
+    return () => setMounted(false)
+  }, [])
 
-  return mounted ? createPortal(children, document.body) : null;
-};
+  return mounted ? createPortal(children, document.body) : null
+}
 
 export const QRErrorModal = () => {
   return (
@@ -1055,20 +1055,20 @@ export const QRErrorModal = () => {
       <style jsx>{`
         @keyframes fade-in {
           from {
-            opacity: 0;
-            transform: scale(0.9) translateY(10px);
+            opacity: 0
+            transform: scale(0.9) translateY(10px)
           }
           to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
+            opacity: 1
+            transform: scale(1) translateY(0)
           }
         }
         
         .animate-fade-in {
-          animation: fade-in 0.3s ease-out;
+          animation: fade-in 0.3s ease-out
         }
       `}</style>
     </div>
-  );
-};
+  )
+}
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react'
 import { 
   User, 
   Mail, 
@@ -22,16 +22,16 @@ import {
   Maximize, 
   Minimize,
   Menu,
-} from 'lucide-react';
-import Sidebar  from '../component/sidebar';
+} from 'lucide-react'
+import Sidebar  from '../component/sidebar'
 import { fetchAllEmployees, fetchDataEmployeeInternal } from '../actions/get'
 import { getDataEmployeeInternalSlice } from '../reducers/get'
 import { 
   Toast,
   ToastPortal,
-} from '../component/alert';
-import { SpinnerFixed } from '../helper/spinner';
-import { useDispatch, useSelector } from 'react-redux';
+} from '../component/alert'
+import { SpinnerFixed } from '../helper/spinner'
+import { useDispatch, useSelector } from 'react-redux'
 import { 
   updateDataEmployeeInternal, 
   updateChangePasswordInternal,
@@ -52,13 +52,13 @@ import {
 import {
   getPaymentMethodsInternalSlice
 } from '../reducers/get'
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 import { validatePassword } from '../helper/validate'
 import { formatCurrency, EmptyState, useFullscreen, useElementHeight } from '../helper/helper'
-import { current } from '@reduxjs/toolkit';
+import { current } from '@reduxjs/toolkit'
 import { navbarInternalSlice } from "../reducers/reducers"
-import { AccessDeniedModal } from '../component/model';
-import { Navigate, useLocation } from 'react-router-dom';
+import { AccessDeniedModal } from '../component/model'
+import { Navigate, useLocation } from 'react-router-dom'
  
 export default function KasirSettings() {
   const activeMenu = "settings"
@@ -66,9 +66,9 @@ export default function KasirSettings() {
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
 
   // maxsimaz minimaz layar
-  const contentRef = useRef(null);
+  const contentRef = useRef(null)
   const { setIsOpen } = navbarInternalSlice.actions
-  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
   // handle sidebar and elemant header yang responsice
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
@@ -171,14 +171,14 @@ export default function KasirSettings() {
 const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
   const dispatch = useDispatch()
   const [spinnerFixed, setSpinnerFixed] = useState(false)
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
+  const [showAccessDenied, setShowAccessDenied] = useState(false)
   const [profileImage, setProfileImage] = useState(null)
   const [previewUrl, setPreviewUrl] = useState(null)
   const [errors, setErrors] = useState()
   const [isUpdate, setIsUpdate] = useState()
 
   // call data payment method
-  const [paymentSettings, setPaymentSettings] = useState(null);
+  const [paymentSettings, setPaymentSettings] = useState(null)
   const {dataPaymentMethodInternal, taxRateInternal, paymentMethodCash} = useSelector((state) => state.persisted.paymentMethodsInternal)
 
   useEffect(() => {
@@ -187,32 +187,32 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
       taxRateInternal === 0 &&
       paymentMethodCash === null
     ) {
-      dispatch(fetchPaymentMethodsInternal());
+      dispatch(fetchPaymentMethodsInternal())
     } else {
-      const virtualAccountFees = {};
-      const ewalletFees = {};
-      let qrisFee = 0;
+      const virtualAccountFees = {}
+      const ewalletFees = {}
+      let qrisFee = 0
 
       dataPaymentMethodInternal.forEach((method) => {
-        const name = method.name.toLowerCase();
-        const fee = method.fee;
+        const name = method.name.toLowerCase()
+        const fee = method.fee
 
         switch (method.type) {
           case "VA":
-            virtualAccountFees[name] = fee;
-            break;
+            virtualAccountFees[name] = fee
+            break
           case "EWALLET":
-            ewalletFees[name] = fee * 100; 
-            break;
+            ewalletFees[name] = fee * 100 
+            break
           case "QR":
             if (name.toLowerCase() === "qris") {
-              qrisFee = parseFloat((fee * 100).toFixed(2)); 
+              qrisFee = parseFloat((fee * 100).toFixed(2)) 
             }
-            break;
+            break
           default:
-            break;
+            break
         }
-      });
+      })
 
       setPaymentSettings({
         taxRate: parseFloat((taxRateInternal * 100).toFixed(2)) ?? 0,
@@ -220,43 +220,43 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
         virtualAccountFees,
         ewalletFees,
         qrisFee
-      });
+      })
     }
-  }, [dataPaymentMethodInternal, taxRateInternal, paymentMethodCash, dispatch]);
+  }, [dataPaymentMethodInternal, taxRateInternal, paymentMethodCash, dispatch])
 
   // Payment Settings State
-  const isEmptyVA = !paymentSettings?.virtualAccountFees || Object.keys(paymentSettings.virtualAccountFees).length === 0;
-  const isEmptyEwallet = !paymentSettings?.ewalletFees || Object.keys(paymentSettings.ewalletFees).length === 0;
+  const isEmptyVA = !paymentSettings?.virtualAccountFees || Object.keys(paymentSettings.virtualAccountFees).length === 0
+  const isEmptyEwallet = !paymentSettings?.ewalletFees || Object.keys(paymentSettings.ewalletFees).length === 0
 
 
   // update payment methods
   const handleSubmitUpdatePaymentMethods = () => {
     const updatedPaymentMethods = dataPaymentMethodInternal.map((method) => {
-      const name = method.name.toLowerCase();
-      let updatedFee = method.fee;
+      const name = method.name.toLowerCase()
+      let updatedFee = method.fee
 
       switch (method.type) {
         case "VA":
-          updatedFee = paymentSettings.virtualAccountFees?.[name] ?? method.fee;
-          break;
+          updatedFee = paymentSettings.virtualAccountFees?.[name] ?? method.fee
+          break
         case "EWALLET":
           // dari persen (1.5%) ke nilai asli (0.015)
-          updatedFee = paymentSettings.ewalletFees?.[name] ?? method.fee;
-          break;
+          updatedFee = paymentSettings.ewalletFees?.[name] ?? method.fee
+          break
         case "QR":
           if (name === "qris") {
-            updatedFee = paymentSettings.qrisFee ?? method.fee;
+            updatedFee = paymentSettings.qrisFee ?? method.fee
           }
-          break;
+          break
         default:
-          break;
+          break
       }
 
       return {
         ...method,
         fee: updatedFee,
-      };
-    });
+      }
+    })
 
     dispatch(updatePaymentMethodsInternal({
       payment_method_cash: {
@@ -265,17 +265,17 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
       },
       payment_methods: updatedPaymentMethods,
       tax_rate: paymentSettings.taxRate
-    }));
-  };
+    }))
+  }
 
   // UI State
   const [showPassword, setShowPassword] = useState({
     current: false,
     new: false,
     confirm: false
-  });
-  const [activeTab, setActiveTab] = useState('profile');
-  const [savedStatus, setSavedStatus] = useState('');
+  })
+  const [activeTab, setActiveTab] = useState('profile')
+  const [savedStatus, setSavedStatus] = useState('')
 
 
   // get data customer from state and call api
@@ -298,7 +298,7 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
 
   // Handlers
  const handleProfileUpdate = (field, value) => {
-    if (field === 'gender' || field === 'position') return;
+    if (field === 'gender' || field === 'position') return
 
     setIsUpdate((prev) => ({
       ...prev,
@@ -308,24 +308,24 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
     setFormDataUpdateEmployee((prev) => ({
       ...prev,
       [field]: value
-    }));
-  };
+    }))
+  }
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]
+    if (!file) return
 
-    setProfileImage(file);
+    setProfileImage(file)
 
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-  };
+    const objectUrl = URL.createObjectURL(file)
+    setPreviewUrl(objectUrl)
+  }
 
   useEffect(() => {
     return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
+      if (previewUrl) URL.revokeObjectURL(previewUrl)
+    }
+  }, [previewUrl])
 
 
   const { resetUpdateDataEmployee } = updateDataEmployeeSlice.actions
@@ -334,19 +334,19 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
     dispatch(resetUpdateDataEmployee())
     setErrors()
 
-    const formData = new FormData();
-    formData.append("id", (formDataUpdateEmployee?.id || dataEmployeeInternal?.id));
-    formData.append("name", (formDataUpdateEmployee?.name || dataEmployeeInternal?.name));
-    formData.append("phone_number", `+62${formDataUpdateEmployee?.phone_number || dataEmployeeInternal?.phone_number}`);
-    formData.append("date_of_birth", (formDataUpdateEmployee?.date_of_birth || dataEmployeeInternal?.date_of_birth));
+    const formData = new FormData()
+    formData.append("id", (formDataUpdateEmployee?.id || dataEmployeeInternal?.id))
+    formData.append("name", (formDataUpdateEmployee?.name || dataEmployeeInternal?.name))
+    formData.append("phone_number", `+62${formDataUpdateEmployee?.phone_number || dataEmployeeInternal?.phone_number}`)
+    formData.append("date_of_birth", (formDataUpdateEmployee?.date_of_birth || dataEmployeeInternal?.date_of_birth))
     formData.append("email", (formDataUpdateEmployee?.email || dataEmployeeInternal?.email))
 
     if (profileImage instanceof File) {
-      formData.append("image", profileImage);
+      formData.append("image", profileImage)
     }
 
     dispatch(updateDataEmployeeInternal(formData))
-  };
+  }
 
   // handle change password
   const { resetChangePasswordInternal } = changePasswordInternalSlice.actions
@@ -355,41 +355,41 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
-  });
+  })
   const [passwordErrors, setPasswordErrors] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
-  });
+  })
 
    const handlePasswordChange = (field, value) => {
-    setPasswordData(prev => ({ ...prev, [field]: value }));
-  };
+    setPasswordData(prev => ({ ...prev, [field]: value }))
+  }
 
   const handleSubmitChangePassword = () => {
     dispatch(resetChangePasswordInternal())
 
-    const errors = validatePassword(passwordData.newPassword, passwordData.confirmPassword);
-    setPasswordErrors(errors);
+    const errors = validatePassword(passwordData.newPassword, passwordData.confirmPassword)
+    setPasswordErrors(errors)
 
-    let currentPasswordValid = true; 
+    let currentPasswordValid = true 
     if (passwordData.currentPassword === '') {
       setPasswordErrors(prev => ({
         ...prev, 
         currentPassword: 'Password saat ini tidak boleh kosong'
-      }));
-      currentPasswordValid = false;
+      }))
+      currentPasswordValid = false
     }
 
-    const isValid = !errors.newPassword && !errors.confirmPassword;
+    const isValid = !errors.newPassword && !errors.confirmPassword
 
-    if (!isValid || !currentPasswordValid) return;
+    if (!isValid || !currentPasswordValid) return
 
     dispatch(updateChangePasswordInternal({
       new_password: passwordData.newPassword,
       last_password: passwordData.currentPassword
-    }));
-  };
+    }))
+  }
 
   // handle loading update data employee
   const { 
@@ -410,15 +410,15 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
   useEffect(() => {
     if (errorFieldUpdateDataEmployee) {
       const mappedErrors = errorFieldUpdateDataEmployee.reduce((acc, curr) => {
-        const [field, message] = Object.entries(curr)[0]; 
-        acc[field] = message;
-        return acc;
-      }, {});
+        const [field, message] = Object.entries(curr)[0] 
+        acc[field] = message
+        return acc
+      }, {})
       if (isMobileDeviceType) {
         window.scrollTo({
           top: 0,
           behavior: "smooth" 
-        });
+        })
       }
       setErrors(mappedErrors)
       dispatch(resetUpdateDataEmployee())
@@ -442,7 +442,7 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
   }, [loadingChangePassword])
   
   // handle sidebar and elemant header yang responsice
-  const { ref: headerRef, height: headerHeight } = useElementHeight();
+  const { ref: headerRef, height: headerHeight } = useElementHeight()
   const { setIsOpen } = navbarInternalSlice.actions
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -458,7 +458,7 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
       <Icon size={20} />
       <span className="font-medium">{label}</span>
     </button>
-  );
+  )
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
@@ -873,8 +873,8 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
                               type="text"
                               value={fee != null ? fee.toLocaleString("id-ID") : '0'}
                               onChange={(e) => {
-                                const rawValue = e.target.value.replace(/\./g, ''); // hilangkan titik ribuan
-                                const parsed = parseInt(rawValue) || 0;
+                                const rawValue = e.target.value.replace(/\./g, '') // hilangkan titik ribuan
+                                const parsed = parseInt(rawValue) || 0
 
                                 setPaymentSettings((prev) => ({
                                   ...prev,
@@ -882,7 +882,7 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
                                     ...prev.virtualAccountFees,
                                     [bank]: parsed,
                                   },
-                                }));
+                                }))
                               }}
                               placeholder="0"
                               min="0"
@@ -1012,8 +1012,8 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const InputField = ({ 
   label, 
@@ -1053,7 +1053,7 @@ const InputField = ({
         </div>
         {error && <p className="mt-1 text-sm text-red-600">• {error}</p>}
       </div>
-    );
+    )
   }
 
   // Input field biasa
@@ -1084,8 +1084,8 @@ const InputField = ({
       </div>
       {error && <p className="mt-1 text-sm text-red-600">• {error}</p>}
     </div>
-  );
-};
+  )
+}
 
 const PasswordField = ({ label, value, onChange, showPassword, toggleShow, placeholder }) => (
   <div className="space-y-2">
@@ -1111,4 +1111,4 @@ const PasswordField = ({ label, value, onChange, showPassword, toggleShow, place
       </button>
     </div>
   </div>
-);
+)

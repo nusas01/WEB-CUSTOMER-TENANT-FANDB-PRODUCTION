@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import Sidebar from "../component/sidebar";
+import { useState, useRef, useEffect } from "react"
+import Sidebar from "../component/sidebar"
 import { 
   TrendingUp, 
   ShoppingCart, 
@@ -25,25 +25,25 @@ import {
   Maximize, 
   Minimize,
   Menu,
-} from 'lucide-react';
-import { useNavigate } from "react-router-dom";
+} from 'lucide-react'
+import { useNavigate } from "react-router-dom"
 import { useFullscreen, useElementHeight } from "../helper/helper"
 import { navbarInternalSlice } from "../reducers/reducers"
-import { useDispatch, useSelector } from "react-redux";
-import { AccessDeniedModal } from "../component/model";
+import { useDispatch, useSelector } from "react-redux"
+import { AccessDeniedModal } from "../component/model"
 
 export default function KasirStatistik() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [activeMenu, setActiveMenu] = useState('statistics')
-    const [selectedPeriod, setSelectedPeriod] = useState('daily');
-    const [salesDateRange, setSalesDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' });
-    const [channelDateRange, setChannelDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' });
-    const [productsDateRange, setProductsDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' });
-    const [customerDateRange, setCustomerDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' });
-    const [timeStatsDateRange, setTimeStatsDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' });
-    const [dailyPerfDateRange, setDailyPerfDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' });
-    const [showAccessDenied, setShowAccessDenied] = useState(false);
+    const [selectedPeriod, setSelectedPeriod] = useState('daily')
+    const [salesDateRange, setSalesDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' })
+    const [channelDateRange, setChannelDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' })
+    const [productsDateRange, setProductsDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' })
+    const [customerDateRange, setCustomerDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' })
+    const [timeStatsDateRange, setTimeStatsDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' })
+    const [dailyPerfDateRange, setDailyPerfDateRange] = useState({ start: '2024-07-01', end: '2024-07-31' })
+    const [showAccessDenied, setShowAccessDenied] = useState(false)
 
 
     const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
@@ -55,45 +55,45 @@ export default function KasirStatistik() {
 
 
     // maxsimaz minimaz layar
-    const contentRef = useRef(null);
-    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+    const contentRef = useRef(null)
+    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
     // handle sidebar and elemant header yang responsice
-    const { ref: headerRef, height: headerHeight } = useElementHeight();
+    const { ref: headerRef, height: headerHeight } = useElementHeight()
     const { setIsOpen } = navbarInternalSlice.actions
     const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
     // Validation function for date range (max 31 days)
     const validateDateRange = (startDate, endDate) => {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      const diffTime = Math.abs(end - start);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays <= 31;
-    };
+      const start = new Date(startDate)
+      const end = new Date(endDate)
+      const diffTime = Math.abs(end - start)
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      return diffDays <= 31
+    }
 
     // Date range handler with validation
     const handleDateRangeChange = (setter, field, value) => {
       setter(prev => {
-        const newRange = { ...prev, [field]: value };
+        const newRange = { ...prev, [field]: value }
         if (validateDateRange(newRange.start, newRange.end)) {
-          return newRange;
+          return newRange
         }
-        return prev;
-      });
-    };
+        return prev
+      })
+    }
 
     // Sample data
     const salesData = {
       daily: { revenue: 15250000, transactions: 156, aov: 97756 },
       weekly: { revenue: 89500000, transactions: 892, aov: 100336 },
       monthly: { revenue: 385000000, transactions: 3847, aov: 100078 }
-    };
+    }
 
     const channelData = [
       { name: 'Kasir', revenue: 125000000, percentage: 45, transactions: 1234, color: 'bg-gradient-to-r from-gray-800 to-gray-700' },
       { name: 'Website', revenue: 89000000, percentage: 32, transactions: 876, color: 'bg-gradient-to-r from-blue-600 to-blue-500' },
-    ];
+    ]
 
     const topProducts = [
       { name: 'Nasi Gudeg Special', sold: 234, revenue: 35100000, growth: 12, category: 'Main Course' },
@@ -101,7 +101,7 @@ export default function KasirStatistik() {
       { name: 'Sate Kambing', sold: 167, revenue: 25050000, growth: -3, category: 'Grilled' },
       { name: 'Es Teh Manis', sold: 445, revenue: 13350000, growth: 15, category: 'Beverages' },
       { name: 'Gudeg Jogja', sold: 123, revenue: 18450000, growth: 5, category: 'Traditional' }
-    ];
+    ]
 
     const customerStats = {
       totalCustomers: 2847,
@@ -109,14 +109,14 @@ export default function KasirStatistik() {
       guestCustomers: 955,
       repeatCustomerRate: 68,
       newCustomersThisMonth: 234
-    };
+    }
 
     const topCustomers = [
       { name: 'Ahmad Wijaya', orders: 24, spent: 4850000, lastOrder: '2 hari lalu', level: 'VIP' },
       { name: 'Siti Nurhaliza', orders: 18, spent: 3420000, lastOrder: '1 hari lalu', level: 'Gold' },
       { name: 'Budi Santoso', orders: 15, spent: 2950000, lastOrder: '3 hari lalu', level: 'Silver' },
       { name: 'Dewi Lestari', orders: 12, spent: 2340000, lastOrder: '1 hari lalu', level: 'Silver' }
-    ];
+    ]
 
     const peakHours = [
       { hour: '06:00', orders: 12 },
@@ -135,7 +135,7 @@ export default function KasirStatistik() {
       { hour: '19:00', orders: 92 },
       { hour: '20:00', orders: 67 },
       { hour: '21:00', orders: 34 }
-    ];
+    ]
 
     const weeklyData = [
       { day: 'Senin', orders: 234, revenue: 35600000 },
@@ -145,15 +145,15 @@ export default function KasirStatistik() {
       { day: 'Jumat', orders: 345, revenue: 56700000 },
       { day: 'Sabtu', orders: 423, revenue: 67800000 },
       { day: 'Minggu', orders: 389, revenue: 62400000 }
-    ];
+    ]
 
     const formatCurrency = (amount) => {
       return new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
         minimumFractionDigits: 0
-      }).format(amount);
-    };
+      }).format(amount)
+    }
 
     const StatCard = ({ title, value, icon: Icon, change, changeType, subtitle }) => (
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300 hover:scale-20 group">
@@ -176,7 +176,7 @@ export default function KasirStatistik() {
           )}
         </div>
       </div>
-    );
+    )
 
     const DateRangeFilter = ({ dateRange, setDateRange, label }) => (
     <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
@@ -232,11 +232,11 @@ export default function KasirStatistik() {
         </div>
       )}
     </div>
-  );
+  )
 
 
-  const maxOrders = Math.max(...peakHours.map(h => h.orders));
-  const maxRevenue = Math.max(...weeklyData.map(d => d.revenue));
+  const maxOrders = Math.max(...peakHours.map(h => h.orders))
+  const maxRevenue = Math.max(...weeklyData.map(d => d.revenue))
 
     return (
       <div className="flex relative">

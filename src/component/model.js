@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useOutsideClick } from "../helper/helper";
+import React, { useState, useEffect } from "react"
+import { useOutsideClick } from "../helper/helper"
 import { 
   X, 
   AlertTriangle, 
@@ -15,15 +15,15 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react"
-import { useRef } from "react";
+import { useRef } from "react"
 import {
   storeInfoCustomerSlice
 } from "../reducers/reducers"
-import { useDispatch, useSelector } from "react-redux";
-import { fetchNumberTableCustomer } from "../actions/get";
+import { useDispatch, useSelector } from "react-redux"
+import { fetchNumberTableCustomer } from "../actions/get"
 
 export const ModalConfirm = ({ isOpen, onClose, onConfirm, message }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -48,8 +48,8 @@ export const ModalConfirm = ({ isOpen, onClose, onConfirm, message }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 
 export const AccessDeniedModal = ({
@@ -59,12 +59,12 @@ export const AccessDeniedModal = ({
   message = "Anda tidak memiliki izin untuk mengakses fitur ini. Silakan hubungi administrator.",
   buttonText = "Mengerti"
 }) => {
-  const modalRef = useRef(null);
+  const modalRef = useRef(null)
 
   // panggil custom hook
-  useOutsideClick({ ref: modalRef, callback: onClose, isActive: isOpen });
+  useOutsideClick({ ref: modalRef, callback: onClose, isActive: isOpen })
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 z-[9999] flex bg-gray-900 bg-opacity-50 items-center justify-center">
@@ -105,8 +105,8 @@ export const AccessDeniedModal = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const DeleteEmployeeConfirmation = ({ 
   employeeId, 
@@ -171,8 +171,8 @@ export const DeleteEmployeeConfirmation = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const ModernStoreBrand = ({ 
   storeName,
@@ -182,28 +182,28 @@ export const ModernStoreBrand = ({
   totalReviews = 1234,
   phone
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const { setStoreInfoCustomer: setIsMinimized } = storeInfoCustomerSlice.actions;
-  const { statusStoreInfo: isMinimized } = useSelector((state) => state.persisted.storeInfoCustomer);
+  const { setStoreInfoCustomer: setIsMinimized } = storeInfoCustomerSlice.actions
+  const { statusStoreInfo: isMinimized } = useSelector((state) => state.persisted.storeInfoCustomer)
 
   const {
     numberTable,
     loading: tableLoading,
     error: tableError,
-  } = useSelector((state) => state.persisted.getNumberTableCustomer);
+  } = useSelector((state) => state.persisted.getNumberTableCustomer)
 
-  const { tableId, orderType } = useSelector((state) => state.persisted.orderType);
+  const { tableId, orderType } = useSelector((state) => state.persisted.orderType)
 
   useEffect(() => {
     if (tableId && !numberTable) {
-      dispatch(fetchNumberTableCustomer(tableId));
+      dispatch(fetchNumberTableCustomer(tableId))
     }
-  }, [tableId, dispatch]);
+  }, [tableId, dispatch])
 
   // Determine if we should show table section
-  const shouldShowTableSection = tableId && (tableLoading || tableError || numberTable);
-  const isValidTable = numberTable && !tableError && !tableLoading;
+  const shouldShowTableSection = tableId && (tableLoading || tableError || numberTable)
+  const isValidTable = numberTable && !tableError && !tableLoading
 
   // Determine order type display
   const getOrderTypeInfo = () => {
@@ -212,32 +212,32 @@ export const ModernStoreBrand = ({
         icon: UtensilsCrossed,
         label: 'Dine In',
         color: 'from-emerald-50 to-green-50 border-emerald-200 text-emerald-700'
-      };
+      }
     } else if (orderType === 'takeaway') {
       return {
         icon: QrCode,
         label: 'Take Away',
         color: 'from-teal-50 to-cyan-50 border-teal-200 text-teal-700'
-      };
+      }
     }
-    return null;
-  };
+    return null
+  }
 
-  const orderTypeInfo = getOrderTypeInfo();
+  const orderTypeInfo = getOrderTypeInfo()
     // Handle share location to WhatsApp
     const handleShareToWhatsApp = () => {
-    const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+    const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`
     const message = encodeURIComponent(
       `🛍️ *${storeName}*\n` +
       `📍 *Lokasi:* [Lihat di Google Maps](${googleMapsLink})\n` +
       `⭐ *Rating:* ${rating} (${totalReviews.toLocaleString()} ulasan)\n` +
       `🕒 *Status:* ${isOpen ? 'Buka' : 'Tutup'} | *Jam operasional:* 10:00 - 22:00\n\n` +
       `Ayo kunjungi sekarang! 🔗`
-    );
+    )
 
-    const whatsappUrl = `https://wa.me/?text=${message}`;
-    window.open(whatsappUrl, '_blank');
-  };
+    const whatsappUrl = `https://wa.me/?text=${message}`
+    window.open(whatsappUrl, '_blank')
+  }
 
 
   return (
@@ -311,8 +311,8 @@ export const ModernStoreBrand = ({
               {/* Minimize Button */}
               <button
                 onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch(setIsMinimized(true));
+                  e.stopPropagation()
+                  dispatch(setIsMinimized(true))
                 }}
                 className="absolute top-3 right-3 z-10 p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg border border-gray-200 transition-all duration-300 hover:scale-110 active:scale-95 group/minimize"
                 aria-label="Minimize"
@@ -491,10 +491,10 @@ export const ModernStoreBrand = ({
 
       <style jsx>{`
         @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
+          0% { transform: translateX(-100%) }
+          100% { transform: translateX(100%) }
         }
       `}</style>
     </div>
-  );
-};
+  )
+}

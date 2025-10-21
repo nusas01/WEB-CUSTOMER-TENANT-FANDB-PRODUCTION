@@ -1,18 +1,18 @@
 import "../style/add.css"
-import { useState } from 'react';
-import { useDispatch } from "react-redux";
-import { addItem, addItemCashier } from "../reducers/cartSlice";
+import { useState } from 'react'
+import { useDispatch } from "react-redux"
+import { addItem, addItemCashier } from "../reducers/cartSlice"
 
 // type CUSTOMER, INTERNAL
 export const AddProductToCart = ({ onClose, id, name, desc, harga, image, type }) => {
-  const [quantity, setQuantity] = useState(1);
-  const [notes, setNotes] = useState('');
+  const [quantity, setQuantity] = useState(1)
+  const [notes, setNotes] = useState('')
   const amountPrice = quantity * harga
 
-  const handleIncrement = () => setQuantity(prev => prev + 1);
-  const handleDecrement = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+  const handleIncrement = () => setQuantity(prev => prev + 1)
+  const handleDecrement = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1))
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const handleAddItem = (name, harga, image, amountPrice, quantity) => {
       const newItem = {id, name, harga, image, notes, amountPrice, quantity}
@@ -23,16 +23,16 @@ export const AddProductToCart = ({ onClose, id, name, desc, harga, image, type }
         dispatch(addItemCashier(newItem))
       }
       onClose()
-  };
+  }
 
   const handleQuantityChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
     if (value === '0') {
       setQuantity(1)
       return
     }
-    setQuantity(value === '' ? '' : Number(value));
-  };
+    setQuantity(value === '' ? '' : Number(value))
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center sm:p-4 z-20">
@@ -117,5 +117,5 @@ export const AddProductToCart = ({ onClose, id, name, desc, harga, image, type }
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -52,7 +52,7 @@ const CreateEmployee = () => {
   const employeUpdateState = location.state?.employeeState
   const {resetUpdateEmployee} = updateEmployeeSlice.actions
   const {successUpdateEmployee, errorUpdateEmployee, errorFieldUpdateEmployee, loadingUpdateEmployee} = useSelector((state) => state.updateEmployeeState)
-  const isUpdate = Boolean(employeUpdateState?.id);
+  const isUpdate = Boolean(employeUpdateState?.id)
 
   useEffect(() => {
     if (employeUpdateState) {
@@ -60,21 +60,21 @@ const CreateEmployee = () => {
         ...prev,
         ...employeUpdateState,
         phone_number: getPhoneWithoutPrefix(employeUpdateState.phone_number) || ''
-        }));
+        }))
     }
-    }, [employeUpdateState]);
+    }, [employeUpdateState])
 
     useEffect(() => {
       if (errorFieldUpdateEmployee) {
         const mappedErrors = errorFieldUpdateEmployee.reduce((acc, curr) => {
-          const [field, message] = Object.entries(curr)[0]; 
-          acc[field] = message;
-          return acc;
-        }, {});
+          const [field, message] = Object.entries(curr)[0] 
+          acc[field] = message
+          return acc
+        }, {})
         window.scrollTo({
           top: 0,
           behavior: "smooth" 
-        });
+        })
         setErrors(mappedErrors)
         dispatch(resetUpdateEmployee())
       }
@@ -126,14 +126,14 @@ const CreateEmployee = () => {
     useEffect(() => {
       if (ErrorFieldCreateEmployee) {
         const mappedErrors = ErrorFieldCreateEmployee.reduce((acc, curr) => {
-          const [field, message] = Object.entries(curr)[0]; 
-          acc[field] = message;
-          return acc;
-        }, {});
+          const [field, message] = Object.entries(curr)[0] 
+          acc[field] = message
+          return acc
+        }, {})
         window.scrollTo({
           top: 0,
           behavior: "smooth"
-        });
+        })
         setErrors(mappedErrors)
         dispatch(resetCreateEmployee())
       }
@@ -398,16 +398,16 @@ const CreateEmployee = () => {
     }
 
     const handleInputSalery = (e) => {
-      const raw = e.target.value.replace(/\./g, '');
+      const raw = e.target.value.replace(/\./g, '')
 
-      if (!/^\d*$/.test(raw)) return;
+      if (!/^\d*$/.test(raw)) return
 
-      const numericValue = parseInt(raw, 10) || 0;
+      const numericValue = parseInt(raw, 10) || 0
 
       setFormData((prev) => ({
         ...prev,
         [e.target.name]: numericValue,
-      }));
+      }))
 
       if (errors[e.target.name]) {
         setErrors(prev => ({ ...prev, [e.target.name]: '' }))
@@ -459,14 +459,14 @@ const CreateEmployee = () => {
       
       // Check if there are any errors
       if (Object.keys(foundErrors).length > 0) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
+        window.scrollTo({ top: 0, behavior: "smooth" })
+        return
       }
       // Create FormData for multipart submission
       const submitData = {
           ...formData,
           phone_number: `+62${formData.phone_number}`
-      };
+      }
 
       if (!isUpdate) {
         dispatch(createEmployee(submitData))

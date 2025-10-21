@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import {
   forgotPasswordCustomerSlice,
   forgotPasswordInternalSlice,
@@ -13,20 +13,20 @@ import {
   Toast, 
   ToastPortal
 } from './alert'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
 
 const ForgotPasswordComponent = ({type}) => {
   const dispatch = useDispatch()
-  const [email, setEmail] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState('')
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState('')
   const [toast, setToast] = useState(null)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
 
   const {resetForgotPasswordCustomer} = forgotPasswordCustomerSlice.actions
   const {
@@ -84,16 +84,16 @@ const ForgotPasswordComponent = ({type}) => {
   const handleSubmit = () => {
     dispatch(resetForgotPasswordInternal())
     dispatch(resetForgotPasswordCustomer())
-    setError('');
+    setError('')
 
     if (!email) {
-      setError('Email address is required');
-      return;
+      setError('Email address is required')
+      return
     }
 
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address');
-      return;
+      setError('Please enter a valid email address')
+      return
     }
 
     if (type === "customer") {
@@ -102,7 +102,7 @@ const ForgotPasswordComponent = ({type}) => {
       dispatch(forgotPasswordInternal({email: email}))
     }
 
-  };
+  }
 
   if (isSubmitted) {
     return (
@@ -142,7 +142,7 @@ const ForgotPasswordComponent = ({type}) => {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -197,8 +197,8 @@ const ForgotPasswordComponent = ({type}) => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (error) setError('');
+                    setEmail(e.target.value)
+                    if (error) setError('')
                   }}
                 />
               </div>
@@ -239,7 +239,7 @@ const ForgotPasswordComponent = ({type}) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ForgotPasswordComponent;
+export default ForgotPasswordComponent

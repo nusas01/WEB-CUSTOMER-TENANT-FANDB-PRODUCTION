@@ -1,8 +1,8 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
-import sessionStorage from 'redux-persist/lib/storage/session';
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import { persistReducer, persistStore } from 'redux-persist'
+import sessionStorage from 'redux-persist/lib/storage/session'
 
-import { cartSlice, cartCashierSlice } from './cartSlice';
+import { cartSlice, cartCashierSlice } from './cartSlice'
 import {
   orderTypeSlice,
   storeInfoCustomerSlice,

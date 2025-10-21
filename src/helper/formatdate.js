@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import dayjs from "dayjs"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 
 export const FormatISODate = (isoDate) => {
     return new Intl.DateTimeFormat("id-ID", {
@@ -12,22 +12,22 @@ export const FormatISODate = (isoDate) => {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
-    }).format(new Date(isoDate));
-  };
+    }).format(new Date(isoDate))
+  }
 
 export const FormatDate = (dateString) => {
-  const date = new Date(dateString);
+  const date = new Date(dateString)
 
-  const padTo2Digits = (num) => num.toString().padStart(2, '0');
+  const padTo2Digits = (num) => num.toString().padStart(2, '0')
 
-  const year = date.getFullYear();
-  const month = padTo2Digits(date.getMonth() + 1); // Bulan dimulai dari 0
-  const day = padTo2Digits(date.getDate());
-  const hours = padTo2Digits(date.getHours());
-  const minutes = padTo2Digits(date.getMinutes());
-  const seconds = padTo2Digits(date.getSeconds());
+  const year = date.getFullYear()
+  const month = padTo2Digits(date.getMonth() + 1) // Bulan dimulai dari 0
+  const day = padTo2Digits(date.getDate())
+  const hours = padTo2Digits(date.getHours())
+  const minutes = padTo2Digits(date.getMinutes())
+  const seconds = padTo2Digits(date.getSeconds())
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 }
 
 /**
@@ -46,21 +46,21 @@ export const DateFilterComponent = ({
   setEndDate,
   maxRangeDays = 7,
 }) => {
-  const dispatch = useDispatch();
-  const [isDateRangeInvalid, setIsDateRangeInvalid] = useState(false);
+  const dispatch = useDispatch()
+  const [isDateRangeInvalid, setIsDateRangeInvalid] = useState(false)
 
   const handleStartDateChange = (e) => {
-    const newStartDate = e.target.value;
+    const newStartDate = e.target.value
     // Validasi hanya dilakukan jika endDate sudah diisi
-    if (endDate && !validateDateRange(newStartDate, endDate, maxRangeDays, setIsDateRangeInvalid)) return;
-    dispatch(setStartDate(newStartDate));
-  };
+    if (endDate && !validateDateRange(newStartDate, endDate, maxRangeDays, setIsDateRangeInvalid)) return
+    dispatch(setStartDate(newStartDate))
+  }
 
   const handleEndDateChange = (e) => {
-    const newEndDate = e.target.value;
-    if (startDate && !validateDateRange(startDate, newEndDate, maxRangeDays, setIsDateRangeInvalid)) return;
-    dispatch(setEndDate(newEndDate));
-  };
+    const newEndDate = e.target.value
+    if (startDate && !validateDateRange(startDate, newEndDate, maxRangeDays, setIsDateRangeInvalid)) return
+    dispatch(setEndDate(newEndDate))
+  }
 
   return (
     <div className="relative">
@@ -94,26 +94,26 @@ export const DateFilterComponent = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 export const validateDateRange = (start, end, maxRangeDays, setIsDateRangeInvalid) => {
-    const startDay = dayjs(start);
-    const endDay = dayjs(end);
-    const diff = endDay.diff(startDay, "day");
+    const startDay = dayjs(start)
+    const endDay = dayjs(end)
+    const diff = endDay.diff(startDay, "day")
 
     if (diff < 0) {
-      toast.error("Tanggal akhir tidak boleh sebelum tanggal awal!");
-      setIsDateRangeInvalid(true);
-      return false;
+      toast.error("Tanggal akhir tidak boleh sebelum tanggal awal!")
+      setIsDateRangeInvalid(true)
+      return false
     }
 
     if (diff >= maxRangeDays) {
-      toast.warning(`Rentang tanggal tidak boleh lebih dari ${maxRangeDays} hari!`);
-      setIsDateRangeInvalid(true);
-      return false;
+      toast.warning(`Rentang tanggal tidak boleh lebih dari ${maxRangeDays} hari!`)
+      setIsDateRangeInvalid(true)
+      return false
     }
 
-    setIsDateRangeInvalid(false);
-    return true;
-  };
+    setIsDateRangeInvalid(false)
+    return true
+  }

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"
 
 
 const initialSignupCustomerState = {
@@ -12,22 +12,22 @@ export const signupCustomerSlice = createSlice({
     initialState: initialSignupCustomerState,
     reducers: {
         setLoadingSignCustomer: (state, action) => {
-            state.loadingSign = action.payload;
+            state.loadingSign = action.payload
         },
         signupSuccessCustomer: (state, action) => {
-            state.successSign = action.payload;
-            state.error = null;
-            state.errorObject = null;
+            state.successSign = action.payload
+            state.error = null
+            state.errorObject = null
         },
         signupErrorCustomer: (state, action) => {
-            state.error = action.payload.error;
-            state.errorObject = action.payload.errorObject;
-            state.successSign = null;
+            state.error = action.payload.error
+            state.errorObject = action.payload.errorObject
+            state.successSign = null
         },
         resetSignupCustomer: (state) => {
-            state.successSign = null;
-            state.error = null;
-            state.errorObject = null;
+            state.successSign = null
+            state.error = null
+            state.errorObject = null
         }
     }
 })
@@ -81,30 +81,30 @@ export const loginCustomerSlice = createSlice({
     initialState: initialLoginCustomerState,
     reducers: {
         loginSuccessCustomer: (state, action) => {
-            state.messageLoginSuccess = action.payload.messageLoginSuccess;
-            state.statusCodeSuccess = action.payload.statusCodeSuccess;
-            // state.loadingLogin = false;
-            // state.errorLogin = null;
-            // state.errPass = null;
-            // state.errUsername = null;
+            state.messageLoginSuccess = action.payload.messageLoginSuccess
+            state.statusCodeSuccess = action.payload.statusCodeSuccess
+            // state.loadingLogin = false
+            // state.errorLogin = null
+            // state.errPass = null
+            // state.errUsername = null
         },
         loginErrorCustomer: (state, action) => {
-            state.errorLogin = action.payload.errorLogin;
-            state.errPass = action.payload.errPass;
-            state.errUsername = action.payload.errUsername;
-            // state.statusCodeSuccess = null;
-            // state.loadingLogin = false;
+            state.errorLogin = action.payload.errorLogin
+            state.errPass = action.payload.errPass
+            state.errUsername = action.payload.errUsername
+            // state.statusCodeSuccess = null
+            // state.loadingLogin = false
         },
         setLoginLoadingCustomer: (state, action) => {
-            state.loadingLogin = action.payload;
+            state.loadingLogin = action.payload
         },
         setLoginStateNullCustomer: (state, action) => {
-            state.messageLoginSuccess = null;
-            state.loadingLogin = false;
-            state.statusCodeSuccess = null;
-            state.errorLogin = null;
-            state.errPass = null;
-            state.errUsername = null;
+            state.messageLoginSuccess = null
+            state.loadingLogin = false
+            state.statusCodeSuccess = null
+            state.errorLogin = null
+            state.errPass = null
+            state.errUsername = null
         }
     }
 })
@@ -189,7 +189,7 @@ export const createTransactionCustomerSlice = createSlice({
             state.errorPhoneNumber = action.payload.errorPhoneNumber
         }, 
         setLoadingCreateTransactionCustomer: (state, action) => {
-            state.loading = action.payload;
+            state.loading = action.payload
         }, 
         resetCreateTransactionCustomer: (state) => {
             state.message = null
@@ -219,27 +219,27 @@ export const loginInternalSlice = createSlice({
     initialState: initialLoginInternalState,
     reducers: {
         loginSuccessInternal: (state, action) => {
-            state.messageLoginSuccessInternal = action.payload.messageLoginSuccess;
-            state.statusCodeSuccessInternal = action.payload.statusCodeSuccess;
-            state.errorLoginInternal = null;
-            state.errPassInternal = null;
-            state.errEmailInternal = null;
+            state.messageLoginSuccessInternal = action.payload.messageLoginSuccess
+            state.statusCodeSuccessInternal = action.payload.statusCodeSuccess
+            state.errorLoginInternal = null
+            state.errPassInternal = null
+            state.errEmailInternal = null
         },
         loginErrorInternal: (state, action) => {
-            state.errorLoginInternal = action.payload.errorLogin;
-            state.errPassInternal = action.payload.errPass;
-            state.errEmailInternal = action.payload.errEmail;
-            state.statusCodeSuccessInternal = null;
+            state.errorLoginInternal = action.payload.errorLogin
+            state.errPassInternal = action.payload.errPass
+            state.errEmailInternal = action.payload.errEmail
+            state.statusCodeSuccessInternal = null
         },
         setLoginLoadingInternal: (state, action) => {
-            state.loadingLoginInternal = action.payload;
+            state.loadingLoginInternal = action.payload
         },
         setLoginStateNullInternal: (state, action) => {
-            state.messageLoginSuccessInternal = null;
-            state.statusCodeSuccessInternal = null;
-            state.errorLoginInternal = null;
-            state.errPassInternal = null;
-            state.errEmailInternal = null;
+            state.messageLoginSuccessInternal = null
+            state.statusCodeSuccessInternal = null
+            state.errorLoginInternal = null
+            state.errPassInternal = null
+            state.errEmailInternal = null
         }
     }
 })

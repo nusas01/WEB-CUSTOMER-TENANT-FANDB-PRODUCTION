@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef, use, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useRef, use, useCallback } from 'react'
 import { 
   Calendar, 
   Filter, 
@@ -19,12 +19,12 @@ import {
   Minimize,
   Settings,
   Menu,
-} from 'lucide-react';
-import Sidebar from '../../component/sidebar';
+} from 'lucide-react'
+import Sidebar from '../../component/sidebar'
 import {FormatISODate} from '../../helper/formatdate.js'
 import {DrafVoidDataComponent} from './drafVoidGeneralJournal'
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import {voidGeneralJournalInternal} from '../../actions/put'
 import {voidGeneralJournalInternalSlice} from '../../reducers/put'
 import {getJournalDrafByJsonInternalSlice} from '../../reducers/post.js'
@@ -39,23 +39,23 @@ import {
 import {
   getGeneralJournalByEventPerDayInternalSlice
 } from '../../reducers/get.js'
-import { SpinnerRelative, SpinnerFixed } from '../../helper/spinner';
+import { SpinnerRelative, SpinnerFixed } from '../../helper/spinner'
 import {
   fetchGeneralJournalByEventAllInternal, 
   fetchGeneralJournalByEventPerDayInternal, 
   fetchGeneralJournalVoidInternal, 
   fetchGeneralJournalDrafInternal,
-} from '../../actions/get';
+} from '../../actions/get'
 import {formatCurrency, useInfiniteScroll, useFullscreen, useElementHeight} from '../../helper/helper'
-import {DateFilterComponent,validateDateRange} from '../../helper/formatdate';
-import { set } from 'date-fns';
-import { AccessDeniedModal } from '../../component/model.js';
+import {DateFilterComponent,validateDateRange} from '../../helper/formatdate'
+import { set } from 'date-fns'
+import { AccessDeniedModal } from '../../component/model.js'
  
 export default function GeneralJournalDashboard() {
     const activeMenu = "general-journal"
     const dispatch = useDispatch()
-    const [toast, setToast] = useState(null);
-    const [showAccessDenied, setShowAccessDenied] = useState(false);
+    const [toast, setToast] = useState(null)
+    const [showAccessDenied, setShowAccessDenied] = useState(false)
 
     const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
     useEffect(() => {
@@ -65,8 +65,8 @@ export default function GeneralJournalDashboard() {
     }, [dataEmployeeInternal])
 
     // maxsimaz minimaz layar
-    const contentRef = useRef(null);
-    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+    const contentRef = useRef(null)
+    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
     // handle sidebar and elemant header yang responsice
     const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
@@ -87,9 +87,9 @@ export default function GeneralJournalDashboard() {
         setToast({
           message: errorVoidGeneralJournal,
           type: 'error'
-        });
+        })
       }
-    }, [errorVoidGeneralJournal]);
+    }, [errorVoidGeneralJournal])
 
     return (
       <div className="flex relative">
@@ -101,7 +101,7 @@ export default function GeneralJournalDashboard() {
               type={toast.type} 
               onClose={() => { 
                 setToast(null)
-                dispatch(resetVoidGeneralJournal());
+                dispatch(resetVoidGeneralJournal())
               }} 
               duration={5000}
               />
@@ -140,7 +140,7 @@ export default function GeneralJournalDashboard() {
 }
 
 const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
-  const dateInputRef = useRef(null);
+  const dateInputRef = useRef(null)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [spinnerRelative, setSpinnerRelative] = useState(false)
@@ -200,19 +200,19 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
 
   const groupedDataAgregasi = journalDataAgregasi.reduce((acc, entry) => {
     if (!acc[entry.event]) {
-      acc[entry.event] = [];
+      acc[entry.event] = []
     }
-    acc[entry.event].push(entry);
-    return acc;
-  }, {});
+    acc[entry.event].push(entry)
+    return acc
+  }, {})
 
   const groupedDataNonAgregasi = journalDataNonAgregasi.reduce((acc, entry) => {
     if (!acc[entry.event]) {
-      acc[entry.event] = [];
+      acc[entry.event] = []
     }
-    acc[entry.event].push(entry);
-    return acc;
-  }, {});
+    acc[entry.event].push(entry)
+    return acc
+  }, {})
   
 
   // Filter states
@@ -280,11 +280,11 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
       }
   }, [statusFilter, eventFilter])
 
-  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [isFirstRender, setIsFirstRender] = useState(true)
   useEffect(() => {
     if (isFirstRender) {
-      setIsFirstRender(false);
-      return;
+      setIsFirstRender(false)
+      return
     }
 
     if (startDate !== '' && endDate !== '') {
@@ -318,7 +318,7 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
         hasMoreJournalNonAgregasi && 
         !isLoadMoreNonAgregasi && 
         !loadingGeneralJournalByEventPerDayInternal) {
-        dispatch(loadMoreGeneralJournalNonAgregasi());
+        dispatch(loadMoreGeneralJournalNonAgregasi())
     }
   }, [eventFilter, hasMoreJournalNonAgregasi, isLoadMoreNonAgregasi, loadingGeneralJournalByEventPerDayInternal, dispatch])
 
@@ -351,21 +351,21 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
   const getStatusConfig = (status) => {
     switch (status) {
       case 'FINALIZE':
-        return { icon: CheckCircle, color: 'text-green-600', bgColor: 'bg-green-100', label: 'Finalize' };
+        return { icon: CheckCircle, color: 'text-green-600', bgColor: 'bg-green-100', label: 'Finalize' }
       case 'DRAF':
-        return { icon: Clock, color: 'text-yellow-600', bgColor: 'bg-yellow-100', label: 'Draf' };
+        return { icon: Clock, color: 'text-yellow-600', bgColor: 'bg-yellow-100', label: 'Draf' }
       case 'VOID':
-        return { icon: XCircle, color: 'text-red-600', bgColor: 'bg-red-100', label: 'Void' };
+        return { icon: XCircle, color: 'text-red-600', bgColor: 'bg-red-100', label: 'Void' }
       default:
-        return { icon: AlertTriangle, color: 'text-gray-600', bgColor: 'bg-gray-100', label: 'Unknown' };
+        return { icon: AlertTriangle, color: 'text-gray-600', bgColor: 'bg-gray-100', label: 'Unknown' }
     }
-  };
+  }
   
   
   // Calculate totals
   const totals = useMemo(() => {
-  let totalDebit = 0;
-  let totalKredit = 0;
+  let totalDebit = 0
+  let totalKredit = 0
   
   if (eventFilter === 'Non Agregasi') {
     totalDebit = totalDebetNonAgregasi
@@ -377,33 +377,33 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
       entry.accounts.forEach(acc => {
         // Hapus pengecekan acc.action karena semua data sudah FINALIZE
         if (acc.type === 'DEBIT') {
-          totalDebit += acc.amount;
+          totalDebit += acc.amount
         } else if (acc.type === 'KREDIT') {
-          totalKredit += acc.amount;
+          totalKredit += acc.amount
         }
-      });
-    });
+      })
+    })
   }
   
-  return { totalDebit, totalKredit };
-}, [journalDataNonAgregasi, journalDataAgregasi, eventFilter]);
+  return { totalDebit, totalKredit }
+}, [journalDataNonAgregasi, journalDataAgregasi, eventFilter])
 
 // Alternatif: Jika ingin menghitung keduanya sekaligus
 // const totalsAlternative = useMemo(() => {
-//   let totalDebit = 0;
-//   let totalKredit = 0;
+//   let totalDebit = 0
+//   let totalKredit = 0
   
 //   // Hitung Non Agregasi
 //   if (eventFilter === 'Non Agregasi' && journalDataNonAgregasi) {
 //     journalDataNonAgregasi.forEach(entry => {
 //       entry.accounts.forEach(acc => {
 //         if (acc.type === 'DEBIT') {
-//           totalDebit += acc.amount;
+//           totalDebit += acc.amount
 //         } else if (acc.type === 'KREDIT') {
-//           totalKredit += acc.amount;
+//           totalKredit += acc.amount
 //         }
-//       });
-//     });
+//       })
+//     })
 //   }
   
 //   // Hitung Agregasi
@@ -411,32 +411,32 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
 //     journalDataAgregasi.forEach(entry => {
 //       entry.accounts.forEach(acc => {
 //         if (acc.type === 'DEBIT') {
-//           totalDebit += acc.amount;
+//           totalDebit += acc.amount
 //         } else if (acc.type === 'KREDIT') {
-//           totalKredit += acc.amount;
+//           totalKredit += acc.amount
 //         }
-//       });
-//     });
+//       })
+//     })
 //   }
   
-//   return { totalDebit, totalKredit };
-// }, [journalDataNonAgregasi, journalDataAgregasi, eventFilter]);
+//   return { totalDebit, totalKredit }
+// }, [journalDataNonAgregasi, journalDataAgregasi, eventFilter])
 
 
   // Get unique events for filter
   const uniqueEvents = ["Agregasi", 'Non Agregasi']
 
   // handle status filtered
-  const [isDataEmpty, setDataEmpty] = useState(false);
+  const [isDataEmpty, setDataEmpty] = useState(false)
   useEffect(() => {
     const dataMap = {
       'FINALIZE': journalDataAgregasi.length === 0 && journalDataNonAgregasi.length === 0,
       'DRAF': journalDataDraf.length === 0,
       'VOID': journalDataVoid.length === 0,
-    };
+    }
   
-    setDataEmpty(dataMap[statusFilter || ''] || false);
-  }, [statusFilter, journalDataAgregasi, journalDataNonAgregasi, journalDataDraf, journalDataVoid]);
+    setDataEmpty(dataMap[statusFilter || ''] || false)
+  }, [statusFilter, journalDataAgregasi, journalDataNonAgregasi, journalDataDraf, journalDataVoid])
 
 
 
@@ -479,42 +479,42 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
 
   const handleDivDateClick = () => {
     if (statusFilter !== "DRAF" && dateInputRef.current) {
-      dateInputRef.current.showPicker(); // Untuk browser modern
-      // Atau gunakan: dateInputRef.current.focus();
+      dateInputRef.current.showPicker() // Untuk browser modern
+      // Atau gunakan: dateInputRef.current.focus()
     }
-  };
+  }
 
 
   // VALIDATE DATE RANGE  
-  const maxRangeDays = 7;
-  const [isDateRangeInvalid, setIsDateRangeInvalid] = useState(false);
+  const maxRangeDays = 7
+  const [isDateRangeInvalid, setIsDateRangeInvalid] = useState(false)
   
   const handleStartDateChange = (e) => {
-    const newStartDate = e.target.value;
+    const newStartDate = e.target.value
     // Validasi hanya dilakukan jika endDate sudah diisi
-    if (endDate && !validateDateRange(newStartDate, endDate, maxRangeDays, setIsDateRangeInvalid)) return;
-    dispatch(setStartDate(newStartDate));
-  };
+    if (endDate && !validateDateRange(newStartDate, endDate, maxRangeDays, setIsDateRangeInvalid)) return
+    dispatch(setStartDate(newStartDate))
+  }
 
   const handleEndDateChange = (e) => {
-    const newEndDate = e.target.value;
-    if (startDate && !validateDateRange(startDate, newEndDate, maxRangeDays, setIsDateRangeInvalid)) return;
-    dispatch(setEndDate(newEndDate));
-    setIsDateRangeInvalid(false); // Reset validasi saat endDate diubah
-  };
+    const newEndDate = e.target.value
+    if (startDate && !validateDateRange(startDate, newEndDate, maxRangeDays, setIsDateRangeInvalid)) return
+    dispatch(setEndDate(newEndDate))
+    setIsDateRangeInvalid(false) // Reset validasi saat endDate diubah
+  }
 
-  const isMissingDate = startDate === '' || endDate === '';
+  const isMissingDate = startDate === '' || endDate === ''
   const shouldShowInfoToday =
   isMissingDate &&
   (
     (eventFilter === 'Agregasi' && journalDataAgregasi.length > 0) ||
     (eventFilter === 'Non Agregasi' && journalDataNonAgregasi.length > 0) ||
     (statusFilter === 'VOID' && journalDataVoid.length > 0)
-  );
+  )
 
 
   // handle sidebar and elemant header yang responsice
-  const { ref: headerRef, height: headerHeight } = useElementHeight();
+  const { ref: headerRef, height: headerHeight } = useElementHeight()
   const { setIsOpen } = navbarInternalSlice.actions
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -783,17 +783,17 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
                     <style jsx>{`
                       @keyframes shimmer {
                         0% {
-                          transform: translateX(-100%) skewX(-12deg);
+                          transform: translateX(-100%) skewX(-12deg)
                         }
                         100% {
-                          transform: translateX(200%) skewX(-12deg);
+                          transform: translateX(200%) skewX(-12deg)
                         }
                       }
                       .animate-shimmer {
-                        animation: shimmer 1.5s ease-in-out;
+                        animation: shimmer 1.5s ease-in-out
                       }
                       .animation-delay-700 {
-                        animation-delay: 700ms;
+                        animation-delay: 700ms
                       }
                     `}</style>
                   </div>
@@ -812,15 +812,15 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
                             
                             <div className="divide-y divide-gray-200">
                               {entries.map((entry, entryIndex) => {
-                                const statusConfig = getStatusConfig('FINALIZE');
-                                const StatusIcon = statusConfig.icon;
+                                const statusConfig = getStatusConfig('FINALIZE')
+                                const StatusIcon = statusConfig.icon
                                 
                                 // Sort accounts: DEBIT first, then KREDIT
                                 const sortedAccounts = [...entry.accounts].sort((a, b) => {
-                                  if (a.type === 'DEBIT' && b.type === 'KREDIT') return -1;
-                                  if (a.type === 'KREDIT' && b.type === 'DEBIT') return 1;
-                                  return 0;
-                                });
+                                  if (a.type === 'DEBIT' && b.type === 'KREDIT') return -1
+                                  if (a.type === 'KREDIT' && b.type === 'DEBIT') return 1
+                                  return 0
+                                })
                                 
                                 return (
                                   <div key={entryIndex} className="p-3 sm:p-6">
@@ -875,7 +875,7 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
                                       </table>
                                     </div>
                                   </div>
-                                );
+                                )
                               })}
                             </div>
                           </div>
@@ -893,16 +893,16 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
                             
                             <div className="divide-y divide-gray-200">
                               {entries.map((entry, entryIndex) => {
-                                const status = entry.accounts[0]?.action || 'UNKNOWN';
-                                const statusConfig = getStatusConfig('FINALIZE'); // Non agregasi selalu FINALIZE
-                                const StatusIcon = statusConfig.icon;
+                                const status = entry.accounts[0]?.action || 'UNKNOWN'
+                                const statusConfig = getStatusConfig('FINALIZE') // Non agregasi selalu FINALIZE
+                                const StatusIcon = statusConfig.icon
                                 
                                 // Sort accounts: DEBIT first, then KREDIT
                                 const sortedAccounts = [...entry.accounts].sort((a, b) => {
-                                  if (a.type === 'DEBIT' && b.type === 'KREDIT') return -1;
-                                  if (a.type === 'KREDIT' && b.type === 'DEBIT') return 1;
-                                  return 0;
-                                });
+                                  if (a.type === 'DEBIT' && b.type === 'KREDIT') return -1
+                                  if (a.type === 'KREDIT' && b.type === 'DEBIT') return 1
+                                  return 0
+                                })
                                 
                                 return (
                                   <div key={entryIndex} className="p-6">
@@ -960,7 +960,7 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
                                       </table>
                                     </div>
                                   </div>
-                                );
+                                )
                               })}
                             </div>
                           </div>
@@ -1022,5 +1022,5 @@ const JournalDashboard = ({isFullScreen, fullscreenchange}) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

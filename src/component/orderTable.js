@@ -1,11 +1,11 @@
 import { ArrowDown, ArrowUp, CalendarIcon, Search, History, Currency, Download } from "lucide-react"
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Order() {
-    const [search, setSearch] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [search, setSearch] = useState("")
+    const [startDate, setStartDate] = useState("")
+    const [endDate, setEndDate] = useState("")
 
       const transactions = [
         {
@@ -67,7 +67,7 @@ export default function Order() {
           date: "14 Jan 2021, 04:07 PM",
           direction: "in",
         },
-      ];
+      ]
 
     const navigate = useNavigate()
     const handleNavigate = () => {

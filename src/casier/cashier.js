@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux"
 import {SpinnerRelative, SpinnerFixed} from "../helper/spinner"
 import { id } from "date-fns/locale"
 import { AddProductToCart } from "../component/add"
-import { Trash2 } from 'lucide-react'; // Pastikan Anda mengimpor ikon yang diperlukan
+import { Trash2 } from 'lucide-react' // Pastikan Anda mengimpor ikon yang diperlukan
 import  { addItemCashier, deleteItemCashier, updateItemCashier, clearCartCashier } from "../reducers/cartSlice"
 import { Tuple } from "@reduxjs/toolkit"
 import { validateEmail } from "../helper/validate"
@@ -48,20 +48,20 @@ import { useNavigate } from "react-router-dom"
 import { useFullscreen, useElementHeight } from "../helper/helper.js"
 
 const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+  const [debouncedValue, setDebouncedValue] = useState(value)
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+      setDebouncedValue(value)
+    }, delay)
 
     return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
+      clearTimeout(handler)
+    }
+  }, [value, delay])
 
-  return debouncedValue;
-};
+  return debouncedValue
+}
 
 
 export default function Cashier() {
@@ -74,11 +74,11 @@ export default function Cashier() {
     const {isHidden} = useSelector((state) => state.headerHiddenInternalState)
 
     // maxsimaz minimaz layar
-    const contentRef = useRef(null);
-    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+    const contentRef = useRef(null)
+    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
     // handle sidebar and elemant header yang responsice
-    const { ref: headerRef, height: headerHeight } = useElementHeight();
+    const { ref: headerRef, height: headerHeight } = useElementHeight()
     const { setIsOpen } = navbarInternalSlice.actions
     const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -179,8 +179,8 @@ export default function Cashier() {
 } 
 
 const ComponentCartCashier = ({cartRef, isFullScreen}) => {
-    const [notesState, setNotesState] = useState({});
-    const [expandedNotes, setExpandedNotes] = useState({});
+    const [notesState, setNotesState] = useState({})
+    const [expandedNotes, setExpandedNotes] = useState({})
     const [eventNotes, setEventNotes] = useState(0)
     const dispatch = useDispatch()
     const dropdownRef = useRef(null)
@@ -301,29 +301,29 @@ const ComponentCartCashier = ({cartRef, isFullScreen}) => {
     }
 
     useEffect(() => {
-        const tax = Math.floor(taxRateInternal * subTotal);
+        const tax = Math.floor(taxRateInternal * subTotal)
 
         if (dataCart.payment_method === "QR") {
-            const rawFee = feeTransaction * (subTotal + tax);
-            const fee = Math.floor(rawFee); 
-            const total = subTotal + tax + fee;
+            const rawFee = feeTransaction * (subTotal + tax)
+            const fee = Math.floor(rawFee) 
+            const total = subTotal + tax + fee
 
             setDataCart((prev) => ({
             ...prev,
             amount_price: total,
             fee: fee,
             tax: tax,
-            }));
+            }))
         } else {
-            const total = subTotal + tax + dataCart.fee;
+            const total = subTotal + tax + dataCart.fee
 
             setDataCart((prev) => ({
             ...prev,
             amount_price: total,
             tax: tax,
-            }));
+            }))
         }
-    }, [subTotal, taxRateInternal, dataCart.payment_method, dataCart.fee]);
+    }, [subTotal, taxRateInternal, dataCart.payment_method, dataCart.fee])
 
 
 
@@ -343,27 +343,27 @@ const ComponentCartCashier = ({cartRef, isFullScreen}) => {
 
     const handleQuantityChange = (quantity, id, harga) => {
         if (quantity === 0 || isNaN(quantity)) {
-            quantity = '';
+            quantity = ''
         }
-        const amountPrice = quantity * harga;
+        const amountPrice = quantity * harga
         const item = {id, amountPrice, quantity}
         dispatch(updateItemCashier(item))
     }
 
     const handleUpdateIncerement = (id, harga, quantity) => {
-        quantity = Number(quantity) + 1;
-        const amountPrice = quantity * harga;
-        const item = {id, amountPrice, quantity};
-        dispatch(updateItemCashier(item));
+        quantity = Number(quantity) + 1
+        const amountPrice = quantity * harga
+        const item = {id, amountPrice, quantity}
+        dispatch(updateItemCashier(item))
     }
 
     const handleUpdateDecrement = (id, harga, quantity) => {
-        quantity = Number(quantity) - 1;
+        quantity = Number(quantity) - 1
         if (quantity === 0) {
-            // setIdModelNotifDelete(id);
-            quantity = 1;
+            // setIdModelNotifDelete(id)
+            quantity = 1
         }
-        const amountPrice = quantity * harga;
+        const amountPrice = quantity * harga
         const item = {id, amountPrice, quantity}
         dispatch(updateItemCashier(item))
     }
@@ -376,43 +376,43 @@ const ComponentCartCashier = ({cartRef, isFullScreen}) => {
 
     // Initialize notes state dari items
     useEffect(() => {
-        const initialNotes = {};
+        const initialNotes = {}
         items.forEach(item => {
-        initialNotes[item.id] = item.notes || '';
-        });
-        setNotesState(initialNotes);
-    }, [items]);
+        initialNotes[item.id] = item.notes || ''
+        })
+        setNotesState(initialNotes)
+    }, [items])
 
     // Handle perubahan notes secara lokal
     const handleNotesChange = useCallback((productId, value) => {
         setNotesState(prev => ({
         ...prev,
         [productId]: value
-        }));
-    }, []);
+        }))
+    }, [])
 
     // Debounce untuk setiap product notes
-    const debouncedNotes = useDebounce(notesState, 800);
+    const debouncedNotes = useDebounce(notesState, 800)
 
     // Effect untuk update notes ke parent/store ketika debounced value berubah
     useEffect(() => {
         Object.entries(debouncedNotes).forEach(([productId, notes]) => {
-        const currentItem = items.find(item => item.id === productId);
+        const currentItem = items.find(item => item.id === productId)
         
         // Hanya update jika notes berbeda dengan yang ada di store
         if (currentItem && currentItem.notes !== notes) {
-            handleUpdateNotes(notes, productId);
+            handleUpdateNotes(notes, productId)
         }
-        });
-    }, [debouncedNotes, items, handleUpdateNotes]);
+        })
+    }, [debouncedNotes, items, handleUpdateNotes])
 
     // Toggle expand notes
     const toggleNotesExpand = useCallback((productId) => {
         setExpandedNotes(prev => ({
         ...prev,
         [productId]: !prev[productId]
-        }));
-    }, []);
+        }))
+    }, [])
 
     const handleChangeMoneyReceved = (e) => {
         const raw = e.target.value.replace(/\./g, '')
@@ -524,8 +524,8 @@ const ComponentCartCashier = ({cartRef, isFullScreen}) => {
                 quantity: product.quantity,
                 notes: product.notes || "", 
                 name: product.name,
-            };
-        });
+            }
+        })
 
         const data = {
             payment_method: dataCart.payment_method,
@@ -679,7 +679,7 @@ const ComponentCartCashier = ({cartRef, isFullScreen}) => {
                                             {dataPaymentMethodInternal
                                             .filter(method => method.type !== "EWALLET") 
                                             .map((method) => {
-                                                const isSelected = method.name === dataCart.channel_code;
+                                                const isSelected = method.name === dataCart.channel_code
                                                 return (
                                                     <button
                                                         key={method.id}
@@ -703,7 +703,7 @@ const ComponentCartCashier = ({cartRef, isFullScreen}) => {
                                                             </svg>
                                                         )}
                                                     </button>
-                                                );
+                                                )
                                             })}
                                             
                                             { paymentMethodCash.status_payment && (
@@ -962,7 +962,7 @@ const ComponentCartCashier = ({cartRef, isFullScreen}) => {
 const ProductCashier = ({onClose}) => {
     const dispatch = useDispatch()
     const [productData, setProductData] = useState()
-    const [showModelAddProduct, setShowModelAddProduct] = useState(false);
+    const [showModelAddProduct, setShowModelAddProduct] = useState(false)
 
 
     const { datas } = useSelector((state) => state.persisted.productsCustomer)
@@ -1035,8 +1035,8 @@ const ProductCashier = ({onClose}) => {
                                     <p className="text-2xl font-bold text-gray-700 mb-4">{item.category_name}</p>
                                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                                         {item.products.map((prd, idx) => {
-                                            const cartItem = items.find((cart) => cart.id === prd.product_id);
-                                            const isAvailable = prd.available;
+                                            const cartItem = items.find((cart) => cart.id === prd.product_id)
+                                            const isAvailable = prd.available
 
                                             return (
                                                 <div 
@@ -1053,7 +1053,7 @@ const ProductCashier = ({onClose}) => {
                                                                 name: prd.name,
                                                                 harga: prd.price,
                                                                 image: prd.image,
-                                                            });
+                                                            })
                                                         }
                                                     }}
                                                 >
@@ -1102,7 +1102,7 @@ const ProductCashier = ({onClose}) => {
                                                         </p>
                                                     </div>
                                                 </div>
-                                            );
+                                            )
                                         })}
                                     </div>
                                 </div>
@@ -1166,14 +1166,14 @@ const ComponentOrderCashier = () => {
             if (modelRef.current && !modelRef.current.contains(event.target)) {
                 closeModal()
             }
-        };
+        }
 
        
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside)
        
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [])
 
@@ -1382,7 +1382,7 @@ const ComponentOrderCashier = () => {
 
 
 const PaymentDetailsModal = ({ isOpen, transaction, onClose, modalRef }) => {
-    if (!isOpen || !transaction) return null;
+    if (!isOpen || !transaction) return null
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
@@ -1457,7 +1457,7 @@ const PaymentDetailsModal = ({ isOpen, transaction, onClose, modalRef }) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
 

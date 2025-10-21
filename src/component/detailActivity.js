@@ -1,11 +1,11 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"
 import "../style/activity.css"
-import ImagePaymentMethod from "../helper/imagePaymentMethod";
-import { Calendar, Clock, ArrowLeft, RefreshCw, AlertTriangle, Loader2, Store } from 'lucide-react';
-import { useSelector, useDispatch } from "react-redux";
+import ImagePaymentMethod from "../helper/imagePaymentMethod"
+import { Calendar, Clock, ArrowLeft, RefreshCw, AlertTriangle, Loader2, Store } from 'lucide-react'
+import { useSelector, useDispatch } from "react-redux"
 import { getDetailTransactionsHistoryCustomerSlice } from "../reducers/get"
 import { fetchDetailTransactionHistoryCustomer } from "../actions/get"
-import { addItem, addItemCashier } from "../reducers/cartSlice";
+import { addItem, addItemCashier } from "../reducers/cartSlice"
 
 // Loading Skeleton Component
 const LoadingSkeleton = () => {
@@ -96,8 +96,8 @@ const LoadingSkeleton = () => {
         <div className="w-full h-12 bg-gray-200 rounded-xl"></div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Error Component
 const ErrorState = ({ onRetry, onBack }) => {
@@ -162,8 +162,8 @@ const ErrorState = ({ onRetry, onBack }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 // Loading Overlay Component
 const LoadingOverlay = () => {
@@ -185,33 +185,33 @@ const LoadingOverlay = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default function DetailActivity() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const location = useLocation()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    const {resetError} = getDetailTransactionsHistoryCustomerSlice.actions;
-    const {dataDetailTransactionHistory : detailOrder, error, loadingHistory} = useSelector((state) => state.persisted.getDetailTransactionsHistoryCustomer);
+    const {resetError} = getDetailTransactionsHistoryCustomerSlice.actions
+    const {dataDetailTransactionHistory : detailOrder, error, loadingHistory} = useSelector((state) => state.persisted.getDetailTransactionsHistoryCustomer)
     const id = location.state?.id 
 
     const handleNavigate = () => {
-        dispatch(resetError());
-        navigate("/activity", {state: "history"});
-    };
+        dispatch(resetError())
+        navigate("/activity", {state: "history"})
+    }
 
     const handleRetry = () => {
-        dispatch(resetError());
+        dispatch(resetError())
         dispatch(fetchDetailTransactionHistoryCustomer(id))
         // Add your retry logic here - typically refetch the data
-        // dispatch(fetchDetailTransaction(transactionId));
-    };
+        // dispatch(fetchDetailTransaction(transactionId))
+    }
 
     // Show loading skeleton on initial load
     if (loadingHistory && !detailOrder) {
-        return <LoadingSkeleton />;
+        return <LoadingSkeleton />
     }
 
     // Show error state
@@ -221,12 +221,12 @@ export default function DetailActivity() {
                 onRetry={handleRetry}
                 onBack={handleNavigate}
             />
-        );
+        )
     }
 
     // reorder
     const handleReorder = () => {
-      if (!detailOrder?.order || detailOrder.order.length === 0) return;
+      if (!detailOrder?.order || detailOrder.order.length === 0) return
 
       detailOrder.order.forEach((item) => {
         const newItem = {
@@ -237,17 +237,17 @@ export default function DetailActivity() {
           notes: item.notes || '',
           amountPrice: item.product.price * item.quantity,
           quantity: item.quantity,
-        };
+        }
 
-        dispatch(addItem(newItem)); 
-      });
+        dispatch(addItem(newItem)) 
+      })
 
-      navigate("/cart"); 
-    };
+      navigate("/cart") 
+    }
 
 
     // Show loading overlay when refetching with existing data
-    const showLoadingOverlay = loadingHistory && detailOrder;
+    const showLoadingOverlay = loadingHistory && detailOrder
 
     // Main content
     return (
@@ -447,5 +447,5 @@ export default function DetailActivity() {
                 </div>
             </div>
         </>
-    );
+    )
 }

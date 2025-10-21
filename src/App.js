@@ -1,7 +1,7 @@
 import Cart from './component/cart'
 import './App.css'
 import Home from './component/home'
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import RegisterPage from './component/loginSignup'
 import Profile from './component/profile'
 import ChangePassword from './component/changePassword'
@@ -11,7 +11,6 @@ import DetailActivity from './component/detailActivity'
 import Buy from './component/buy'
 import KasirTransaction from './casier/transaction'
 import KasirOrders from './casier/order'
-import OrderDetails from './casier/orderdetails'
 import KasirProducts from './casier/product'
 import KasirStatistik from './casier/statistik'
 import KasirSettings from './casier/settings'
@@ -27,9 +26,8 @@ import {
 } from './actions/get'
 import { GeneralJournalForm } from './casier/finance/inputGeneralJournal'
 import { useDispatch, useSelector } from 'react-redux'
-import { PrivateRouteCustomer, PrivateRouteInternal } from './helper/privateRoute'
 import Verification from './component/verification'
-import { use, useEffect } from 'react'
+import { useEffect } from 'react'
 import SetUsername from './component/setUsername'
 import {UsedSSEContainer} from './actions/sse'
 import ServiceRenewalNotice from './component/serviceRenewal'
@@ -43,21 +41,30 @@ import {
   statusServiceMaintenanceSlice,
   statusExpiredInternalTokenSlice,
 } from './reducers/expToken'
+import { resetApp } from './reducers/state'
 import MaintenanceComponent from './component/maintanance'
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom"
 import {
   loginStatusInternalSlice,
   loginStatusCustomerSlice,
+  logoutInternalSlice,
+  logoutCustomerSlice,
+  getProductsCustomerSlice,
+  getDataCustomerSlice,
+  getPaymentMethodsCustomerSlice,
+  getTransactionOnGoingCustomerSlice,
+  getTransactionsHistoryCustomerSlice,
 } from './reducers/get'
 import EmployeeManagement from './casier/employee'
 import CreateEmployee from './casier/createEmployee'
 import ForgotPasswordComponent from './component/forgotPassword'
-import { ScrollToTop } from './helper/helper';
-import { da } from 'date-fns/locale'
+import { ScrollToTop } from './helper/helper'
 import { useSingleTab } from './helper/helper'
+import { setOrderTypeContext } from "./reducers/reducers"
+import { clearCart } from "./reducers/cartSlice"
 
 function InternalWrapper() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   // handle fetch data employee internal
   const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
@@ -82,11 +89,11 @@ function InternalWrapper() {
     }
   }, [])
 
-  return <Outlet />; // render semua child route internal
+  return <Outlet /> // render semua child route internal
 }
 
 function CustomerWrapper() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const { loggedIn: loggedInCustomer } = useSelector((state) => state.persisted.loginStatusCustomer)
   useEffect(() => {
@@ -119,11 +126,8 @@ function CustomerWrapper() {
 
 function AppContent() {
   const dispatch = useDispatch()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   
-  const {setLoginStatusCustomer} = loginStatusCustomerSlice.actions
-  const {setLoginStatusInternal} = loginStatusInternalSlice.actions
-
   // get data products 
   const { datas } = useSelector((state) => state.persisted.productsCustomer)
   useEffect(() => {
@@ -142,31 +146,48 @@ function AppContent() {
 
   useEffect(() => {
     if (statusExpiredToken) {
-      navigate("/service/renewal");
+      navigate("/service/renewal")
       dispatch(clearStatusExpiredToken())
     }
   }, [statusExpiredToken])
 
   // handle expired user token
+  const { successFetchProducts } = getProductsCustomerSlice.actions
+  const { fetchSuccessGetDataCustomer } = getDataCustomerSlice.actions
+  const { fetchSuccessGetPaymentMethodsCustomer } = getPaymentMethodsCustomerSlice.actions
+  const { setLoginStatusCustomer } = loginStatusCustomerSlice.actions
+  const { fetchSuccessGetTransactionOnGoingCustomer } = getTransactionOnGoingCustomerSlice.actions
+  const { fetchSuccessGetTransactionHistoryCustomer } = getTransactionsHistoryCustomerSlice.actions
+  
+  const { resetLogoutCustomer } = logoutCustomerSlice.actions
   const { clearStatusExpiredUserToken } = statusExpiredUserTokenSlice.actions
   const { statusExpiredUserToken } = useSelector((state) => state.statusExpiredUserTokenState)
   useEffect(() => {
     if (statusExpiredUserToken) {
-      navigate("/access");
-      dispatch(clearStatusExpiredUserToken())
-      dispatch(setLoginStatusCustomer(false))
+      dispatch(resetLogoutCustomer())
+      dispatch(successFetchProducts([]))
+      dispatch(fetchSuccessGetDataCustomer({}))
+      dispatch(fetchSuccessGetPaymentMethodsCustomer({payment_methods: []}))
+      dispatch(setOrderTypeContext({orderTakeAway: null, tableId: null}))
+      dispatch(setLoginStatusCustomer(null))
+      dispatch(fetchSuccessGetTransactionOnGoingCustomer([]))
+      dispatch(fetchSuccessGetTransactionHistoryCustomer(null))
+      dispatch(clearCart())
+      window.location.href = "/"
     }
   }, [statusExpiredUserToken])
 
 
   // handle expired internal user token
+  const {setLoginStatusInternal} = loginStatusInternalSlice.actions
   const {clearStatusExpiredInternalToken} = statusExpiredInternalTokenSlice.actions
+  const {resetLogoutInternal} = logoutInternalSlice.actions
   const { statusExpiredInternalToken } = useSelector((state) => state.statusExpiredInternalTokenState)
   useEffect(() => {
     if (statusExpiredInternalToken) {
-      navigate("/internal/access");
-      dispatch(clearStatusExpiredInternalToken())
-      dispatch(setLoginStatusInternal(false))
+      dispatch(resetLogoutInternal())
+      navigate("/internal/access")
+      resetApp()
     }
   }, [statusExpiredInternalToken])
 
@@ -176,7 +197,7 @@ function AppContent() {
 
   useEffect(() => {
     if (statusServiceMaintenance) {
-      navigate("/maintenance");
+      navigate("/maintenance")
       dispatch(clearStatusServiceMaintenance())
     }
   }, [statusServiceMaintenance])
@@ -230,7 +251,7 @@ function AppContent() {
           </Route>
       </Routes>
     </div>
-  );
+  )
 }
 
 // Main App component dengan Router di level tertinggi
@@ -239,7 +260,7 @@ function App() {
     <Router>
       <AppContent />
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

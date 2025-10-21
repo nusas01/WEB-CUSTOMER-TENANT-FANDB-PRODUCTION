@@ -1,4 +1,4 @@
-import { ShoppingCart, Clock } from 'lucide-react';
+import { ShoppingCart, Clock } from 'lucide-react'
 
 const ServiceRenewalNotice = ({ expirationDate }) => {
   return (
@@ -52,7 +52,7 @@ const ServiceRenewalNotice = ({ expirationDate }) => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ServiceRenewalNotice;
+export default ServiceRenewalNotice

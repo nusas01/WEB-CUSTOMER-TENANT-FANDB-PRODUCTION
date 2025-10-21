@@ -13,21 +13,21 @@ export const changePasswordCustomerSlice = createSlice({
     initialState: initialChangePasswordCustomerState,
     reducers: {
         changePassSuccessCustomer: (state, action) => {
-            state.responseSucces = action.payload;
-            state.errorField = null;
-            state.errorMessage = null;
-            state.errorCP = null;
-            state.loading = false;
+            state.responseSucces = action.payload
+            state.errorField = null
+            state.errorMessage = null
+            state.errorCP = null
+            state.loading = false
         },
         changePassErrorCustomer: (state, action) => {
-            state.errorField = action.payload.errorField;
-            state.errorMessage = action.payload.errorMessage;
-            state.errorCP = action.payload.error;
-            state.responseSucces = null;
-            state.loading = false;
+            state.errorField = action.payload.errorField
+            state.errorMessage = action.payload.errorMessage
+            state.errorCP = action.payload.error
+            state.responseSucces = null
+            state.loading = false
         },
         setLoadingPassCustomer: (state, action) => {
-            state.loading = action.payload;
+            state.loading = action.payload
         },
         resetChangePasswordCustomer: (state) => {
             state.responseSucces = null

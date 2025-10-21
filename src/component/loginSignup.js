@@ -1,22 +1,22 @@
-// import { useForm } from "react-hook-form";
-// import { FcGoogle } from "react-icons/fc";
-// import { FaApple } from "react-icons/fa";
-// import { BsMicrosoft } from "react-icons/bs";
-import { useEffect, useState } from "react";
-import "../style/loginSignup.css";
-import { LogIn } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { signupCustomer, loginCustomer, loginGoogleCustomer, loginInternal } from "../actions/post";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useForm } from "react-hook-form"
+// import { FcGoogle } from "react-icons/fc"
+// import { FaApple } from "react-icons/fa"
+// import { BsMicrosoft } from "react-icons/bs"
+import { useEffect, useState } from "react"
+import "../style/loginSignup.css"
+import { LogIn } from "lucide-react"
+import { useDispatch, useSelector } from "react-redux"
+import { signupCustomer, loginCustomer, loginGoogleCustomer, loginInternal } from "../actions/post"
+import { useLocation, useNavigate } from "react-router-dom"
 import { 
   loginCustomerSlice, 
   signupCustomerSlice, 
   loginGoogleCustomerSlice,
   loginInternalSlice,
-} from "../reducers/post";
-import {SpinnerFixed} from "../helper/spinner";
-import { setIsClose } from "../reducers/reducers";
-import { OrderTypeInvalidAlert, Toast, ToastPortal } from "./alert";
+} from "../reducers/post"
+import {SpinnerFixed} from "../helper/spinner"
+import { setIsClose } from "../reducers/reducers"
+import { OrderTypeInvalidAlert, Toast, ToastPortal } from "./alert"
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -27,7 +27,7 @@ export default function RegisterPage() {
   const [showAlertError, setShowAlertError] = useState(false)
   const [toast, setToast] = useState(null)
   const location = useLocation()
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
   const isInternal = location.pathname.startsWith('/internal')
 
@@ -105,20 +105,20 @@ export default function RegisterPage() {
 
   useEffect(() => {
 
-    const errors = errorObject?.ErrorField || [];
+    const errors = errorObject?.ErrorField || []
 
-    const emailError = errors.find(err => err.Email)?.Email || null;
-    const usernameError = errors.find(err => err.Username)?.Username || null;
-    const passwordError = errors.find(err => err.Password)?.Password || null;
+    const emailError = errors.find(err => err.Email)?.Email || null
+    const usernameError = errors.find(err => err.Username)?.Username || null
+    const passwordError = errors.find(err => err.Password)?.Password || null
 
     setFormSignup(prev => ({
       ...prev,
       repeatPassword: ''
     }))
     
-    setEmailErrSign(emailError);
-    setUsernameErrSign(usernameError);
-    setPasswordErrSign(passwordError);
+    setEmailErrSign(emailError)
+    setUsernameErrSign(usernameError)
+    setPasswordErrSign(passwordError)
   }, [errorObject])
 
 
@@ -146,7 +146,7 @@ export default function RegisterPage() {
       setFormSignup((prev) => ({
         ...prev,
         [name]: value,
-      }));
+      }))
     } else {
       setFormLogin((prev) => ({
         ...prev,
@@ -209,15 +209,15 @@ export default function RegisterPage() {
 
   // useEffect(() => {
   //   if (data) {
-  //     setShowAlertVerificationSuccess(true);
+  //     setShowAlertVerificationSuccess(true)
 
   //     const timer = setTimeout(() => {
-  //       setShowAlertVerificationSuccess(false);
-  //     }, 2000);
+  //       setShowAlertVerificationSuccess(false)
+  //     }, 2000)
 
-  //     return () => clearTimeout(timer);
+  //     return () => clearTimeout(timer)
   //   }
-  // }, [data]);
+  // }, [data])
 
   useEffect(() => {
     if (data) {
@@ -227,7 +227,7 @@ export default function RegisterPage() {
         })
 
         // Clear state after showing toast
-        navigate(location.pathname, { replace: true });
+        navigate(location.pathname, { replace: true })
     }
   }, [data])
 
@@ -272,21 +272,21 @@ export default function RegisterPage() {
 
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   // Determine current password value
-  const passwordValue = signup ? formSignup?.password : formLogin?.password;
+  const passwordValue = signup ? formSignup?.password : formLogin?.password
 
   // Determine if field has error
   const hasError = !signup
     ? (isInternal ? !!errPassInternal : !!errPass)
-    : !!passwordErrSign;
+    : !!passwordErrSign
 
   // Get error message
   const errorMessage = !signup
     ? (isInternal ? errPassInternal : errPass)
-    : passwordErrSign;
+    : passwordErrSign
 
 
   const handleToForgotPassword = () => {
@@ -564,5 +564,5 @@ export default function RegisterPage() {
         <SpinnerFixed colors={isInternal ? 'fill-gray-900' : 'fill-green-500'} />
       )}
     </div>
-  );
+  )
 }

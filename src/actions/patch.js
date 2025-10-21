@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance.js";
+import axiosInstance from "./axiosInstance.js"
  import { 
     changePasswordCustomerSlice,
     setPasswordCustomerSlice,
@@ -29,7 +29,7 @@ const {setStatusExpiredUserToken} = statusExpiredUserTokenSlice.actions
 const {setStatusServiceMaintenance} = statusServiceMaintenanceSlice.actions
 
 
-const { changePassSuccessCustomer, changePassErrorCustomer, setLoadingPassCustomer } = changePasswordCustomerSlice.actions;
+const { changePassSuccessCustomer, changePassErrorCustomer, setLoadingPassCustomer } = changePasswordCustomerSlice.actions
 export const changePasswordCustomer = (data) => async (dispatch) => {
     const config = {
         headers: {
@@ -48,29 +48,29 @@ export const changePasswordCustomer = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
         const message = {
             errorField: error.response?.data?.ErrorFields, 
             errorMessage: error.response?.data?.message,
             error: error.response?.data?.error,
-        };
-        dispatch(changePassErrorCustomer(message));
+        }
+        dispatch(changePassErrorCustomer(message))
     } finally {
         dispatch(setLoadingPassCustomer(false))
     }
 }
 
 
-const { setPassSuccessCustomer, setPassErrorCustomer, setLoadingSetPassCustomer } = setPasswordCustomerSlice.actions;
+const { setPassSuccessCustomer, setPassErrorCustomer, setLoadingSetPassCustomer } = setPasswordCustomerSlice.actions
 export const setPasswordCustomer = (data) => async (dispatch) => {
     const config = {
         headers: {
@@ -89,22 +89,22 @@ export const setPasswordCustomer = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
             errorField: error.response?.data?.ErrorFields, 
             error: error.response?.data?.error,
-        };
-        dispatch(setPassErrorCustomer(message));
+        }
+        dispatch(setPassErrorCustomer(message))
     } finally {
         dispatch(setLoadingSetPassCustomer(false))
     }
@@ -130,28 +130,28 @@ export const setUsernameCustomer = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
             errorField: error.response?.data?.ErrorFields, 
             error: error.response?.data?.error,
-        };
-        dispatch(setUsernameErrorCustomer(message));
+        }
+        dispatch(setUsernameErrorCustomer(message))
     } finally {
         dispatch(setLoadingSetUsernameCustomer(false))
     }
 }
 
-const { setSuccessBuyTransactionCashOnGoingInternal, setErrorBuyTransactionCashOnGoinInternal, setLoadingBuyTransactionCashOnGoingInternal } = buyTransactionCashOnGoingInternalSlice.actions;
+const { setSuccessBuyTransactionCashOnGoingInternal, setErrorBuyTransactionCashOnGoinInternal, setLoadingBuyTransactionCashOnGoingInternal } = buyTransactionCashOnGoingInternalSlice.actions
 export const buyTransactionCashOnGoingInternal = (data) => async (dispatch) => {
     const config = {
         headers: {
@@ -170,22 +170,22 @@ export const buyTransactionCashOnGoingInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
             errorField: error.response?.data?.ErrorFields, 
             error: error.response?.data?.error,
-        };
-        dispatch(setErrorBuyTransactionCashOnGoinInternal(message));
+        }
+        dispatch(setErrorBuyTransactionCashOnGoinInternal(message))
     } finally {
         dispatch(setLoadingBuyTransactionCashOnGoingInternal(false))
     }
@@ -211,18 +211,18 @@ export const availableProductInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
-        dispatch(setErrorAvailableProduct(error.response?.data?.error));
+        dispatch(setErrorAvailableProduct(error.response?.data?.error))
     } 
 }
 
@@ -247,18 +247,18 @@ export const toProgressOrderInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
-        dispatch(setErrorToProgressOrder(error.response?.data?.error));
+        dispatch(setErrorToProgressOrder(error.response?.data?.error))
     } finally {
         dispatch(setLoadingToProgressOrder(false))
     }
@@ -289,18 +289,18 @@ export const toFinishedOrderInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
-        dispatch(setErrorToFinishedOrder(error.response?.data?.error));
+        dispatch(setErrorToFinishedOrder(error.response?.data?.error))
     } finally {
         dispatch(setLoadingToFinishedOrder(false))
     }
@@ -326,15 +326,15 @@ export const updateDataEmployeeInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -342,7 +342,7 @@ export const updateDataEmployeeInternal = (data) => async (dispatch) => {
             errorField: error.response?.data?.ErrorField,
         }
 
-        dispatch(setErrorUpdateDataEmployee(message));
+        dispatch(setErrorUpdateDataEmployee(message))
     } finally {
         dispatch(setLoadingUpdateDataEmployee(false))
     }
@@ -367,22 +367,22 @@ export const updateChangePasswordInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorChangePasswordInteral({
             error: error.response?.data?.error,
             password: error.response?.data?.ErrorFields?.Password,
             newPassword: error.response?.data?.ErrorFields?.NewPassword
-        }));
+        }))
     } finally {
         dispatch(setLoadingChangePasswordInternal(false))
     }
@@ -407,15 +407,15 @@ export const changePasswordEmployee = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorChangePasswordEmployee({ 

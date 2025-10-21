@@ -1,9 +1,9 @@
 import {Box, Database, RefreshCw} from 'lucide-react'
 import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux'
 import { navbarInternalSlice } from '../reducers/reducers'
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
 import {
   Utensils,
   Pizza,
@@ -31,8 +31,8 @@ export const formatCurrency = (amount) => {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0
-    }).format(amount);
-  };
+    }).format(amount)
+  }
 
 export const EmptyState = ({ title, description, onRetry }) => (
   <div className="col-span-full flex flex-col items-center justify-center py-16 px-6 text-center">
@@ -52,7 +52,7 @@ export const EmptyState = ({ title, description, onRetry }) => (
       </button>
     )}
   </div>
-);
+)
 
 export const useInfiniteScroll = ({ 
   hasMore, 
@@ -64,44 +64,44 @@ export const useInfiniteScroll = ({
   const { ref, inView } = useInView({
     threshold,
     rootMargin,
-  });
+  })
 
   useEffect(() => {
     if (inView && hasMore && !loading) {
-      loadMore();
+      loadMore()
     }
-  }, [inView, hasMore, loading, loadMore]);
+  }, [inView, hasMore, loading, loadMore])
 
-  return { ref, inView };
-};
+  return { ref, inView }
+}
 
 export const useFullscreen = (targetRef) => {
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false)
 
   const enterFullScreen = useCallback(() => {
-    const element = targetRef.current;
+    const element = targetRef.current
     if (element?.requestFullscreen) {
-      element.requestFullscreen();
+      element.requestFullscreen()
     } else if (element?.webkitRequestFullscreen) {
-      element.webkitRequestFullscreen();
+      element.webkitRequestFullscreen()
     } else if (element?.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
+      element.mozRequestFullScreen()
     } else if (element?.msRequestFullscreen) {
-      element.msRequestFullscreen();
+      element.msRequestFullscreen()
     }
-  }, [targetRef]);
+  }, [targetRef])
 
   const exitFullScreen = useCallback(() => {
     if (document.exitFullscreen) {
-      document.exitFullscreen();
+      document.exitFullscreen()
     } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
+      document.webkitExitFullscreen()
     } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
+      document.mozCancelFullScreen()
     } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
+      document.msExitFullscreen()
     }
-  }, []);
+  }, [])
 
   const toggleFullScreen = useCallback(() => {
     if (
@@ -110,11 +110,11 @@ export const useFullscreen = (targetRef) => {
       document.mozFullScreenElement ||
       document.msFullscreenElement
     ) {
-      exitFullScreen();
+      exitFullScreen()
     } else {
-      enterFullScreen();
+      enterFullScreen()
     }
-  }, [enterFullScreen, exitFullScreen]);
+  }, [enterFullScreen, exitFullScreen])
 
   useEffect(() => {
     const handleFullScreenChange = () => {
@@ -122,105 +122,105 @@ export const useFullscreen = (targetRef) => {
         !!document.fullscreenElement ||
         !!document.webkitFullscreenElement ||
         !!document.mozFullScreenElement ||
-        !!document.msFullscreenElement;
-      setIsFullScreen(isFs);
-    };
+        !!document.msFullscreenElement
+      setIsFullScreen(isFs)
+    }
 
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullScreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullScreenChange);
+    document.addEventListener('fullscreenchange', handleFullScreenChange)
+    document.addEventListener('webkitfullscreenchange', handleFullScreenChange)
+    document.addEventListener('mozfullscreenchange', handleFullScreenChange)
+    document.addEventListener('MSFullscreenChange', handleFullScreenChange)
 
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullScreenChange);
-    };
-  }, []);
+      document.removeEventListener('fullscreenchange', handleFullScreenChange)
+      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange)
+      document.removeEventListener('mozfullscreenchange', handleFullScreenChange)
+      document.removeEventListener('MSFullscreenChange', handleFullScreenChange)
+    }
+  }, [])
 
-  return { isFullScreen, toggleFullScreen };
-};
+  return { isFullScreen, toggleFullScreen }
+}
 
 export function useElementHeight() {
-  const elementRef = useRef(null);
-  const [height, setHeight] = useState(0);
+  const elementRef = useRef(null)
+  const [height, setHeight] = useState(0)
 
   useLayoutEffect(() => {
-    if (!elementRef.current) return;
+    if (!elementRef.current) return
 
     const updateHeight = () => {
-      setHeight(elementRef.current.offsetHeight || 0);
-    };
+      setHeight(elementRef.current.offsetHeight || 0)
+    }
 
-    updateHeight(); // Set awal
+    updateHeight() // Set awal
 
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(elementRef.current);
+    const observer = new ResizeObserver(updateHeight)
+    observer.observe(elementRef.current)
 
-    return () => observer.disconnect();
-  }, []);
+    return () => observer.disconnect()
+  }, [])
 
-  return { ref: elementRef, height };
+  return { ref: elementRef, height }
 }
 
 export const useDeviceDetection = () => {
-  const dispatch = useDispatch();
-  const { setIsMobileDeviceType } = navbarInternalSlice.actions;
+  const dispatch = useDispatch()
+  const { setIsMobileDeviceType } = navbarInternalSlice.actions
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId
 
     const detectDevice = () => {
       // Clear timeout sebelumnya
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId)
       
       // Debounce untuk mengurangi dispatch saat resize
       timeoutId = setTimeout(() => {
-        const width = window.innerWidth;
-        dispatch(setIsMobileDeviceType(width < 1280));
-      }, 100); // Delay 100ms
-    };
+        const width = window.innerWidth
+        dispatch(setIsMobileDeviceType(width < 1280))
+      }, 100) // Delay 100ms
+    }
 
-    detectDevice(); // Deteksi saat pertama mount
-    window.addEventListener('resize', detectDevice);
+    detectDevice() // Deteksi saat pertama mount
+    window.addEventListener('resize', detectDevice)
 
     // Cleanup
     return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', detectDevice);
-    };
-  }, [dispatch, setIsMobileDeviceType]);
-};
+      clearTimeout(timeoutId)
+      window.removeEventListener('resize', detectDevice)
+    }
+  }, [dispatch, setIsMobileDeviceType])
+}
 
 export const useOutsideClick = ({ref, callback, isActive = true}) => {
     useEffect(() => {
-        if (!isActive) return;
+        if (!isActive) return
 
         function handleClickOutside(event) {
             if (ref.current && !ref.current.contains(event.target)) {
-                callback();
+                callback()
             }
         }
 
         function handleTouchOutside(event) {
             if (ref.current && !ref.current.contains(event.target)) {
-                callback();
+                callback()
             }
         }
 
         // Delay untuk mencegah immediate trigger
         const timeoutId = setTimeout(() => {
-            document.addEventListener("mousedown", handleClickOutside);
-            document.addEventListener("touchstart", handleTouchOutside, { passive: true });
-        }, 100);
+            document.addEventListener("mousedown", handleClickOutside)
+            document.addEventListener("touchstart", handleTouchOutside, { passive: true })
+        }, 100)
 
         return () => {
-            clearTimeout(timeoutId);
-            document.removeEventListener("mousedown", handleClickOutside);
-            document.removeEventListener("touchstart", handleTouchOutside);
-        };
-    }, [ref, callback, isActive]);
+            clearTimeout(timeoutId)
+            document.removeEventListener("mousedown", handleClickOutside)
+            document.removeEventListener("touchstart", handleTouchOutside)
+        }
+    }, [ref, callback, isActive])
 }
 
 export const formatDateTime = (dateString) => {
@@ -230,94 +230,94 @@ export const formatDateTime = (dateString) => {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
-  });
-};
+  })
+}
 
 export const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation()
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" }); // atau behavior: "auto"
-  }, [pathname]);
+    window.scrollTo({ top: 0, behavior: "smooth" }) // atau behavior: "auto"
+  }, [pathname])
 
-  return null;
+  return null
 }
 
 export const getPhoneWithoutPrefix = (phoneNumber) => {
-  if (!phoneNumber) return '';
-  const phone = phoneNumber.toString();
+  if (!phoneNumber) return ''
+  const phone = phoneNumber.toString()
   if (phone.startsWith('+62')) {
-      return phone.substring(3);
+      return phone.substring(3)
   }
-  return phone;
-};
+  return phone
+}
 
 export function useSingleTab() {
   useEffect(() => {
-    const bc = new BroadcastChannel("only_one_tab");
+    const bc = new BroadcastChannel("only_one_tab")
 
-    let isMaster = false;
+    let isMaster = false
 
     // dengarkan pesan dari tab lain
     bc.onmessage = (e) => {
       if (e.data === "who_is_master") {
         // kalau ada tab baru nanya, jawab "saya master"
         if (isMaster) {
-          bc.postMessage("master_here");
+          bc.postMessage("master_here")
         }
       }
 
       if (e.data === "master_here") {
         // berarti tab lain sudah master → tab ini harus keluar
-        alert("Aplikasi sudah dibuka di tab lain!");
-        window.location.href = "/error"; // lebih aman daripada window.close()
+        alert("Aplikasi sudah dibuka di tab lain!")
+        window.location.href = "/error" // lebih aman daripada window.close()
       }
-    };
+    }
 
     // saat tab ini dibuka, cek apakah sudah ada master
-    bc.postMessage("who_is_master");
+    bc.postMessage("who_is_master")
 
     // kasih delay sedikit untuk menunggu jawaban
     const timer = setTimeout(() => {
       // kalau tidak ada tab lain yang jawab → tab ini jadi master
-      isMaster = true;
-    }, 500);
+      isMaster = true
+    }, 500)
 
     return () => {
-      clearTimeout(timer);
-      bc.close();
-    };
-  }, []);
+      clearTimeout(timer)
+      bc.close()
+    }
+  }, [])
 }
 
 export const getIconByCategory = (categoryName) => {
-  if (!categoryName) return CircleHelp;
+  if (!categoryName) return CircleHelp
   
-  const name = categoryName.toLowerCase();
+  const name = categoryName.toLowerCase()
   
   // Makanan
-  if (name.includes('makanan') || name.includes('food')) return Utensils;
-  if (name.includes('pizza')) return Pizza;
-  if (name.includes('cemilan') || name.includes('snack')) return Cookie;
-  if (name.includes('dessert') || name.includes('manis')) return IceCream;
-  if (name.includes('soup') || name.includes('sop')) return Soup;
-  if (name.includes('sandwich') || name.includes('burger')) return Sandwich;
-  if (name.includes('salad') || name.includes('sayur')) return Salad;
-  if (name.includes('cake') || name.includes('kue')) return Cake;
-  if (name.includes('ayam') || name.includes('chicken')) return Drumstick;
+  if (name.includes('makanan') || name.includes('food')) return Utensils
+  if (name.includes('pizza')) return Pizza
+  if (name.includes('cemilan') || name.includes('snack')) return Cookie
+  if (name.includes('dessert') || name.includes('manis')) return IceCream
+  if (name.includes('soup') || name.includes('sop')) return Soup
+  if (name.includes('sandwich') || name.includes('burger')) return Sandwich
+  if (name.includes('salad') || name.includes('sayur')) return Salad
+  if (name.includes('cake') || name.includes('kue')) return Cake
+  if (name.includes('ayam') || name.includes('chicken')) return Drumstick
   
   // Minuman
-  if (name.includes('minuman') || name.includes('drink') || name.includes('beverage')) return Coffee;
-  if (name.includes('kopi') || name.includes('coffee')) return Coffee;
-  if (name.includes('teh') || name.includes('tea')) return Coffee;
-  if (name.includes('jus') || name.includes('juice') || name.includes('segar')) return Droplets;
-  if (name.includes('alkohol') || name.includes('alcohol') || name.includes('wine')) return Wine;
-  if (name.includes('bir') || name.includes('beer')) return Beer;
-  if (name.includes('cocktail') || name.includes('martini')) return Martini;
-  if (name.includes('susu') || name.includes('milk')) return Milk;
-  if (name.includes('soda') || name.includes('soft drink')) return CupSoda;
-  if (name.includes('air') || name.includes('water')) return GlassWater;
+  if (name.includes('minuman') || name.includes('drink') || name.includes('beverage')) return Coffee
+  if (name.includes('kopi') || name.includes('coffee')) return Coffee
+  if (name.includes('teh') || name.includes('tea')) return Coffee
+  if (name.includes('jus') || name.includes('juice') || name.includes('segar')) return Droplets
+  if (name.includes('alkohol') || name.includes('alcohol') || name.includes('wine')) return Wine
+  if (name.includes('bir') || name.includes('beer')) return Beer
+  if (name.includes('cocktail') || name.includes('martini')) return Martini
+  if (name.includes('susu') || name.includes('milk')) return Milk
+  if (name.includes('soda') || name.includes('soft drink')) return CupSoda
+  if (name.includes('air') || name.includes('water')) return GlassWater
   
   // Default fallback
-  return ChefHat;
-};
+  return ChefHat
+}

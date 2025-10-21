@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react'
 import { 
   Bell, 
   Settings, 
@@ -15,15 +15,15 @@ import {
   Maximize, 
   Minimize,
   Menu,
-} from 'lucide-react';
-import Sidebar from '../component/sidebar';
-import { useNavigate } from 'react-router-dom';
-import { SpinnerRelative, SpinnerFixed } from '../helper/spinner';
+} from 'lucide-react'
+import Sidebar from '../component/sidebar'
+import { useNavigate } from 'react-router-dom'
+import { SpinnerRelative, SpinnerFixed } from '../helper/spinner'
 import { 
   DeleteConfirmationModalTable,
   ToastPortal,
 } from '../component/alert'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchTablesInternal } from '../actions/get'
 import { deleteTableInternalSlice } from '../reducers/delete'
 import { deleteTableInternal } from '../actions/delete'
@@ -37,11 +37,11 @@ import {
 } from '../reducers/post'
 import { getTablesInternalSlice } from '../reducers/get'
 import handleDownloadQR  from '../helper/downloadQrTable'
-import { set } from 'date-fns';
-import { Toast } from '../component/alert';
-import { useFullscreen, useElementHeight } from '../helper/helper';
+import { set } from 'date-fns'
+import { Toast } from '../component/alert'
+import { useFullscreen, useElementHeight } from '../helper/helper'
 import {navbarInternalSlice} from "../reducers/reducers"
-import { AccessDeniedModal } from '../component/model';
+import { AccessDeniedModal } from '../component/model'
 
 // QR Code Component (placeholder - in real app you'd use a QR library)
 const QRCodePlaceholder = ({ size = 120, tableNumber = null }) => (
@@ -56,7 +56,7 @@ const QRCodePlaceholder = ({ size = 120, tableNumber = null }) => (
       </div>
     </div>
   </div>
-);
+)
 
 export default function ModernKasirDashboard() {
     const activeMenu ="table"
@@ -65,52 +65,52 @@ export default function ModernKasirDashboard() {
     const [spinnerRelative, setSpinnerRelative] = useState(true)
     const [spinnerFixed, setSpinnerFixed] = useState(false)
     const [confirmModel, setConfirmModel] = useState(false)
-    const [downloadingStates, setDownloadingStates] = useState({});
-    const [toast, setToast] = useState(null);
-    const [showAccessDenied, setShowAccessDenied] = useState(false);
+    const [downloadingStates, setDownloadingStates] = useState({})
+    const [toast, setToast] = useState(null)
+    const [showAccessDenied, setShowAccessDenied] = useState(false)
 
-    const origin = window.location.origin;
+    const origin = window.location.origin
 
     // data employee
     const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
 
     // maxsimaz minimaz layar
-    const contentRef = useRef(null);
-    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+    const contentRef = useRef(null)
+    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
 
     const handleDownloadQRWithLoading = async (tableNumber = null, takeAway = null, imageUrl = '') => {
-      const downloadKey = takeAway ? 'takeaway' : `table-${tableNumber}`;
+      const downloadKey = takeAway ? 'takeaway' : `table-${tableNumber}`
       
       // Set loading state
       setDownloadingStates(prev => ({
         ...prev,
         [downloadKey]: true
-      }));
+      }))
 
       try {
-        await handleDownloadQR(tableNumber, takeAway, imageUrl);
+        await handleDownloadQR(tableNumber, takeAway, imageUrl)
         
         // Success toast
         setToast({
           message: `QR Code ${takeAway ? 'Take Away' : `Table ${tableNumber}`} berhasil didownload`,
           type: 'success'
-        });
+        })
         
       } catch (error) {
         setToast({
           message: 'Gagal mendownload QR Code. Silakan coba lagi.',
           type: 'error'
-        });
+        })
       } finally {
         // Remove loading state
         setDownloadingStates(prev => {
-          const newState = { ...prev };
-          delete newState[downloadKey];
-          return newState;
-        });
+          const newState = { ...prev }
+          delete newState[downloadKey]
+          return newState
+        })
       }
-    };
+    }
 
     // api call dan data state table
     const { resetErrorTablesInternal } = getTablesInternalSlice.actions
@@ -131,7 +131,7 @@ export default function ModernKasirDashboard() {
           setToast({
             message: errorTablesInternal,
             type: 'error'
-          });
+          })
       }
     }, [errorTablesInternal])
 
@@ -149,7 +149,7 @@ export default function ModernKasirDashboard() {
       } else {
         setShowAccessDenied(true)
       }
-    };
+    }
 
     // handle delete table
     const {resetDeleteTableInternal} = deleteTableInternalSlice.actions
@@ -158,7 +158,7 @@ export default function ModernKasirDashboard() {
     const handleDeleteLastTable = () => {
       setConfirmModel(false)
       dispatch(deleteTableInternal())
-    };
+    }
 
     useEffect(() => {
       setSpinnerFixed(loadingDeleteTable)
@@ -170,7 +170,7 @@ export default function ModernKasirDashboard() {
         setToast({
           message: successCreateTable || successDeleteTable,
           type: 'success'
-        });
+        })
       }
     }, [successDeleteTable, successCreateTable])
 
@@ -180,7 +180,7 @@ export default function ModernKasirDashboard() {
         setToast({
           message: errorCreateTable || errorDeleteTable,
           type: 'error'
-        });
+        })
       }
     }, [errorDeleteTable, errorCreateTable])
 
@@ -190,14 +190,14 @@ export default function ModernKasirDashboard() {
     
     const handleCreateTakeAwayQR = () => {
       dispatch(createQROrderTypeTakeAway())
-    };
+    }
 
     useEffect(() => {
       if (errorCreateQROrderTypeTakeAway || alredyCreated) {
         setToast({
           message: errorCreateQROrderTypeTakeAway || alredyCreated,
           type: 'error'
-        });
+        })
       }
     }, [errorCreateQROrderTypeTakeAway, alredyCreated])
 
@@ -210,7 +210,7 @@ export default function ModernKasirDashboard() {
     const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
     // handle sidebar and elemant header yang responsice
-    const { ref: headerRef, height: headerHeight } = useElementHeight();
+    const { ref: headerRef, height: headerHeight } = useElementHeight()
     const { setIsOpen } = navbarInternalSlice.actions
 
     return (
@@ -352,10 +352,6 @@ export default function ModernKasirDashboard() {
                         </div>
                         
                         <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <QrCode className="w-4 h-4" />
-                            <span className="text-sm">URL: {origin}?order_type_take_away=true</span>
-                          </div>
                           <div className="flex items-center gap-2 text-gray-600">
                             <ShoppingBag className="w-4 h-4" />
                             <span className="text-sm">Type: Take Away Orders</span>
@@ -534,5 +530,5 @@ export default function ModernKasirDashboard() {
           </div>
         </div>
       </div>
-    );
+    )
 }

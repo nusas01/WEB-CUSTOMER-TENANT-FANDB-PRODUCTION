@@ -9,7 +9,7 @@ import { fetchGetDataCustomer } from "../actions/get"
 
 export default function SetPassword() {
     const dispatch = useDispatch()
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const [password, setPassword] = useState(null)
     const [repeatPassword, setRepeatPassword] = useState(null)
     const [toast, setToast] = useState({})
@@ -24,7 +24,7 @@ export default function SetPassword() {
     })
 
     // data customer
-    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer);
+    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
     const {dataCustomer} = useSelector((state) => state.persisted.dataCustomer)
     useEffect(() => {
         if ((!data || Object.keys(data).length === 0) && loggedIn) {
@@ -70,7 +70,7 @@ export default function SetPassword() {
 
     useEffect(() => {
         if (errorFieldSetPass) {
-            const errors = errorFieldSetPass || [];
+            const errors = errorFieldSetPass || []
 
             const errorPassword = errors.find((error) => error.Password)?.Password || null
             
@@ -94,7 +94,7 @@ export default function SetPassword() {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
         
         if (data.password !== data.repeatPassword) {
             setRepeatPassword(true)

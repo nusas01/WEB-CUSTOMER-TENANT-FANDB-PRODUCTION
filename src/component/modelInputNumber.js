@@ -1,27 +1,27 @@
-import "../style/add.css";
-import { useState } from "react";
+import "../style/add.css"
+import { useState } from "react"
 
 export function ModelInputNumberEwallet({ channelCode, handleCloseModel, handleInputNumber }) {
-    const [phoneNumber, setPhoneNumber] = useState("+62");
+    const [phoneNumber, setPhoneNumber] = useState("+62")
 
     const handleChange = (e) => {
-        let value = e.target.value;
+        let value = e.target.value
 
-        if (value.length > 15) return;
+        if (value.length > 15) return
 
         // Pastikan tetap dimulai dengan +62
         if (!value.startsWith("+62")) {
-            value = "+62" + value.replace(/^(\+)?62?/, ""); // ganti apapun di awal jadi +62
+            value = "+62" + value.replace(/^(\+)?62?/, "") // ganti apapun di awal jadi +62
         }
 
-        setPhoneNumber(value);
-    };
+        setPhoneNumber(value)
+    }
 
     const handleFocus = () => {
         if (phoneNumber === "") {
-            setPhoneNumber("+62");
+            setPhoneNumber("+62")
         }
-    };
+    }
 
     return (
         <div className="bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-6" style={{ position: 'fixed', width: '100%', height: '100%', top: 0, zIndex: '100' }}>
@@ -62,5 +62,5 @@ export function ModelInputNumberEwallet({ channelCode, handleCloseModel, handleI
                 </div>
             </div>
         </div>
-    );
+    )
 }

@@ -1,11 +1,11 @@
-import "../style/bottomNavbar.css";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import "../style/bottomNavbar.css"
+import { useNavigate, useLocation } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 export default function BottomNavbar() {
-    const cartItems = useSelector((state) => state.persisted.cart.items);
-    const navigate = useNavigate();
-    const location = useLocation();
+    const cartItems = useSelector((state) => state.persisted.cart.items)
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const handleActivity = () => {
         navigate('/activity')

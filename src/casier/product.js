@@ -67,7 +67,7 @@ import { AccessDeniedModal } from "../component/model"
 export default function KasirProducts() {
     const dispatch = useDispatch()
     const [activeMenu, setActiveMenu] = useState("Product")
-    const [toast, setToast] = useState(null);    
+    const [toast, setToast] = useState(null)    
 
     // handle response add product
     const { resetCreateProductInternal } = createProductInternalSlice.actions
@@ -77,7 +77,7 @@ export default function KasirProducts() {
             setToast({
                 message: successCreateProductInternal,
                 type: 'success'
-            });
+            })
         }
     }, [successCreateProductInternal])
 
@@ -92,7 +92,7 @@ export default function KasirProducts() {
             setToast({
                 message: successCreateCategoryInternal,
                 type: 'success'
-            });
+            })
         }
     }, [successCreateCategoryInternal])
         
@@ -105,7 +105,7 @@ export default function KasirProducts() {
             setToast({
                 message: successUpdateProductInternal,
                 type: 'success'
-            });
+            })
         }
     }, [successUpdateProductInternal])
 
@@ -126,7 +126,7 @@ export default function KasirProducts() {
            setToast({
                 message: successDeleteProductInternal,
                 type: 'success'
-            });
+            })
         }
     }, [successDeleteProductInternal])
 
@@ -138,7 +138,7 @@ export default function KasirProducts() {
             setToast({
                 message: successDeleteCategory,
                 type: 'success'
-            });
+            })
         }
     }, [successDeleteCategory])
 
@@ -148,7 +148,7 @@ export default function KasirProducts() {
         setToast({
             message: errorHasProductDeleteCategory,
             type: 'error'
-        });
+        })
       }
     }, [errorHasProductDeleteCategory])
 
@@ -157,14 +157,14 @@ export default function KasirProducts() {
             setToast({
                 message: errorDeleteProductInternal || errorDeleteCategory || errorAvailableProduct || errorUpdateProductInternal || errorCreateCategoryInternal || errorCategoyAndProductIntenal || errorCreateProductInternal,
                 type: 'error'
-            });
+            })
         }   
     }, [errorDeleteProductInternal, errorDeleteCategory, errorAvailableProduct, errorUpdateProductInternal, errorCreateCategoryInternal, errorCategoyAndProductIntenal, errorCreateProductInternal])
 
     // handle full screen
     // maxsimaz minimaz layar
-    const contentRef = useRef(null);
-    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+    const contentRef = useRef(null)
+    const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
     // handle navbar ketika ukuran table dan hp
     const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
@@ -219,7 +219,7 @@ export default function KasirProducts() {
 function ProductsTable({isFullScreen, fullscreenchange}) {
     const navigate = useNavigate()
     const panelRef = useRef()
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState("")
     const [addProduct, setAddProduct] = useState(false)
     const [addCategory, setAddCategory] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState(null)
@@ -227,7 +227,7 @@ function ProductsTable({isFullScreen, fullscreenchange}) {
     const [spinnerProduct, setSpinnerProduct ] = useState(false)
     const [modelConfirmDeleteProduct, setModelConfirmDeleteProduct] = useState(false)
     const [productIdDelete, setProductIdDelete] = useState(null)
-    const [showAccessDenied, setShowAccessDenied] = useState(false);
+    const [showAccessDenied, setShowAccessDenied] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -360,7 +360,7 @@ function ProductsTable({isFullScreen, fullscreenchange}) {
   }, [search, dispatch])
 
   // handle sidebar and elemant header yang responsice
-  const { ref: headerRef, height: headerHeight } = useElementHeight();
+  const { ref: headerRef, height: headerHeight } = useElementHeight()
   const { setIsOpen } = navbarInternalSlice.actions
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -514,10 +514,10 @@ function ProductsTable({isFullScreen, fullscreenchange}) {
                     <button
                       onClick={() => {
                         if (dataEmployeeInternal?.position === "Manager") {
-                          setAddCategory(true);
-                          dispatch(setHeaderHidden(true));
+                          setAddCategory(true)
+                          dispatch(setHeaderHidden(true))
                         } else {
-                          setShowAccessDenied(true); 
+                          setShowAccessDenied(true) 
                         }
                       }}
                       className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl font-medium transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 shadow-lg hover:shadow-xl"
@@ -529,10 +529,10 @@ function ProductsTable({isFullScreen, fullscreenchange}) {
                     <button
                       onClick={() => {
                         if (dataEmployeeInternal?.position === "Manager") {
-                          setAddProduct(true);
-                          dispatch(setHeaderHidden(true));
+                          setAddProduct(true)
+                          dispatch(setHeaderHidden(true))
                         } else {
-                          setShowAccessDenied(true); 
+                          setShowAccessDenied(true) 
                         }
                       }}
 
@@ -550,7 +550,7 @@ function ProductsTable({isFullScreen, fullscreenchange}) {
               <div className="bg-white border-b border-gray-200 rounded-md  min-h-[70vh] shadow-lg p-6">
                 { !spinnerProduct ? (
                   <>
-                    {dataCategoryAndProduct && dataCategoryAndProduct.length > 0 ? (
+                    {dataCategoryAndProduct.length > 0 ? (
                       (Array.isArray(filteredProduct) && filteredProduct.length > 0 ? filteredProduct : dataCategoryAndProduct).map((category) => (
                         <div key={category.id} className="mb-4">
                           {/* Nama Kategori */}
@@ -622,11 +622,11 @@ function ProductsTable({isFullScreen, fullscreenchange}) {
                                 <div
                                   onClick={() => {
                                     if (dataEmployeeInternal?.position === "Manager") {
-                                      setProductIdDelete(product.id);
-                                      setModelConfirmDeleteProduct(true);
-                                      dispatch(setHeaderHidden(true));
+                                      setProductIdDelete(product.id)
+                                      setModelConfirmDeleteProduct(true)
+                                      dispatch(setHeaderHidden(true))
                                     } else {
-                                      setShowAccessDenied(true); 
+                                      setShowAccessDenied(true) 
                                     }
                                   }}
                                   className="flex justify-center space-x-2  items-center w-full mt-2 py-2 text-sm bg-white border border-gray-200 hover:bg-gray-50 rounded-lg text-red-600"
@@ -771,7 +771,7 @@ const AddProductModal = ({
     id: null, 
     name: '',
   })
-  const containerRef = useRef(null);
+  const containerRef = useRef(null)
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false)
   const [errors, setErrors] = useState({})
 
@@ -799,22 +799,22 @@ const AddProductModal = ({
   }
 
   const handleChangeMoneyReceved = (e) => {
-    const raw = e.target.value.replace(/\./g, '');
+    const raw = e.target.value.replace(/\./g, '')
 
-    if (!/^\d*$/.test(raw)) return;
+    if (!/^\d*$/.test(raw)) return
 
-    const numericValue = parseInt(raw, 10) || 0;
+    const numericValue = parseInt(raw, 10) || 0
 
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: numericValue,
-    }));
+    }))
 
     // Clear error when user starts typing
     if (errors[e.target.name]) {
       setErrors(prev => ({ ...prev, [e.target.name]: '' }))
     }
-  };
+  }
 
   const handleChangeCategory = (id, name) => {
     setCategory({
@@ -887,15 +887,15 @@ const AddProductModal = ({
   useEffect(() => {
     if (Array.isArray(errorFieldCreateProductInternal)) {
       const mappedErrors = errorFieldCreateProductInternal.reduce((acc, curr) => {
-        const [field, message] = Object.entries(curr)[0]; 
-        acc[field] = message;
-        return acc;
-      }, {});
-      containerRef.current.scrollTop = 0;
-      setErrors(prev => ({ ...prev, ...mappedErrors }));
-      dispatch(resetCreateProductInternal());
+        const [field, message] = Object.entries(curr)[0] 
+        acc[field] = message
+        return acc
+      }, {})
+      containerRef.current.scrollTop = 0
+      setErrors(prev => ({ ...prev, ...mappedErrors }))
+      dispatch(resetCreateProductInternal())
     }
-  }, [errorFieldCreateProductInternal]);
+  }, [errorFieldCreateProductInternal])
 
   useEffect(() => {
     if (successCreateProductInternal || errorCreateProductInternal) {
@@ -1400,24 +1400,24 @@ const EditProductModal = ({
   }
 
   const handleChangeMoneyReceived = (e) => {
-    const raw = e.target.value.replace(/\./g, '');
+    const raw = e.target.value.replace(/\./g, '')
 
-    if (!/^\d*$/.test(raw)) return;
+    if (!/^\d*$/.test(raw)) return
 
-    const numericValue = parseInt(raw, 10) || 0;
+    const numericValue = parseInt(raw, 10) || 0
 
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: numericValue,
-    }));
+    }))
 
     // Clear error when user starts typing
     if (errors[e.target.name]) {
       setErrors(prev => ({ ...prev, [e.target.name]: '' }))
     }
-  };
+  }
 
-  const { dataCategory, loadingCategoryInternal } = useSelector((state) => state.persisted.getCategoryInternal);
+  const { dataCategory, loadingCategoryInternal } = useSelector((state) => state.persisted.getCategoryInternal)
 
   useEffect(() => {
     if (!dataCategory || dataCategory.length <= 0) {
@@ -1473,7 +1473,7 @@ const EditProductModal = ({
         acc[key] = item[key]
         return acc
       })
-      modelScrollref.current.scrollTop = 0;
+      modelScrollref.current.scrollTop = 0
       setErrors(fieldErrors)
     }
   }, [errorFieldUpdateProductInternal])

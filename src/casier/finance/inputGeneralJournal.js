@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Calendar, FileText, DollarSign, Save, ChevronDown } from 'lucide-react';
-import { useSelector, useDispatch } from 'react-redux';
-import { SpinnerFixed } from '../../helper/spinner';
-import { fetchAssetsStoreInternal } from '../../actions/get';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Calendar, FileText, DollarSign, Save, ChevronDown } from 'lucide-react'
+import { useSelector, useDispatch } from 'react-redux'
+import { SpinnerFixed } from '../../helper/spinner'
+import { fetchAssetsStoreInternal } from '../../actions/get'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useHandleDataUpdateGeneralJournal } from './updateGeneralJournal'
 import { ErrorAlert, Toast, ToastPortal } from '../../component/alert'
 import {inputGeneralJournalInternalSlice, getJournalDrafByJsonInternalSlice} from '../../reducers/post'
 import {updateGeneralJournalInternalSlice} from '../../reducers/put'
 import {inputGeneralJournalInternal, getJournalDrafByJsonInternal} from '../../actions/post'
 import {UpdateGeneralJournalInternal} from '../../actions/put'
-import { AccessDeniedModal } from '../../component/model';
+import { AccessDeniedModal } from '../../component/model'
 
 export function GeneralJournalForm() {
   const navigate = useNavigate()
   const [errorAlert, setErrorAlert] = useState(false)
-  const [selectedAccount, setSelectedAccount] = useState('');
-  const [selectedType, setSelectedType] = useState('');
-  const [formData, setFormData] = useState({});
-  const dispatch = useDispatch();
-  const location = useLocation();
+  const [selectedAccount, setSelectedAccount] = useState('')
+  const [selectedType, setSelectedType] = useState('')
+  const [formData, setFormData] = useState({})
+  const dispatch = useDispatch()
+  const location = useLocation()
   const [requiredDate, setRequiredDate] = useState(false)
   const [requiredAmount, setRequiredAmount] = useState(false)
   const [requiredKeterangan, setRequiredKeterangan] = useState(false)
@@ -37,8 +37,8 @@ export function GeneralJournalForm() {
   const [requiredPercentageSale, setRequiredPercentageSale] = useState(false)
   const [requiredOptionMethodSale, setRequiredOptionMethodSale] = useState(false)
   const [requiredMetodeAmortisasi, setRequiredMetodeAmortisasi] = useState(false)
-  const [toast, setToast] = useState(null);
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
+  const [toast, setToast] = useState(null)
+  const [showAccessDenied, setShowAccessDenied] = useState(false)
 
   const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
   useEffect(() => {
@@ -70,8 +70,8 @@ export function GeneralJournalForm() {
     loadStateRequired() 
   }, [selectedAccount, selectedType])
 
-  const previousPath = location.state?.from || "/";
-  const isUpdateMode = previousPath === '/internal/admin/general-journal';
+  const previousPath = location.state?.from || "/"
+  const isUpdateMode = previousPath === '/internal/admin/general-journal'
 
   // handle respone get data journal draf from server, jika update data draf 
   const { 
@@ -88,30 +88,30 @@ export function GeneralJournalForm() {
     selectedAccount: journalDataSelectedAccount,
     selectedType: journalDataSelectedType,
     formData: journalDataFormData
-  } = useHandleDataUpdateGeneralJournal(journalData);
+  } = useHandleDataUpdateGeneralJournal(journalData)
 
   useEffect(() => {
     if (journalData !== null) {
-      setSelectedAccount(journalDataSelectedAccount);
-      setSelectedType(journalDataSelectedType);
-      setFormData(journalDataFormData);
+      setSelectedAccount(journalDataSelectedAccount)
+      setSelectedType(journalDataSelectedType)
+      setFormData(journalDataFormData)
     }
-  }, [journalData, journalDataSelectedAccount, journalDataSelectedType, journalDataFormData]);
+  }, [journalData, journalDataSelectedAccount, journalDataSelectedType, journalDataFormData])
   
   useEffect(() => {
   
-    const updatedData = { ...formData };
+    const updatedData = { ...formData }
 
-    const shouldDeleteDepreciationFields = formData.is_depreciable !== true;
-    const shouldDeleteAmortizationFields = formData.is_amortizable !== true;
+    const shouldDeleteDepreciationFields = formData.is_depreciable !== true
+    const shouldDeleteAmortizationFields = formData.is_amortizable !== true
   
     if (shouldDeleteDepreciationFields && shouldDeleteAmortizationFields) {
       // Kalau keduanya false, hapus semua
-      delete updatedData.umur_manfaat_tahun;
-      delete updatedData.nilai_sisa;
-      delete updatedData.rate;
-      delete updatedData.metode_penyusutan;
-      delete updatedData.metode_amortisasi;
+      delete updatedData.umur_manfaat_tahun
+      delete updatedData.nilai_sisa
+      delete updatedData.rate
+      delete updatedData.metode_penyusutan
+      delete updatedData.metode_amortisasi
       setRequiredUmurManfaatTahun(false)
       setRequiredNilaiSisa(false)
       setRequiredRate(false)
@@ -120,69 +120,69 @@ export function GeneralJournalForm() {
     }
     
 
-    setFormData(updatedData);
-  }, [formData.is_depreciable, formData.is_amortizable]);
+    setFormData(updatedData)
+  }, [formData.is_depreciable, formData.is_amortizable])
   
   
   const validateCommonFields = () => {
-    let isValid = true;
+    let isValid = true
   
     if (formData.date === "" || !formData.date) {
-      setRequiredDate(true);
-      isValid = false;
+      setRequiredDate(true)
+      isValid = false
     }
   
     if (!formData.amount || formData.amount <= 0) {
-      setRequiredAmount(true);
-      isValid = false;
+      setRequiredAmount(true)
+      isValid = false
     }
   
     if (!formData.keterangan || formData.keterangan.trim() === "") {
-      setRequiredKeterangan(true);
-      isValid = false;
+      setRequiredKeterangan(true)
+      isValid = false
     }
   
-    return isValid;
-  };
+    return isValid
+  }
   
 
   const validatePencatatanAsetTetap = () => {
-    let isValid = true;
+    let isValid = true
   
     if (!formData.name_asset || formData.name_asset === "") {
-      setRequiredNameAsset(true);
-      isValid = false;
+      setRequiredNameAsset(true)
+      isValid = false
     }
   
     if (!formData.date || formData.date === "") {
-      setRequiredDate(true);
-      isValid = false;
+      setRequiredDate(true)
+      isValid = false
     }
   
     if (!formData.tanggal_perolehan || formData.tanggal_perolehan === "") {
-      setRequiredTanggalPerolehan(true);
-      isValid = false;
+      setRequiredTanggalPerolehan(true)
+      isValid = false
     }
   
     if (formData.is_depreciable) {
       if (!formData.umur_manfaat_tahun || formData.umur_manfaat_tahun <= 0) {
-        setRequiredUmurManfaatTahun(true);
-        isValid = false;
+        setRequiredUmurManfaatTahun(true)
+        isValid = false
       }
   
       if (!formData.nilai_sisa || formData.nilai_sisa <= 0) {
-        setRequiredNilaiSisa(true);
-        isValid = false;
+        setRequiredNilaiSisa(true)
+        isValid = false
       }
   
       if (!formData.rate || formData.rate <= 0) {
-        setRequiredRate(true);
-        isValid = false;
+        setRequiredRate(true)
+        isValid = false
       }
   
       if (!formData.metode_penyusutan || formData.metode_penyusutan === "") {
-        setRequiredMetodePenyusutan(true);
-        isValid = false;
+        setRequiredMetodePenyusutan(true)
+        isValid = false
       }
     } 
 
@@ -192,92 +192,92 @@ export function GeneralJournalForm() {
     }
    
     if (!formData.harga_perolehan || formData.harga_perolehan <= 0) {
-      setRequiredHargaPerolehan(true);
-      isValid = false;
+      setRequiredHargaPerolehan(true)
+      isValid = false
     }
   
     if (!formData.keterangan || formData.keterangan.trim() === "") {
-      setRequiredKeterangan(true);
-      isValid = false;
+      setRequiredKeterangan(true)
+      isValid = false
     }
   
-    return isValid;
-  };
+    return isValid
+  }
 
   const validatePenjualanAsetTetap = () => {
-    let isValid = true;
+    let isValid = true
   
     if (!formData.id_asset || formData.id_asset === "") {
-      setRequiredIdAsset(true);
-      isValid = false;
+      setRequiredIdAsset(true)
+      isValid = false
     }
   
     if (!formData.percentage_sale || formData.percentage_sale <= 0 || formData.percentage_sale > 100) {
-      setRequiredPercentageSale(true);
-      isValid = false;
+      setRequiredPercentageSale(true)
+      isValid = false
     }
   
     if (!formData.option_method_sale || formData.option_method_sale === "") {
-      setRequiredOptionMethodSale(true);
-      isValid = false;
+      setRequiredOptionMethodSale(true)
+      isValid = false
     }
   
     if (!formData.date || formData.date === "") {
-      setRequiredDate(true);
-      isValid = false;
+      setRequiredDate(true)
+      isValid = false
     }
   
     if (!formData.amount || formData.amount <= 0) {
-      setRequiredAmount(true);
-      isValid = false;
+      setRequiredAmount(true)
+      isValid = false
     }
   
     if (!formData.keterangan || formData.keterangan.trim() === "") {
-      setRequiredKeterangan(true);
-      isValid = false;
+      setRequiredKeterangan(true)
+      isValid = false
     }
   
-    return isValid;
+    return isValid
   }
 
 
   const validatePencatatanAsetTidakBerwujud = () => {
-    let isValid = true;
+    let isValid = true
   
     if (!formData.name_asset || formData.name_asset.trim() === "") {
-      setRequiredNameAsset(true);
-      isValid = false;
+      setRequiredNameAsset(true)
+      isValid = false
     }
   
     if (!formData.harga_perolehan || formData.harga_perolehan <= 0) {
-      setRequiredHargaPerolehan(true);
-      isValid = false;
+      setRequiredHargaPerolehan(true)
+      isValid = false
     }
   
     if (!formData.tanggal_perolehan || formData.tanggal_perolehan === "") {
-      setRequiredTanggalPerolehan(true);
-      isValid = false;
+      setRequiredTanggalPerolehan(true)
+      isValid = false
     } 
     
     if (formData.is_amortizable) {
       if (!formData.umur_manfaat_tahun || formData.umur_manfaat_tahun <= 0) {
-        setRequiredUmurManfaatTahun(true);
-        isValid = false;
+        setRequiredUmurManfaatTahun(true)
+        isValid = false
       }
     
       if (!formData.nilai_sisa || formData.nilai_sisa <= 0) {
-        setRequiredNilaiSisa(true);
-        isValid = false;
+        setRequiredNilaiSisa(true)
+        isValid = false
       }
     
       if (!formData.rate || formData.rate <= 0 || formData.rate > 100) {
-        setRequiredRate(true);
-        isValid = false;
+        setRequiredRate(true)
+        isValid = false
       }
 
       if (!formData.metode_amortisasi || formData.metode_amortisasi === "") {
-        setRequiredMetodeAmortisasi(true);
-        isValid = false;
+        setRequiredMetodeAmortisasi(true)
+        isValid = false
       } 
     } 
 
@@ -288,25 +288,25 @@ export function GeneralJournalForm() {
   
     // Common Fields
     if (validateCommonFields() === false) {
-      isValid = false;
+      isValid = false
     }
   
-    return isValid;
-  };
+    return isValid
+  }
 
   const validateCommonFieldsAndPaymentOption = () => {
-    let isValid = true;
+    let isValid = true
 
     if (!formData.payment_option || formData.payment_option === "") {
-      setRequiredPaymentOption(true);
-      isValid = false;
+      setRequiredPaymentOption(true)
+      isValid = false
     } 
 
     if (validateCommonFields() === false) {
-      isValid = false;
+      isValid = false
     }
 
-    return isValid;
+    return isValid
   }
   
   const handleInputJournal = (action) => {
@@ -315,22 +315,22 @@ export function GeneralJournalForm() {
     switch (selectedType) {
       case 'Retur Pembelian Bahan Baku':
         if (formData.option_return === "" || !formData.option_return) {
-          setRequiredOptionReturn(true);
+          setRequiredOptionReturn(true)
         }
         if (!validateCommonFields()) {
-          return;
+          return
         }
-        break;
+        break
   
       case 'Pembelian Bahan Baku':
         if (formData.option_acquisition === "" || !formData.option_acquisition) {
-          setRequiredOptionAcquisition(true);
+          setRequiredOptionAcquisition(true)
         }
 
         if (!validateCommonFields()) {
-          return;
+          return
         }
-        break;
+        break
   
       case 'Pencatatan Piutang Usaha':
       case 'Pelunasan Piutang Usaha':
@@ -339,44 +339,44 @@ export function GeneralJournalForm() {
       case 'Pencatatan Prive':
       case 'Pencatatan Beban Gaji':
         if (!validateCommonFields()) {
-          return;
+          return
         }
-        break;
+        break
   
       case 'Pencatatan Beban Sewa':
       case 'Pencatatan Beban Promosi dan Pemasaran':
       case 'Pencatatan Beban Operasional Lainnya':
         if (!validateCommonFieldsAndPaymentOption()) {
-          return;
+          return
         }
-        break;
+        break
   
       case 'Pencatatan Aset Tetap':
         if (!validatePencatatanAsetTetap()) {
-          return;
+          return
         }
-        break;
+        break
   
       case 'Penjualan Aset Tetap':
         if (!validatePenjualanAsetTetap()) {
-          return;
+          return
         }
-        break;
+        break
   
       case 'Pencatatan Aset Tidak Berwujud':
         if (!validatePencatatanAsetTidakBerwujud()) {
-          return;
+          return
         }
-        break;
+        break
   
       default:
         // Optional: handle default if needed
-        break;
+        break
     }
   
 
     handleSubmitJournal(action)
-  };
+  }
   
   const accounts = [
     { value: 'Persediaan Bahan Baku', label: 'Persediaan Bahan Baku' },
@@ -392,7 +392,7 @@ export function GeneralJournalForm() {
     { value: 'Beban Sewa', label: 'Beban Sewa' },
     { value: 'Beban Promosi dan Pemasaran', label: 'Beban Promosi dan Pemasaran' },
     { value: 'Beban Operasional Lainnya', label: 'Beban Operasional Lainnya' }
-  ];
+  ]
 
   const getTypeOptions = (account) => {
     switch (account) {
@@ -400,29 +400,29 @@ export function GeneralJournalForm() {
         return [
           { value: 'Retur Pembelian Bahan Baku', label: 'Retur Pembelian Bahan Baku' },
           { value: 'Pembelian Bahan Baku', label: 'Pembelian Bahan Baku' }
-        ];
+        ]
       case 'Piutang Usaha':
         return [
           { value: 'Pencatatan Piutang Usaha' , label: 'Pencatatan Piutang Usaha' },
           { value: 'Pelunasan Piutang Usaha', label: 'Pelunasan Piutang Usaha' }
-        ];
+        ]
       case 'Aset Tetap':
         return [
           { value: 'Pencatatan Aset Tetap', label: 'Pencatatan Aset Tetap' },
           { value: 'Penjualan Aset Tetap', label: 'Penjualan Aset Tetap' }
-        ];
+        ]
       case 'Aset Tidak Berwujud':
         return [
           { value: 'Pencatatan Aset Tidak Berwujud', label: 'Pencatatan Aset Tidak Berwujud' }
-        ];
+        ]
       case 'Modal Awal':
         return [
           { value: 'Pencatatan Modal Awal', label: 'Pencatatan Modal Awal' }
-        ];
+        ]
       case 'Modal Disetor':
         return [
           { value: 'Pencatatan Modal Disetor', label: 'Pencatatan Modal Disetor' }
-        ];
+        ]
       case "Prive":
         return [
           {values: 'Pencatatan Prive', label: 'Pencatatan Prive'}
@@ -444,9 +444,9 @@ export function GeneralJournalForm() {
           {values: 'Pencatatan Beban Operasional Lainnya', label: 'Pencatatan Beban Operasional Lainnya'}
         ]
       default:
-        return [];
+        return []
     }
-  };
+  }
 
   useEffect(() => {
     if (selectedType) {
@@ -458,20 +458,20 @@ export function GeneralJournalForm() {
   }, [selectedType])
 
   const handleAccountChange = (account) => {
-    setSelectedAccount(account);
-    setSelectedType('');
-    setFormData({});
-  };
+    setSelectedAccount(account)
+    setSelectedType('')
+    setFormData({})
+  }
 
   const handleInputChange = (field, value) => {
     if (field === 'date') {
-      value = new Date(value).toISOString().split('T')[0]; // hasil: "2025-07-11"
+      value = new Date(value).toISOString().split('T')[0] // hasil: "2025-07-11"
     }
     setFormData(prev => ({
       ...prev,
       [field]: value
-    }));
-  };
+    }))
+  }
 
 
   ///////// Integration data with state /////////
@@ -532,14 +532,14 @@ export function GeneralJournalForm() {
       setToast({
         message: errorGetJournalByJsonJournal || errorInputGeneralJournal || errorUpdateGeneralJournalInternal,
         type: 'error'
-      });
+      })
     }
-  }, [errorGetJournalByJsonJournal, errorInputGeneralJournal, errorUpdateGeneralJournalInternal]);
+  }, [errorGetJournalByJsonJournal, errorInputGeneralJournal, errorUpdateGeneralJournalInternal])
 
 
 
   const renderFormFields = () => {
-    if (!selectedAccount || !selectedType) return null;
+    if (!selectedAccount || !selectedType) return null
 
     const commonFields = (
       <>
@@ -568,10 +568,10 @@ export function GeneralJournalForm() {
               value={formData?.amount != null ? formData.amount.toLocaleString("id-ID") : ''}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${requiredAmount ? 'border-red-500' : 'border-gray-300'}`}
               onChange={(e) => {
-                const raw = e.target.value.replace(/\./g, '');
-                const number = parseInt(raw) || 0;
+                const raw = e.target.value.replace(/\./g, '')
+                const number = parseInt(raw) || 0
 
-                handleInputChange('amount', number);
+                handleInputChange('amount', number)
               }}
             />
             {requiredAmount && <p className="text-red-500 text-xs mt-1">Jumlah wajib diisi dan harus lebih dari nol.</p>}
@@ -593,7 +593,7 @@ export function GeneralJournalForm() {
           {requiredKeterangan && <p className="text-red-500 text-xs mt-1">Keterangan wajib diisi.</p>}
         </div>
       </>
-    );
+    )
 
     // Persediaan Bahan Baku
     if (selectedAccount === 'Persediaan Bahan Baku') {
@@ -618,7 +618,7 @@ export function GeneralJournalForm() {
               {requiredOptionReturn && <p className="text-red-500 text-xs mt-1">Opsi Return wajib dipilih.</p>}
             </div>
           </div>
-        );
+        )
       } else if (selectedType === 'Pembelian Bahan Baku') {
         return (
           <div className="space-y-6">
@@ -641,7 +641,7 @@ export function GeneralJournalForm() {
               {requiredOptionAcquisition && <p className="text-red-500 text-xs mt-1">Opsi Akuisisi wajib dipilih.</p>}
             </div>
           </div>
-        );
+        )
       }
     }
 
@@ -651,7 +651,7 @@ export function GeneralJournalForm() {
         <div className="space-y-6">
           {commonFields}
         </div>
-      );
+      )
     }
 
     // Aset Tetap
@@ -907,10 +907,10 @@ export function GeneralJournalForm() {
                   type="text"
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${requiredAmount ? 'border-red-500' : 'border-gray-300'}`}
                   onChange={(e) => {
-                    const raw = e.target.value.replace(/\./g, '');
-                    const number = parseInt(raw) || 0;
+                    const raw = e.target.value.replace(/\./g, '')
+                    const number = parseInt(raw) || 0
 
-                    handleInputChange('amount', number);
+                    handleInputChange('amount', number)
                   }}
                   value={formData?.amount != null ? formData.amount.toLocaleString("id-ID") : ''}
                 />
@@ -933,7 +933,7 @@ export function GeneralJournalForm() {
               {requiredKeterangan && <p className="text-red-500 text-xs mt-1">Keterangan wajib diisi.</p>}
             </div>
           </div>
-        );
+        )
       }
     }
 
@@ -1107,7 +1107,7 @@ export function GeneralJournalForm() {
           </div>
           {commonFields} {/* Reusing common fields for date, amount, keterangan */}
         </div>
-      );
+      )
     }
 
     // Modal Awal & Modal Disetor
@@ -1119,8 +1119,8 @@ export function GeneralJournalForm() {
       )
     }
 
-    return null;
-  };
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -1247,7 +1247,7 @@ export function GeneralJournalForm() {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default GeneralJournalForm;
+export default GeneralJournalForm

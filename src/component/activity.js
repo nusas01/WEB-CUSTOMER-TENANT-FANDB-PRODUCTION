@@ -24,7 +24,7 @@ import {
     Loader2,
     Package,
     CreditCard,
-} from 'lucide-react';
+} from 'lucide-react'
 import {getDetailTransactionsHistoryCustomerSlice} from '../reducers/get'
 import { setOrderTypeContext, setIsClose } from "../reducers/reducers"
 import {
@@ -34,12 +34,12 @@ import {
 export default function Activity() {
     const dispatch = useDispatch()
     const location = useLocation()
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const buttonstatus = location.state || "on going"
     const [orderTypeInvalid, setOrderTypeInvalid] = useState(false)
     const [spinner, setSpinner] = useState(false)
 
-    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer);
+    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
     const {data} = useSelector((state) => state.persisted.dataCustomer)
     useEffect(() => {
         if ((!data || Object.keys(data).length === 0) && loggedIn) {
@@ -69,9 +69,9 @@ export default function Activity() {
         }
     }, [filterOvo])
 
-    const {resetError} = getDetailTransactionsHistoryCustomerSlice.actions;
+    const {resetError} = getDetailTransactionsHistoryCustomerSlice.actions
     const handleDetail = (id) => {
-        dispatch(resetError());
+        dispatch(resetError())
         dispatch(fetchDetailTransactionHistoryCustomer(id))
         navigate("/activity/detail", {state: {id}})
     }
@@ -113,11 +113,11 @@ export default function Activity() {
     // get table id or order_tye_take_away = true from query
     const {tableId, orderTakeAway, isClose} = useSelector((state) => state.persisted.orderType)
     if (orderTakeAway === null && tableId === null) {
-        const q = new URLSearchParams(location.search);
-        const orderTakeAways = q.get("order_type_take_away") === "true";
-        const tableIds = q.get("table_id");
+        const q = new URLSearchParams(location.search)
+        const orderTakeAways = q.get("order_type_take_away") === "true"
+        const tableIds = q.get("table_id")
 
-        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }));
+        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }))
     }
 
     useEffect(() => {
@@ -391,7 +391,7 @@ export default function Activity() {
                                                             <button
                                                                 onClick={() => {
                                                                     if (data.payment_method_type === "EWALLET" && data.channel_code !== 'OVO') {
-                                                                        window.open(data.payment_reference, "_blank"); 
+                                                                        window.open(data.payment_reference, "_blank") 
                                                                     } else {
                                                                         handlePembayaran({
                                                                             id: data.id,
@@ -400,7 +400,7 @@ export default function Activity() {
                                                                             exp: data.expires_at,
                                                                             unixNumber: data.payment_reference,
                                                                             channel_code: data.channel_code,
-                                                                        });
+                                                                        })
                                                                     }
                                                                 }}
                                                                 className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg"

@@ -39,20 +39,20 @@ export const getDataCustomerSlice = createSlice({
     initialState: initialGetDataCustomer,
     reducers: {
         setLoadingGetDataCustomer: (state, action) => {
-            state.loading = action.payload;
+            state.loading = action.payload
         },
         fetchSuccessGetDataCustomer: (state, action) => {
-            state.data = action.payload;
-            state.statusCode =  200;
-            state.loading = false;
+            state.data = action.payload
+            state.statusCode =  200
+            state.loading = false
         },
         fetchErrorGetDataCustomer: (state, action) => {
-            state.error = action.payload.error;
-            state.statusCode = action.payload.statusCode;
-            state.loading = false;
+            state.error = action.payload.error
+            state.statusCode = action.payload.statusCode
+            state.loading = false
         },
         resetGetDataCustomer: (state) => {
-            state.data = {};
+            state.data = {}
         }
     }
 })
@@ -96,12 +96,12 @@ export const getTransactionOnGoingCustomerSlice = createSlice({
         fetchSuccessGetTransactionOnGoingCustomer: (state, action) => {
             const sortedData = [...action.payload].sort((a, b) => 
                 new Date(b.created_at) - new Date(a.created_at)
-            );
+            )
             
-            state.dataTransactionOnGoing = sortedData;
-            state.lengthTransactionOnGoing = sortedData.length;
-            state.statusCode = 200;
-            state.loading = false;
+            state.dataTransactionOnGoing = sortedData
+            state.lengthTransactionOnGoing = sortedData.length
+            state.statusCode = 200
+            state.loading = false
         },
         fetchErrorGetTransactionOnGoingCustomer: (state, action) => {
             state.error = action.payload.error
@@ -112,7 +112,7 @@ export const getTransactionOnGoingCustomerSlice = createSlice({
             state.dataTransactionOnGoing = state.dataTransactionOnGoing.filter(
                 (item) => item.id !== action.payload
             )
-            state.lengthTransactionOnGoing = state.dataTransactionOnGoing.length;
+            state.lengthTransactionOnGoing = state.dataTransactionOnGoing.length
         },
         updateTransactionOnGoingStatusById: (state, action) => {
             const updated = state.dataTransactionOnGoing.map(item => {
@@ -146,7 +146,7 @@ export const getTransactionsHistoryCustomerSlice = createSlice({
             state.loadingHistory = action.payload
         },
         fetchSuccessGetTransactionHistoryCustomer: (state, action) => {
-            state.dataTransactionHistory = action.payload || {};
+            state.dataTransactionHistory = action.payload || {}
         },
         fetchErrorGetTransactionHistoryCustomer: (state, action) => {
             state.error = action.payload.error
@@ -171,7 +171,7 @@ export const getDetailTransactionsHistoryCustomerSlice = createSlice({
             state.loadingHistory = action.payload
         },
         fetchSuccessDetailTransactionHistoryCustomer: (state, action) => {
-            state.dataDetailTransactionHistory = action.payload;
+            state.dataDetailTransactionHistory = action.payload
         },
         fetchErrorDetailTransactionHistoryCustomer: (state, action) => {
             state.error = action.payload.error
@@ -226,17 +226,17 @@ export const logoutCustomerSlice = createSlice({
     initialState: initialLogoutCustomerState,
     reducers: {
         logoutSuccessCustomer: (state, action) => {
-            state.message = action.payload;
+            state.message = action.payload
         },
         logoutErrorCustomer: (state, action) => {
-            state.error = action.payload;
+            state.error = action.payload
         },
         setLoadingLogoutCustomer: (state, action) => {
-            state.loadingLogout = action.payload;
+            state.loadingLogout = action.payload
         }, 
         resetLogoutCustomer: (state) => {
-            state.message = null;
-            state.error = null;
+            state.message = null
+            state.error = null
         }
     }
 })
@@ -267,7 +267,7 @@ export const loginStatusInternalSlice = createSlice({
     initialState: initialLoginStatusInternal,
     reducers: {
         setLoginStatusInternal: (state, action) => {
-            state.loggedIn = action.payload;
+            state.loggedIn = action.payload
         }
     }
 })
@@ -441,13 +441,13 @@ export const transactionHistoryInternalSlice = createSlice({
     reducers: {
         setLoadingTransactionHistoryInternal: (state, action) => {
             if (state.page === 1 && !action.payload.isLoadMore) {
-                state.loadingTransactionHistoryInternal = action.payload.loading;
+                state.loadingTransactionHistoryInternal = action.payload.loading
             } else {
-                state.hasMore = action.payload.loading;
+                state.hasMore = action.payload.loading
             }
         },
         fetchSuccessTransactionHistoryInternal: (state, action) => {
-            const { data, hasMore, totalCount, totalRevenue, page } = action.payload;
+            const { data, hasMore, totalCount, totalRevenue, page } = action.payload
             
             if (page === 1) {
                 state.dataTransactionHistoryInternal = data
@@ -551,7 +551,7 @@ export const getAllCreateTransactionInternalSlice = createSlice({
         removeGetAllCreateTransactionById: (state, action) => {
             state.dataGetAllCreateTransactionInternal = state.dataGetAllCreateTransactionInternal.filter(
                 (item) => {
-                    return item.transaction_id !== action.payload;
+                    return item.transaction_id !== action.payload
                 }
             )
         },
@@ -580,7 +580,7 @@ export const getSearchTransactionInternalSlice = createSlice({
             }
         },
         fetchSuccessSearchTransactionInternal: (state, action) => {
-            const { data, page, hasMore, totalCount} = action.payload;
+            const { data, page, hasMore, totalCount} = action.payload
 
             if (page === 1) {
                 state.dataSearchTransactionInternal = data
@@ -665,7 +665,7 @@ export const getPaymentMethodsInternalSlice = createSlice({
 //             state.dataOrderIntenal = state.dataOrderIntenal.filter(item => item.id !== idToRemove)
 //         },
 //         addDataOrderInternal: (state, action) => {
-//             state.dataOrderIntenal.push(action.payload);
+//             state.dataOrderIntenal.push(action.payload)
 //         }
 //     }
 // })
@@ -684,7 +684,7 @@ export const getCategoryInternalSlice = createSlice({
             state.loadingCategoryInternal= action.payload
         },
         fetchSuccessCategoryInternal: (state, action) => {
-            state.dataCategory = action.payload
+            state.dataCategory = action.payload || []
             state.errorCategoyIntenal = null
         },
         fetchErrorCategoryInternal: (state, action) => {
@@ -692,8 +692,8 @@ export const getCategoryInternalSlice = createSlice({
             state.dataCategory = []
         },
         deleteCategoryById: (state, action) => {
-            const idToDelete = action.payload;
-            state.dataCategory = state.dataCategory.filter(category => category.id !== idToDelete);
+            const idToDelete = action.payload
+            state.dataCategory = state.dataCategory.filter(category => category.id !== idToDelete)
         },
     }
 })
@@ -715,7 +715,7 @@ export const getCategoryAndProductInternalSlice = createSlice({
             state.loadingCategoryAndProductInternal= action.payload
         },
         fetchSuccessCategoryAndProductInternal: (state, action) => {
-            state.dataCategoryAndProduct = action.payload.data
+            state.dataCategoryAndProduct = action.payload.data || []
             state.amountCategory = action.payload.amountCategory
             state.amountProduct = action.payload.amountProduct
             state.errorCategoyAndProductIntenal = null
@@ -729,88 +729,88 @@ export const getCategoryAndProductInternalSlice = createSlice({
             state.filteredProduct = []
         },
         updateProductInCategory: (state, action) => {
-            const { categoryId, productId, updatedProduct } = action.payload;
+            const { categoryId, productId, updatedProduct } = action.payload
 
             for (let i = 0; i < state.dataCategoryAndProduct.length; i++) {
                 const productIndex = state.dataCategoryAndProduct[i].product.findIndex(
                 (prod) => prod.id === productId
-                );
+                )
                 if (productIndex !== -1) {
-                state.dataCategoryAndProduct[i].product.splice(productIndex, 1);
-                break;
+                state.dataCategoryAndProduct[i].product.splice(productIndex, 1)
+                break
                 }
             }
 
             const newCategoryIndex = state.dataCategoryAndProduct.findIndex(
                 (cat) => cat.id === categoryId
-            );
+            )
 
             if (newCategoryIndex !== -1) {
-                state.dataCategoryAndProduct[newCategoryIndex].product.push(updatedProduct);
+                state.dataCategoryAndProduct[newCategoryIndex].product.push(updatedProduct)
             }
         },
         toggleProductAvailability: (state, action) => {
-            const productId = action.payload;
+            const productId = action.payload
 
             // Ubah di data utama
             for (const category of state.dataCategoryAndProduct) {
-                const product = category.product.find((p) => p.id === productId);
+                const product = category.product.find((p) => p.id === productId)
                 if (product) {
-                product.available = !product.available;
-                break;
+                product.available = !product.available
+                break
                 }
             }
 
             // Ubah juga di filteredProduct jika sedang aktif
             for (const category of state.filteredProduct) {
-                const product = category.product.find((p) => p.id === productId);
+                const product = category.product.find((p) => p.id === productId)
                 if (product) {
-                product.available = !product.available;
-                break;
+                product.available = !product.available
+                break
                 }
             }
         },
         deleteProductById: (state, action) => {
-            const productId = action.payload;
+            const productId = action.payload
 
             for (let i = 0; i < state.dataCategoryAndProduct.length; i++) {
-                const category = state.dataCategoryAndProduct[i];
-                const products = category.product;
+                const category = state.dataCategoryAndProduct[i]
+                const products = category.product
 
-                const productIndex = products.findIndex((prod) => prod.id === productId);
+                const productIndex = products.findIndex((prod) => prod.id === productId)
 
                 if (productIndex !== -1) {
-                    products.splice(productIndex, 1);
-                    state.amountProduct--; // update jumlah produk
+                    products.splice(productIndex, 1)
+                    state.amountProduct-- // update jumlah produk
 
                     // Jika produk dalam kategori ini kosong setelah penghapusan, hapus kategorinya
                     if (products.length === 0) {
-                        state.dataCategoryAndProduct.splice(i, 1);
-                        state.amountCategory--; // update jumlah kategori
+                        state.dataCategoryAndProduct.splice(i, 1)
+                        state.amountCategory-- // update jumlah kategori
                     }
-                    break;
+                    break
                 }
             }
 
             // Jika `filteredProduct` aktif juga, update di sana
             for (let i = 0; i < state.filteredProduct.length; i++) {
-                const category = state.filteredProduct[i];
-                const products = category.product;
-                const productIndex = products.findIndex((prod) => prod.id === productId);
+                const category = state.filteredProduct[i]
+                const products = category.product
+                const productIndex = products.findIndex((prod) => prod.id === productId)
 
                 if (productIndex !== -1) {
-                    products.splice(productIndex, 1);
+                    products.splice(productIndex, 1)
 
                     // Jika setelah dihapus kategori jadi kosong, hapus dari filteredProduct juga
                     if (products.length === 0) {
-                        state.filteredProduct.splice(i, 1);
+                        state.filteredProduct.splice(i, 1)
                     }
-                    break;
+                    break
                 }
             }
         },
         searchProductByName: (state, action) => {
-            const keyword = action.payload.toLowerCase();
+            const keyword = action.payload.toLowerCase()
 
             state.filteredProduct = []
 
@@ -981,7 +981,7 @@ const initialGeneralJournalVoidInternalState = {
   page: 1,
   hasMore: true,
   isLoadMore: false,
-};
+}
 
 export const getGeneralJournalVoidInternalSlice = createSlice({
   name: "dataGeneralJournalVoid",
@@ -989,44 +989,44 @@ export const getGeneralJournalVoidInternalSlice = createSlice({
   reducers: {
     setLoadingGeneralJournalVoidInternal: (state, action) => {
       if (state.page === 1 && !action.payload.isLoadMore) {
-        state.loadingGeneralJournalVoidInternal = action.payload.loading;
+        state.loadingGeneralJournalVoidInternal = action.payload.loading
       } else {
-        state.isLoadMore = action.payload.loading;
+        state.isLoadMore = action.payload.loading
       }
     },
     fetchSuccessGeneralJournalVoidInternal: (state, action) => {
-      const { data, page, hasMore } = action.payload;
+      const { data, page, hasMore } = action.payload
 
       if (page === 1) {
-        state.dataGeneralJournalVoidInternal = data || [];
+        state.dataGeneralJournalVoidInternal = data || []
       } else {
         state.dataGeneralJournalVoidInternal = [
           ...state.dataGeneralJournalVoidInternal,
           ...(data || []),
-        ];
+        ]
       }
 
-      state.page = page;
-      state.hasMore = hasMore;
-      state.loadingGeneralJournalVoidInternal = false;
-      state.isLoadMore = false;
-      state.errorGeneralJournalVoidIntenal = null;
+      state.page = page
+      state.hasMore = hasMore
+      state.loadingGeneralJournalVoidInternal = false
+      state.isLoadMore = false
+      state.errorGeneralJournalVoidIntenal = null
     },
     fetchErrorGeneralJournalVoidInternal: (state, action) => {
-      state.errorGeneralJournalVoidIntenal = action.payload;
-      state.loadingGeneralJournalVoidInternal = false;
-      state.isLoadMore = false;
+      state.errorGeneralJournalVoidIntenal = action.payload
+      state.loadingGeneralJournalVoidInternal = false
+      state.isLoadMore = false
     },
     resetGeneralJournalVoidInternal: (state) => {
-      state.dataGeneralJournalVoidInternal = [];
-      state.errorGeneralJournalVoidIntenal = null;
-      state.loadingGeneralJournalVoidInternal = false;
-      state.page = 1;
-      state.hasMore = true;
-      state.isLoadMore = false;
+      state.dataGeneralJournalVoidInternal = []
+      state.errorGeneralJournalVoidIntenal = null
+      state.loadingGeneralJournalVoidInternal = false
+      state.page = 1
+      state.hasMore = true
+      state.isLoadMore = false
     },
   },
-});
+})
 
 
 const initialGeneralJournalDrafInternalState = {
@@ -1120,31 +1120,31 @@ export const getOrdersInternalSlice = createSlice({
             state.dataOrdersInternal = state.dataOrdersInternal.filter(item => item.id !== idToDelete)
         },
         appendOrdersInternal: (state, action) => {
-            const newOrders = Array.isArray(action.payload) ? action.payload : [action.payload];
+            const newOrders = Array.isArray(action.payload) ? action.payload : [action.payload]
 
             newOrders.forEach((order) => {
-                const existing = state.dataOrdersInternal.find(item => item.id === order.id);
+                const existing = state.dataOrdersInternal.find(item => item.id === order.id)
 
                 if (existing) {
                 // Update order_status (bisa ditambah update field lain jika perlu)
                 if (order.order_status !== undefined) {
-                    existing.order_status = order.order_status;
+                    existing.order_status = order.order_status
                 }
                 } else {
                 // Order belum ada, langsung push
-                state.dataOrdersInternal.push(order);
+                state.dataOrdersInternal.push(order)
                 }
-            });
+            })
         },
         deleteOrdersExceptToday: (state) => {
-            const now = new Date();
+            const now = new Date()
 
-            const todayString = now.toISOString().split("T")[0]; // Contoh: "2025-07-16"
+            const todayString = now.toISOString().split("T")[0] // Contoh: "2025-07-16"
 
             state.dataOrdersInternal = state.dataOrdersInternal.filter(order => {
-                const orderDate = new Date(order.created_at).toISOString().split("T")[0];
-                return orderDate === todayString;
-            });
+                const orderDate = new Date(order.created_at).toISOString().split("T")[0]
+                return orderDate === todayString
+            })
         }
 
     }
@@ -1159,52 +1159,52 @@ const initialSearchOrderInternalState = {
   isLoadMore: false,
   totalCount: 0,
   totalRevenue: 0,
-};
+}
 export const searchOrderInternalSlice = createSlice({
   name: "searchOrder",
   initialState: initialSearchOrderInternalState,
   reducers: {
     setLoadingSearchOrder: (state, action) => {
         if (state.page === 1 && !action.payload.isLoadMore) {
-        state.loadingSearchOrder = action.payload.loading;
+        state.loadingSearchOrder = action.payload.loading
         } else {
-        state.isLoadMore = action.payload.isLoadMore;
+        state.isLoadMore = action.payload.isLoadMore
         }
     },
     fetchSuccessSearchOrder: (state, action) => {
-        const { data, page, hasMore, totalCount, totalRevenue } = action.payload;
+        const { data, page, hasMore, totalCount, totalRevenue } = action.payload
 
         if (page === 1) {
-            state.dataSearchOrder = data;
-            state.totalCount = totalCount;
-            state.totalRevenue = totalRevenue;
+            state.dataSearchOrder = data
+            state.totalCount = totalCount
+            state.totalRevenue = totalRevenue
         } else {
-            state.dataSearchOrder = [...state.dataSearchOrder, ...data];
+            state.dataSearchOrder = [...state.dataSearchOrder, ...data]
         }
 
-        state.page = page;
-        state.hasMore = hasMore;
-        state.errorSearchOrder = null;
-        state.loadingSearchOrder = false;
-        state.isLoadMore = false;
+        state.page = page
+        state.hasMore = hasMore
+        state.errorSearchOrder = null
+        state.loadingSearchOrder = false
+        state.isLoadMore = false
     },
     fetchErrorSearchOrder: (state, action) => {
-      state.errorSearchOrder = action.payload;
-      state.loadingSearchOrder = false;
-      state.isLoadMore = false;
+      state.errorSearchOrder = action.payload
+      state.loadingSearchOrder = false
+      state.isLoadMore = false
     },
     resetSearchOrder: (state) => {
-      state.dataSearchOrder = [];
-      state.page = 1;
-      state.errorSearchOrder = null;
-      state.hasMore = true;
-      state.isLoadMore = false;
-      state.totalCount = 0;
-      state.loadingSearchOrder = false;
-      state.totalRevenue = 0;
+      state.dataSearchOrder = []
+      state.page = 1
+      state.errorSearchOrder = null
+      state.hasMore = true
+      state.isLoadMore = false
+      state.totalCount = 0
+      state.loadingSearchOrder = false
+      state.totalRevenue = 0
     },
   },
-});
+})
 
 const initialOrdersFinishedInternalState = {
   dataOrdersFinished: [],
@@ -1289,19 +1289,19 @@ export const getTablesInternalSlice = createSlice({
             state.errorTablesInternal = null
         },
         addTableInternal: (state, action) => {
-            state.dataTablesInternal.push(action.payload);
+            state.dataTablesInternal.push(action.payload)
         },
         updateOrderTypeTakeAway: (state, action) => {
-            state.orderTypeTakeAway = action.payload;
+            state.orderTypeTakeAway = action.payload
         },
         deleteTableInternalByNumber: (state) => {
-            if (state.dataTablesInternal.length === 0) return;
+            if (state.dataTablesInternal.length === 0) return
 
-            const maxNumber = Math.max(...state.dataTablesInternal.map(table => table.number_table));
+            const maxNumber = Math.max(...state.dataTablesInternal.map(table => table.number_table))
 
             state.dataTablesInternal = state.dataTablesInternal.filter(
                 table => table.number_table !== maxNumber
-            );
+            )
         },
     }
 })
@@ -1320,14 +1320,14 @@ export const getDataEmployeeInternalSlice = createSlice({
             state.loadingDataEmployeeInternal = action.payload
         },
         fetchSuccessDataEmployeeInternal: (state, action) => {
-            const payload = { ...action.payload };
+            const payload = { ...action.payload }
 
             if (payload.phone_number !== undefined) {
-                payload.phone_number = getPhoneWithoutPrefix(payload.phone_number) || "";
+                payload.phone_number = getPhoneWithoutPrefix(payload.phone_number) || ""
             }
 
-            state.dataEmployeeInternal = payload;
-            state.errorDataEmployeeInternal = null;
+            state.dataEmployeeInternal = payload
+            state.errorDataEmployeeInternal = null
         },
         fetchErrorDataEmployeeInternal: (state, action) => {
            state.errorDataEmployeeInternal = action.payload
@@ -1337,18 +1337,18 @@ export const getDataEmployeeInternalSlice = createSlice({
             state.errorDataEmployeeInternal = null
         },
         updateEmployeeInternalFields: (state, action) => {
-            const updates = action.payload;
-            const allowedFields = ["image", "name", "email", "phone_number", "date_of_birth"];
+            const updates = action.payload
+            const allowedFields = ["image", "name", "email", "phone_number", "date_of_birth"]
 
             allowedFields.forEach((field) => {
             if (updates[field] !== undefined) {
                 if (field === "phone_number") {
-                state.dataEmployeeInternal[field] = getPhoneWithoutPrefix(updates[field]) || '';
+                state.dataEmployeeInternal[field] = getPhoneWithoutPrefix(updates[field]) || ''
                 } else {
-                state.dataEmployeeInternal[field] = updates[field];
+                state.dataEmployeeInternal[field] = updates[field]
                 }
             }
-            });
+            })
         },
     }
 })

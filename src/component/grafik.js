@@ -1,10 +1,10 @@
-import React from "react";
-import Chart from "react-apexcharts";
+import React from "react"
+import Chart from "react-apexcharts"
 
 function IncomeOutcomeChart({ options, series }) {
     return (
         <Chart options={options} series={series} type="area" height={300}/>
-    );
+    )
 }
 
 export const SalesLineChart = ({ data, labels, colors }) => {
@@ -26,9 +26,9 @@ export const SalesLineChart = ({ data, labels, colors }) => {
             fontWeight: 400,
           },
           formatter: (title) => {
-            if (!title) return "";
-            const newT = title.split(" ");
-            return `${newT[0]} ${newT[1].slice(0, 3)}`;
+            if (!title) return ""
+            const newT = title.split(" ")
+            return `${newT[0]} ${newT[1].slice(0, 3)}`
           },
         },
       },
@@ -43,10 +43,10 @@ export const SalesLineChart = ({ data, labels, colors }) => {
       grid: { borderColor: "#e5e7eb" },
       tooltip: { enabled: true },
       colors: colors || ["#111827"],
-    };
+    }
   
-    return <Chart options={options} series={options.series} type="line" height={250} />;
-  };
+    return <Chart options={options} series={options.series} type="line" height={250} />
+  }
 
 
 export const Heatmap = ({ data, labels, dates }) => {
@@ -100,7 +100,7 @@ export const Heatmap = ({ data, labels, dates }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default IncomeOutcomeChart;
+export default IncomeOutcomeChart

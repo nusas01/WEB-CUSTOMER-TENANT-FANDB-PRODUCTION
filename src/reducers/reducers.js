@@ -6,7 +6,7 @@ import {
     fetchGeneralJournalByEventPerDayInternal,
     fetchGeneralJournalVoidInternal,
     fetchSearchTransactionInternal,
- } from "../actions/get";
+ } from "../actions/get"
 
 const initialOrderTypeState = {
     orderTakeAway: null,
@@ -26,7 +26,7 @@ export const orderTypeSlice = createSlice({
         },
     }
 })
-export const { setOrderTypeContext, setIsClose } = orderTypeSlice.actions;
+export const { setOrderTypeContext, setIsClose } = orderTypeSlice.actions
 
 const initialStoreInfoCustomerState = {
     statusStoreInfo: false
@@ -92,17 +92,17 @@ export const filterGeneralJournalInternalSlice = createSlice({
 })
 
 
-const today = new Date();
-const lastMonth = new Date();
-lastMonth.setMonth(today.getMonth() - 1);
+const today = new Date()
+const lastMonth = new Date()
+lastMonth.setMonth(today.getMonth() - 1)
 
 // Format ke yyyy-mm-dd
-const formatDate = (date) => date.toISOString().split("T")[0];
+const formatDate = (date) => date.toISOString().split("T")[0]
 
 const initialFilterDateLabaRugiInternalState = {
     startDate: formatDate(lastMonth), // 1 bulan ke belakang
     endDate: formatDate(today),       // hari ini
-};
+}
 export const filterDateLabaRugiInternalSlice = createSlice({
     name: "filterDateLabaRugi",
     initialState: initialFilterDateLabaRugiInternalState,
@@ -120,7 +120,7 @@ export const filterDateLabaRugiInternalSlice = createSlice({
 const initialFilterDateNeracaInternalState = {
     startDate: formatDate(lastMonth), // 1 bulan ke belakang
     endDate: formatDate(today),       // hari ini
-};
+}
 export const filterDateNeracaInternalSlice = createSlice({
     name: "filterDateNeraca",
     initialState: initialFilterDateNeracaInternalState,
@@ -137,7 +137,7 @@ export const filterDateNeracaInternalSlice = createSlice({
 
 const initialDataDrafToVoidInternalState = {
     dataDrafToVoid: {},
-};
+}
 export const dataDrafToVoidInternalSlice = createSlice({
     name: "dataDrafToVoid",
     initialState: initialDataDrafToVoidInternalState,
@@ -180,18 +180,18 @@ export const filterOrderInternalSlice = createSlice({
 
 export const loadMoreTransactionHistory = () => {
     return async (dispatch, getState) => {
-        const state = getState().persisted;
-        const { transactionHistoryInternal } = state;
-        const { dataFilteringTransactionHistoryState } = state;
+        const state = getState().persisted
+        const { transactionHistoryInternal } = state
+        const { dataFilteringTransactionHistoryState } = state
         
         // Cek apakah masih bisa load more
         if (!transactionHistoryInternal.hasMore || 
             transactionHistoryInternal.isLoadingMore ||
             transactionHistoryInternal.loadingTransactionHistoryInternal) {
-            return;
+            return
         }
 
-        const nextPage = transactionHistoryInternal.page + 1;
+        const nextPage = transactionHistoryInternal.page + 1
         
         const data = {
             method: dataFilteringTransactionHistoryState.method,
@@ -201,51 +201,51 @@ export const loadMoreTransactionHistory = () => {
             startTime: dataFilteringTransactionHistoryState.startTime,
             endTime: dataFilteringTransactionHistoryState.endTime,
             page: nextPage
-        };
+        }
 
-        return dispatch(fetchTransactionHistory(data, true));
+        return dispatch(fetchTransactionHistory(data, true))
     }
 }
 
 export const loadMoreOrderFinished = () => {
   return async (dispatch, getState) => {
-    const state = getState().persisted;
-    const { dataOrdersFinishedInternal } = state; // Pastikan nama state sesuai
-    const { filterOrderInternal } = state;
+    const state = getState().persisted
+    const { dataOrdersFinishedInternal } = state // Pastikan nama state sesuai
+    const { filterOrderInternal } = state
     
     // Cek apakah masih bisa load more
     if (!dataOrdersFinishedInternal?.hasMore || 
         dataOrdersFinishedInternal?.isLoadMore ||
         dataOrdersFinishedInternal?.loadingOrdersFinishedInternal) {
-      return;
+      return
     }
     
-    const nextPage = dataOrdersFinishedInternal?.page + 1;
+    const nextPage = dataOrdersFinishedInternal?.page + 1
     
     return dispatch(fetchOrdersFinishedInternal(
       filterOrderInternal.startDate,
       filterOrderInternal.endDate,
       nextPage,
       true // isLoadMore = true
-    ));
+    ))
   }
 }
 
 export const loadMoreSearchOrderInternal = (keyword) => {
     return async (dispatch, getState) => {
-        const state = getState();
-        const { searchOrderInternalState } = state;
+        const state = getState()
+        const { searchOrderInternalState } = state
 
         // Cek apakah masih bisa load more
         if (!searchOrderInternalState.hasMore || 
             searchOrderInternalState.isLoadMore ||
             searchOrderInternalState.loadingSearchOrder) {
-            return;
+            return
         }
 
-        const nextPage = searchOrderInternalState.page + 1;
+        const nextPage = searchOrderInternalState.page + 1
 
-        return dispatch(fetchSearchOrderInternal(keyword, nextPage, true));
+        return dispatch(fetchSearchOrderInternal(keyword, nextPage, true))
     }
 }
 
@@ -258,10 +258,10 @@ export const loadMoreGeneralJournalNonAgregasi = () => {
         if (!getGeneralJournalByEventPerDayInternal?.hasMore || 
             getGeneralJournalByEventPerDayInternal?.isLoadMore ||
             getGeneralJournalByEventPerDayInternal?.loadingGeneralJournalByEventPerDayInternal) {
-            return;
+            return
         }
         
-        const nextPage = (getGeneralJournalByEventPerDayInternal?.page || 1) + 1;
+        const nextPage = (getGeneralJournalByEventPerDayInternal?.page || 1) + 1
         
         return dispatch(fetchGeneralJournalByEventPerDayInternal(
             filterGeneralJournalInternal.startDate,
@@ -274,18 +274,18 @@ export const loadMoreGeneralJournalNonAgregasi = () => {
 
 export const loadMoreGeneralJournalVoidInternal = () => {
   return async (dispatch, getState) => {
-    const state = getState().persisted;
-    const { getGeneralJournalVoidInternal, filterGeneralJournalInternal } = state;
+    const state = getState().persisted
+    const { getGeneralJournalVoidInternal, filterGeneralJournalInternal } = state
 
     if (
       !getGeneralJournalVoidInternal?.hasMore ||
       getGeneralJournalVoidInternal?.isLoadMore ||
       getGeneralJournalVoidInternal?.loadingGeneralJournalVoidInternal
     ) {
-      return;
+      return
     }
 
-    const nextPage = (getGeneralJournalVoidInternal?.page || 1) + 1;
+    const nextPage = (getGeneralJournalVoidInternal?.page || 1) + 1
 
     return dispatch(
       fetchGeneralJournalVoidInternal(
@@ -294,9 +294,9 @@ export const loadMoreGeneralJournalVoidInternal = () => {
         nextPage,
         true // isLoadMore
       )
-    );
-  };
-};
+    )
+  }
+}
 
 
 export const navbarInternalSlice = createSlice({
@@ -307,13 +307,13 @@ export const navbarInternalSlice = createSlice({
   },
   reducers: {
     setIsOpen: (state, action) => {
-      state.isOpen = action.payload;
+      state.isOpen = action.payload
     },
     setIsMobileDeviceType: (state, action) => {
-       state.isMobileDeviceType = action.payload;
+       state.isMobileDeviceType = action.payload
     }
   },
-});
+})
 
 
 export const headerHiddenInternalSlice = createSlice({
@@ -323,15 +323,15 @@ export const headerHiddenInternalSlice = createSlice({
   },
   reducers: {
     setHeaderHidden: (state, action) => {
-      state.isOpen = action.payload;
+      state.isOpen = action.payload
     }
   },
-});
+})
 
 export const loadMoreSearchTransactionInternal = (keyword) => {
     return async (dispatch, getState) => {
         const state = getState()
-        const { getSearchTransactionInternalState } = state;
+        const { getSearchTransactionInternalState } = state
         
         if (!getSearchTransactionInternalState.hasMore || 
             getSearchTransactionInternalState.isLoadMore ||

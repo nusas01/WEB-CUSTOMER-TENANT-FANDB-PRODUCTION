@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance.js";
+import axiosInstance from "./axiosInstance.js"
 import { 
     getProductsCustomerSlice, 
     logoutCustomerSlice, 
@@ -40,9 +40,10 @@ import {
     statusServiceMaintenanceSlice,
  } from "../reducers/expToken.js"
  import {groupByDate} from "../helper/groupData.js"
-import { data } from "react-router-dom";
-import { customerCollectFingerprintAsync } from "../helper/fp.js";
-import { useDispatch } from "react-redux";
+import { data } from "react-router-dom"
+import { customerCollectFingerprintAsync } from "../helper/fp.js"
+import { useDispatch } from "react-redux"
+import { resetApp } from "../reducers/state.js"
 
 const {setStatusExpiredToken} = statusExpiredTokenSlice.actions
 const {setStatusExpiredInternalToken} = statusExpiredInternalTokenSlice.actions
@@ -59,31 +60,31 @@ export const fetchNonceCustomer = async (dispatch) => {
         },
         withCredentials: true,
       }
-    );
+    )
 
-    return { data: response?.data, error: null };
+    return { data: response?.data, error: null }
   } catch (error) {
     if (error.response?.data?.code === "TOKEN_EXPIRED") {
       dispatch(setStatusExpiredToken(true))
     }
     
     if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-      dispatch(setStatusServiceMaintenance(true));
+      dispatch(setStatusServiceMaintenance(true))
     }
     
-    return { data: null, error: error.response?.data?.error || "Unexpected error" };
+    return { data: null, error: error.response?.data?.error || "Unexpected error" }
   }
-};
+}
 
 
-const {setLoadingProducts, successFetchProducts, errorFetchProducts} = getProductsCustomerSlice.actions;
+const {setLoadingProducts, successFetchProducts, errorFetchProducts} = getProductsCustomerSlice.actions
 export const fetchProductsCustomer = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
         dispatch(setLoadingProducts(true))
         try {
-          const nonce_data = await customerCollectFingerprintAsync(dispatch);
+          const nonce_data = await customerCollectFingerprintAsync(dispatch)
 
           const params = {
             nonce: nonce_data.nonce,
@@ -105,15 +106,17 @@ export const fetchProductsCustomer = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
 
           const message = {
@@ -127,11 +130,11 @@ export const fetchProductsCustomer = () => {
     }
 }
 
-const {setLoadingGetDataCustomer, fetchSuccessGetDataCustomer, fetchErrorGetDataCustomer, resetGetDataCustomer} = getDataCustomerSlice.actions;
+const {setLoadingGetDataCustomer, fetchSuccessGetDataCustomer, fetchErrorGetDataCustomer, resetGetDataCustomer} = getDataCustomerSlice.actions
 export const fetchGetDataCustomer = () => {
     return async (dispatch, getState) => {
-        const { statusExpiredToken } = getState().statusExpiredTokenState;
-        if (statusExpiredToken) return; 
+        const { statusExpiredToken } = getState().statusExpiredTokenState
+        if (statusExpiredToken) return 
         
         dispatch(setLoadingGetDataCustomer(true))
         try {
@@ -148,15 +151,17 @@ export const fetchGetDataCustomer = () => {
             }
 
             if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-              dispatch(setStatusExpiredInternalToken(true));
+              dispatch(setStatusExpiredInternalToken(true))
+              dispatch(resetApp())
             }
 
             if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-              dispatch(setStatusExpiredUserToken(true));
+              dispatch(setStatusExpiredUserToken(true))
+              dispatch(resetApp())
             }
 
             if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-              dispatch(setStatusServiceMaintenance(true));
+              dispatch(setStatusServiceMaintenance(true))
             }
 
             const message = {
@@ -173,12 +178,12 @@ export const fetchGetDataCustomer = () => {
 const {successFetchNumberTableCustomer, errorFetchNumberTableCustomer, setLoadingNumberTableCustomer} = getNumberTableCustomerSlice.actions
 export const fetchNumberTableCustomer = (id) => {
   return async (dispatch, getState) => {
-    const { statusExpiredToken } = getState().statusExpiredTokenState;
-    if (statusExpiredToken) return; 
+    const { statusExpiredToken } = getState().statusExpiredTokenState
+    if (statusExpiredToken) return 
 
     dispatch(setLoadingNumberTableCustomer(true))
     try {
-      const nonce_data = await customerCollectFingerprintAsync(dispatch);
+      const nonce_data = await customerCollectFingerprintAsync(dispatch)
 
       const params = {
         nonce: nonce_data.nonce,
@@ -201,15 +206,17 @@ export const fetchNumberTableCustomer = (id) => {
       }
 
       if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-        dispatch(setStatusExpiredInternalToken(true));
+        dispatch(setStatusExpiredInternalToken(true))
+        dispatch(resetApp())
       }
 
       if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-        dispatch(setStatusExpiredUserToken(true));
+        dispatch(setStatusExpiredUserToken(true))
+        dispatch(resetApp())
       }
 
       if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-        dispatch(setStatusServiceMaintenance(true));
+        dispatch(setStatusServiceMaintenance(true))
       }
 
       dispatch(errorFetchNumberTableCustomer(error.response?.data?.error))
@@ -219,11 +226,11 @@ export const fetchNumberTableCustomer = (id) => {
   }
 }
 
-const {setLoadingGetTransactionOnGoingCustomer, fetchSuccessGetTransactionOnGoingCustomer, fetchErrorGetTransactionOnGoingCustomer} = getTransactionOnGoingCustomerSlice.actions;
+const {setLoadingGetTransactionOnGoingCustomer, fetchSuccessGetTransactionOnGoingCustomer, fetchErrorGetTransactionOnGoingCustomer} = getTransactionOnGoingCustomerSlice.actions
 export const fetchTransactionOnGoingCustomer = () => {
     return async (dispatch, getState) => {
-        const { statusExpiredToken } = getState().statusExpiredTokenState;
-        if (statusExpiredToken) return; 
+        const { statusExpiredToken } = getState().statusExpiredTokenState
+        if (statusExpiredToken) return 
         
         dispatch(setLoadingGetTransactionOnGoingCustomer(true))
         try {
@@ -240,15 +247,17 @@ export const fetchTransactionOnGoingCustomer = () => {
             }
 
             if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-              dispatch(setStatusExpiredInternalToken(true));
+              dispatch(setStatusExpiredInternalToken(true))
+              dispatch(resetApp())
             }
 
             if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-              dispatch(setStatusExpiredUserToken(true));
+              dispatch(setStatusExpiredUserToken(true))
+              dispatch(resetApp())
             }
 
             if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-              dispatch(setStatusServiceMaintenance(true));
+              dispatch(setStatusServiceMaintenance(true))
             }
 
             const message = {
@@ -262,11 +271,11 @@ export const fetchTransactionOnGoingCustomer = () => {
     }
 }
 
-const {setLoadingGetTransactionHistoryCustomer, fetchSuccessGetTransactionHistoryCustomer, fetchErrorGetTransactionHistoryCustomer} = getTransactionsHistoryCustomerSlice.actions;
+const {setLoadingGetTransactionHistoryCustomer, fetchSuccessGetTransactionHistoryCustomer, fetchErrorGetTransactionHistoryCustomer} = getTransactionsHistoryCustomerSlice.actions
 export const fetchTransactionHistoryCustomer = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingGetTransactionHistoryCustomer(true))
       try {
@@ -276,7 +285,7 @@ export const fetchTransactionHistoryCustomer = () => {
             "x-api-key": process.env.REACT_APP_API_KEY,
           },
         })
-        const grouped = groupByDate(response?.data || []);
+        const grouped = groupByDate(response?.data || [])
   
         dispatch(fetchSuccessGetTransactionHistoryCustomer(grouped))
       } catch (error) {
@@ -285,15 +294,17 @@ export const fetchTransactionHistoryCustomer = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
+          dispatch(resetApp())
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
+          dispatch(resetApp())
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
         const message = {
           error: error.response?.data?.error,
@@ -306,11 +317,11 @@ export const fetchTransactionHistoryCustomer = () => {
     }
 }
 
-const {fetchSuccessDetailTransactionHistoryCustomer, fetchErrorDetailTransactionHistoryCustomer, setLoadingDetailTransactionHistoryCustomer} = getDetailTransactionsHistoryCustomerSlice.actions;
+const {fetchSuccessDetailTransactionHistoryCustomer, fetchErrorDetailTransactionHistoryCustomer, setLoadingDetailTransactionHistoryCustomer} = getDetailTransactionsHistoryCustomerSlice.actions
 export const fetchDetailTransactionHistoryCustomer = (id) => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingDetailTransactionHistoryCustomer(true))
       try {
@@ -330,15 +341,17 @@ export const fetchDetailTransactionHistoryCustomer = (id) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
+          dispatch(resetApp())
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
+          dispatch(resetApp())
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -355,10 +368,10 @@ export const fetchDetailTransactionHistoryCustomer = (id) => {
 const {fetchSuccessSearchTransactionInternal, fetchErrorSearchTransactionInternal, setLoadingSearchTransactionInternal} = getSearchTransactionInternalSlice.actions
 export const fetchSearchTransactionInternal = (searchQuery, currentPage, isLoadMore = false) => {
   return async (dispatch, getState) => {
-    const { statusExpiredToken } = getState().statusExpiredTokenState;
-    if (statusExpiredToken) return;
+    const { statusExpiredToken } = getState().statusExpiredTokenState
+    if (statusExpiredToken) return
 
-    const currentState = getState().getSearchTransactionInternalState;
+    const currentState = getState().getSearchTransactionInternalState
 
     if (currentState.isLoadMore && isLoadMore) {
       return 
@@ -392,15 +405,17 @@ export const fetchSearchTransactionInternal = (searchQuery, currentPage, isLoadM
       }
 
       if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-        dispatch(setStatusExpiredInternalToken(true));
+        dispatch(setStatusExpiredInternalToken(true))
+        dispatch(resetApp())
       }
 
       if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-        dispatch(setStatusExpiredUserToken(true));
+        dispatch(setStatusExpiredUserToken(true))
+        dispatch(resetApp())
       }
 
       if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-        dispatch(setStatusServiceMaintenance(true));
+        dispatch(setStatusServiceMaintenance(true))
       }
       
       dispatch(fetchErrorSearchTransactionInternal(error.response?.data?.error))
@@ -408,11 +423,11 @@ export const fetchSearchTransactionInternal = (searchQuery, currentPage, isLoadM
   }
 }
 
-const {setLoadingGetPaymentMethodsCustomer, fetchSuccessGetPaymentMethodsCustomer, fetchErrorGetPaymentMethodsCustomer} = getPaymentMethodsCustomerSlice.actions;
+const {setLoadingGetPaymentMethodsCustomer, fetchSuccessGetPaymentMethodsCustomer, fetchErrorGetPaymentMethodsCustomer} = getPaymentMethodsCustomerSlice.actions
 export const fetchPaymentMethodsCustomer = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingGetPaymentMethodsCustomer(true))
       try {
@@ -429,15 +444,17 @@ export const fetchPaymentMethodsCustomer = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
+          dispatch(resetApp())
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
+          dispatch(resetApp())
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -456,15 +473,15 @@ const {setLoginStatusCustomer, setLoadingLoginStatusCustomer} = loginStatusCusto
 const {logoutSuccessCustomer, logoutErrorCustomer, setLoadingLogoutCustomer } = logoutCustomerSlice.actions
 export const logoutCustomer = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
     
       dispatch(setLoadingLogoutCustomer(true))
       try{
           const response = await axiosInstance.get(`${process.env.REACT_APP_LOGOUT_CUSTOMER_URL}`, {
               withCredentials: true,
               headers: {
-                "API_KEY": process.env.REACT_APP_API_KEY,
+                "x-api-key": process.env.REACT_APP_API_KEY,
               }
           })
           dispatch(logoutSuccessCustomer(response?.data?.success))
@@ -476,15 +493,17 @@ export const logoutCustomer = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
           
           dispatch(logoutErrorCustomer(error.response?.data?.error))
@@ -496,15 +515,15 @@ export const logoutCustomer = () => {
 
 export const loginStatusCustomer = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingLoginStatusCustomer(true))
       try {
         const response = await axiosInstance.get(`${process.env.REACT_APP_LOGIN_STATUS_CUSTOMER}`, {
             withCredentials: true,
             headers: {
-              "API_KEY": process.env.REACT_APP_API_KEY,  
+              "x-api-key": process.env.REACT_APP_API_KEY,  
             }
         })
         dispatch(setLoginStatusCustomer(response?.data?.loggedIn))
@@ -514,15 +533,17 @@ export const loginStatusCustomer = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
+            dispatch(resetApp())
           }
 
-          // if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          //   dispatch(setStatusExpiredUserToken(true));
-          // }
+          if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
+            dispatch(setStatusExpiredUserToken(true))
+            dispatch(resetApp())
+          }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
 
           dispatch(setLoginStatusCustomer(false))
@@ -542,25 +563,25 @@ export const fetchNonceInternal = async () => {
         },
         withCredentials: true,
       }
-    );
+    )
 
-    return { data: response?.data, error: null };
+    return { data: response?.data, error: null }
   } catch (error) {
-    return { data: null, error: error.response?.data?.error || "Unexpected error" };
+    return { data: null, error: error.response?.data?.error || "Unexpected error" }
   }
-};
+}
 
 const {setLoginStatusInternal} = loginStatusInternalSlice.actions
 export const loginStatusInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       try {
           const response = await axiosInstance.get(`${process.env.REACT_APP_LOGIN_STATUS_INTERNAL}`, {
               withCredentials: true,
               headers: {
-                "API_KEY": process.env.REACT_APP_API_KEY,
+                "x-api-key": process.env.REACT_APP_API_KEY,
               }
           })
           dispatch(setLoginStatusInternal(response?.data.loggedIn))
@@ -570,15 +591,17 @@ export const loginStatusInternal = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
 
           dispatch(setLoginStatusInternal(false))
@@ -589,15 +612,15 @@ export const loginStatusInternal = () => {
 const {logoutSuccessInternal, logoutErrorInternal, setLoadingLogoutInternal} = logoutInternalSlice.actions
 export const logoutInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingLogoutInternal(true))
       try{
           const response = await axiosInstance.get(`${process.env.REACT_APP_LOGOUT_INTERNAL_URL}`, {
               withCredentials: true,
               headers: {
-                "API_KEY": process.env.REACT_APP_API_KEY,
+                "x-api-key": process.env.REACT_APP_API_KEY,
               }
           })
           dispatch(logoutSuccessInternal(response?.data.success))
@@ -608,15 +631,17 @@ export const logoutInternal = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
           
           dispatch(logoutErrorInternal(error.response?.data?.error))
@@ -626,11 +651,11 @@ export const logoutInternal = () => {
     }
 }
 
-const {fetchSuccessTransactionCashInternal, fetchErrorTransactionCashInternal, setLoadingTransactionCashInternal} = transactionCashOnGoingInternalSlice.actions;
+const {fetchSuccessTransactionCashInternal, fetchErrorTransactionCashInternal, setLoadingTransactionCashInternal} = transactionCashOnGoingInternalSlice.actions
 export const fetchTransactionCashOnGoingInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingTransactionCashInternal(true))
       try {
@@ -647,15 +672,17 @@ export const fetchTransactionCashOnGoingInternal = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
+            dispatch(resetApp())
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
 
           const message = {
@@ -669,11 +696,11 @@ export const fetchTransactionCashOnGoingInternal = () => {
     }
 }
 
-const {fetchSuccessTransactionNonCashInternal, fetchErrorTransactionNonCashInternal, setLoadingTransactionNonCashInternal} = transactionNonCashOnGoingInternalSlice.actions;
+const {fetchSuccessTransactionNonCashInternal, fetchErrorTransactionNonCashInternal, setLoadingTransactionNonCashInternal} = transactionNonCashOnGoingInternalSlice.actions
 export const fetchTransactionNonCashOnGoingInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingTransactionNonCashInternal(true))
       try {
@@ -690,15 +717,15 @@ export const fetchTransactionNonCashOnGoingInternal = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
           
           const message = {
@@ -721,14 +748,14 @@ const {
 } = transactionHistoryInternalSlice.actions
 export const fetchTransactionHistory = (data, isLoadMore = false) => {
     return async (dispatch, getState) => {
-        const { statusExpiredToken } = getState().statusExpiredTokenState;
-        if (statusExpiredToken) return;
+        const { statusExpiredToken } = getState().statusExpiredTokenState
+        if (statusExpiredToken) return
         
-        const currentState = getState().persisted.transactionHistoryInternal;
+        const currentState = getState().persisted.transactionHistoryInternal
         
         // Jika sedang loading dan ini bukan initial load, skip
         if (currentState.isLoadingMore && isLoadMore) {
-            return;
+            return
         }
 
         dispatch(setLoadingTransactionHistoryInternal({loading: true, isLoadMore: isLoadMore}))
@@ -753,7 +780,7 @@ export const fetchTransactionHistory = (data, isLoadMore = false) => {
                 totalCount: response.data?.totalCount || 0,
                 totalRevenue: response.data?.totalRevenue || 0,
                 page: data.page || 1
-            };
+            }
             
             dispatch(fetchSuccessTransactionHistoryInternal(responseData))
         } catch(error) {
@@ -762,15 +789,15 @@ export const fetchTransactionHistory = (data, isLoadMore = false) => {
             }
 
             if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-              dispatch(setStatusExpiredInternalToken(true));
+              dispatch(setStatusExpiredInternalToken(true))
             }
 
             if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-              dispatch(setStatusExpiredUserToken(true));
+              dispatch(setStatusExpiredUserToken(true))
             }
 
             if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-              dispatch(setStatusServiceMaintenance(true));
+              dispatch(setStatusServiceMaintenance(true))
             }
 
             if (error === null) {
@@ -790,8 +817,8 @@ export const fetchTransactionHistory = (data, isLoadMore = false) => {
 const {checkTransactionNonCashSuccess, checkTransactionNonCashError, setLoadingCheckTransactionNonCash} = checkTransactionNonCashInternalSlice.actions
 export const checkTransactionNonCashInternal = (data) => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingCheckTransactionNonCash(true))
       try {
@@ -809,15 +836,15 @@ export const checkTransactionNonCashInternal = (data) => {
           } 
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
 
           dispatch(checkTransactionNonCashError(error.response?.data?.error))
@@ -831,8 +858,8 @@ export const checkTransactionNonCashInternal = (data) => {
 const {fetchSuccessGetAllCreateTransactionInternal, fetchErrorGetAllCreateTransactionInternal, setLoadingFetchGetAllCreateTransactionInternal} = getAllCreateTransactionInternalSlice.actions
 export const fetchGetAllCreateTransactionInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingFetchGetAllCreateTransactionInternal(true))
       try {
@@ -849,15 +876,15 @@ export const fetchGetAllCreateTransactionInternal = () => {
           }
 
           if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
           }
 
           if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
           }
 
           if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
           }
 
           if (error === null) {
@@ -877,11 +904,11 @@ export const fetchGetAllCreateTransactionInternal = () => {
 }
 
 
-const {setLoadingGetPaymentMethodsInternal, fetchSuccessGetPaymentMethodsInternal, fetchErrorGetPaymentMethodsInternal} = getPaymentMethodsInternalSlice.actions;
+const {setLoadingGetPaymentMethodsInternal, fetchSuccessGetPaymentMethodsInternal, fetchErrorGetPaymentMethodsInternal} = getPaymentMethodsInternalSlice.actions
 export const fetchPaymentMethodsInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingGetPaymentMethodsInternal(true))
       try {
@@ -898,15 +925,15 @@ export const fetchPaymentMethodsInternal = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -923,8 +950,8 @@ export const fetchPaymentMethodsInternal = () => {
 const { fetchSuccessCategoryInternal, fetchErrorCategoryInternal, setLoadingCategoryInternal } = getCategoryInternalSlice.actions
 export const fetchCategoryInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingCategoryInternal(true))
       try {
@@ -941,15 +968,15 @@ export const fetchCategoryInternal = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorCategoryInternal(error.response?.data?.error))
@@ -963,8 +990,8 @@ export const fetchCategoryInternal = () => {
 const {fetchSuccessCategoryAndProductInternal, fetchErrorCategoryAndProductInternal, setLoadingCategoryAndProductInternal} = getCategoryAndProductInternalSlice.actions
 export const fetchCategoryAndProductInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingCategoryAndProductInternal(true))
       try {
@@ -986,15 +1013,15 @@ export const fetchCategoryAndProductInternal = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorCategoryAndProductInternal(error.response?.data?.error))
@@ -1007,8 +1034,8 @@ export const fetchCategoryAndProductInternal = () => {
 const {setLoadingLabaRugiInternal, fetchSuccessLabaRugiInternal,  fetchErrorLabaRugiInternal} = getLabaRugiInternalSlice.actions 
 export const fetchLabaRugiInternal = (startDate, endDate) => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingLabaRugiInternal(true))
       try {
@@ -1029,15 +1056,15 @@ export const fetchLabaRugiInternal = (startDate, endDate) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorLabaRugiInternal(error.response?.data?.error))
@@ -1050,8 +1077,8 @@ export const fetchLabaRugiInternal = (startDate, endDate) => {
 const {fetchSuccessNeracaInternal, fetchErrorNeracaInternal, setLoadingNeracaInternal} = getNeracaInternalSlice.actions
 export const fetchNeracaInternal = (startDate, endDate) => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingNeracaInternal(true))
       try {
@@ -1072,15 +1099,15 @@ export const fetchNeracaInternal = (startDate, endDate) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorNeracaInternal(error.response?.data?.error))
@@ -1093,8 +1120,8 @@ export const fetchNeracaInternal = (startDate, endDate) => {
 const {fetchSuccessGeneralJournalByEventAllInternal, fetchErrorGeneralJournalByEventAllInternal, setLoadingGeneralJournalByEventAllInternal} = getGeneralJournalByEventAllInternalSlice.actions 
 export const fetchGeneralJournalByEventAllInternal = (startDate, endDate) => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingGeneralJournalByEventAllInternal(true))
       try {
@@ -1115,15 +1142,15 @@ export const fetchGeneralJournalByEventAllInternal = (startDate, endDate) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorGeneralJournalByEventAllInternal(error.response?.data?.error))
@@ -1136,10 +1163,10 @@ export const fetchGeneralJournalByEventAllInternal = (startDate, endDate) => {
 const {fetchSuccessGeneralJournalByEventPerDayInternal, fetchErrorGeneralJournalByEventPerDayInternal, setLoadingGeneralJournalByEventPerDayInternal} = getGeneralJournalByEventPerDayInternalSlice.actions
 export const fetchGeneralJournalByEventPerDayInternal = (startDate, endDate, page = 1, isLoadMore = false) => {
     return async (dispatch, getState) => {
-        const { statusExpiredToken } = getState().statusExpiredTokenState;
-        if (statusExpiredToken) return;
+        const { statusExpiredToken } = getState().statusExpiredTokenState
+        if (statusExpiredToken) return
         
-        const currentState = getState().persisted.getGeneralJournalByEventPerDayInternal;
+        const currentState = getState().persisted.getGeneralJournalByEventPerDayInternal
         
         // ✅ Fix: Pengecekan kondisi yang lebih baik
         if (currentState.isLoadMore && isLoadMore) {
@@ -1179,15 +1206,15 @@ export const fetchGeneralJournalByEventPerDayInternal = (startDate, endDate, pag
             }
 
             if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-              dispatch(setStatusExpiredInternalToken(true));
+              dispatch(setStatusExpiredInternalToken(true))
             }
 
             if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-              dispatch(setStatusExpiredUserToken(true));
+              dispatch(setStatusExpiredUserToken(true))
             }
 
             if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-              dispatch(setStatusServiceMaintenance(true));
+              dispatch(setStatusServiceMaintenance(true))
             }
 
             dispatch(fetchErrorGeneralJournalByEventPerDayInternal(error.response?.data?.error))
@@ -1198,20 +1225,20 @@ export const fetchGeneralJournalByEventPerDayInternal = (startDate, endDate, pag
 const {fetchSuccessGeneralJournalVoidInternal, fetchErrorGeneralJournalVoidInternal, setLoadingGeneralJournalVoidInternal} = getGeneralJournalVoidInternalSlice.actions 
 export const fetchGeneralJournalVoidInternal = (startDate, endDate, page = 1, isLoadMore = false) => {
   return async (dispatch, getState) => {
-    const { statusExpiredToken } = getState().statusExpiredTokenState;
-    if (statusExpiredToken) return;
+    const { statusExpiredToken } = getState().statusExpiredTokenState
+    if (statusExpiredToken) return
 
-    const currentState = getState().persisted.getGeneralJournalVoidInternal;
+    const currentState = getState().persisted.getGeneralJournalVoidInternal
 
     if (currentState.isLoadMore && isLoadMore) {
-      return;
+      return
     }
 
     if (currentState.loadingGeneralJournalVoidInternal && !isLoadMore) {
-      return;
+      return
     }
 
-    dispatch(setLoadingGeneralJournalVoidInternal({ loading: true, isLoadMore }));
+    dispatch(setLoadingGeneralJournalVoidInternal({ loading: true, isLoadMore }))
 
     try {
       const response = await axiosInstance.get(`${process.env.REACT_APP_GET_GENERAL_JOURNAL_VOID_INTERNAL_URL}`, {
@@ -1224,41 +1251,41 @@ export const fetchGeneralJournalVoidInternal = (startDate, endDate, page = 1, is
           end_date: endDate,
           page: page,
         },
-      });
+      })
 
       dispatch(fetchSuccessGeneralJournalVoidInternal({
         data: response?.data?.data || [],
         page: page,
         hasMore: response?.data?.hasMore || false,
-      }));
+      }))
     } catch (error) {
       if (error.response?.data?.code === "TOKEN_EXPIRED") {
-        dispatch(setStatusExpiredToken(true));
+        dispatch(setStatusExpiredToken(true))
       }
 
       if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-        dispatch(setStatusExpiredInternalToken(true));
+        dispatch(setStatusExpiredInternalToken(true))
       }
 
       if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-        dispatch(setStatusExpiredUserToken(true));
+        dispatch(setStatusExpiredUserToken(true))
       }
 
       if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-        dispatch(setStatusServiceMaintenance(true));
+        dispatch(setStatusServiceMaintenance(true))
       }
 
-      dispatch(fetchErrorGeneralJournalVoidInternal(error.response?.data?.error));
+      dispatch(fetchErrorGeneralJournalVoidInternal(error.response?.data?.error))
     }
-  };
-};
+  }
+}
 
 
 const {fetchSuccessGeneralJournalDrafInternal, fetchErrorGeneralJournalDrafInternal, setLoadingGeneralJournalDrafInternal} = getGeneralJournalDrafInternalSlice.actions
 export const fetchGeneralJournalDrafInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingGeneralJournalDrafInternal(true))
       try {
@@ -1275,15 +1302,15 @@ export const fetchGeneralJournalDrafInternal = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorGeneralJournalDrafInternal(error.response?.data?.error))
@@ -1297,8 +1324,8 @@ export const fetchGeneralJournalDrafInternal = () => {
 const {fetchSuccessAssetsStoreInternal, fetchErrorAssetsStoreInternal, setLoadingAssetsStoreInternal} = getAssetsStoreInternalSlice.actions
 export const fetchAssetsStoreInternal = (data) => {
   return async (dispatch, getState) => {
-    const { statusExpiredToken } = getState().statusExpiredTokenState;
-    if (statusExpiredToken) return; 
+    const { statusExpiredToken } = getState().statusExpiredTokenState
+    if (statusExpiredToken) return 
 
     dispatch(setLoadingAssetsStoreInternal(true))
       try {
@@ -1315,15 +1342,15 @@ export const fetchAssetsStoreInternal = (data) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorAssetsStoreInternal(error.response?.data?.error))
@@ -1337,8 +1364,8 @@ export const fetchAssetsStoreInternal = (data) => {
 const {fetchSuccessOrdersInternal, fetchErrorOrdersInternal, appendOrdersInternal, setLoadingOrdersInternal} = getOrdersInternalSlice.actions
 export const fetchOrdersInternal = () => {
   return async (dispatch, getState) => {
-    const { statusExpiredToken } = getState().statusExpiredTokenState;
-    if (statusExpiredToken) return; 
+    const { statusExpiredToken } = getState().statusExpiredTokenState
+    if (statusExpiredToken) return 
 
     dispatch(setLoadingOrdersInternal(true))
       try {
@@ -1355,15 +1382,15 @@ export const fetchOrdersInternal = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorOrdersInternal(error.response?.data?.error))
@@ -1376,21 +1403,21 @@ export const fetchOrdersInternal = () => {
 const { fetchSuccessOrdersFinishedInternal, fetchErrorOrdersFinishedInternal, setLoadingOrdersFinishedInternal } = getOrdersFinishedInternalSlice.actions
 export const fetchOrdersFinishedInternal = (startDate, endDate, page, isLoadMore = false) => {
   return async (dispatch, getState) => {
-    const { statusExpiredToken } = getState().statusExpiredTokenState;
-    if (statusExpiredToken) return;
+    const { statusExpiredToken } = getState().statusExpiredTokenState
+    if (statusExpiredToken) return
     
-    const currentState = getState().persisted.dataOrdersFinishedInternal;
+    const currentState = getState().persisted.dataOrdersFinishedInternal
     
     // Prevent multiple simultaneous requests
     if (currentState.isLoadMore && isLoadMore) {
-      return;
+      return
     }
     
     if (currentState.loadingOrdersFinishedInternal && !isLoadMore) {
-      return;
+      return
     }
 
-    dispatch(setLoadingOrdersFinishedInternal({ loading: true, isLoadMore: isLoadMore }));
+    dispatch(setLoadingOrdersFinishedInternal({ loading: true, isLoadMore: isLoadMore }))
     try {
       const response = await axiosInstance.get(`${process.env.REACT_APP_GET_ORDER_INTERNAL_URL}`, {
         withCredentials: true,
@@ -1418,15 +1445,15 @@ export const fetchOrdersFinishedInternal = (startDate, endDate, page, isLoadMore
       }
 
       if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-        dispatch(setStatusExpiredInternalToken(true));
+        dispatch(setStatusExpiredInternalToken(true))
       }
 
       if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-        dispatch(setStatusExpiredUserToken(true));
+        dispatch(setStatusExpiredUserToken(true))
       }
 
       if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-        dispatch(setStatusServiceMaintenance(true));
+        dispatch(setStatusServiceMaintenance(true))
       }
 
       dispatch(fetchErrorOrdersFinishedInternal(error.response?.data?.error))
@@ -1436,20 +1463,20 @@ export const fetchOrdersFinishedInternal = (startDate, endDate, page, isLoadMore
 
 const {fetchSuccessSearchOrder, fetchErrorSearchOrder, setLoadingSearchOrder, addSearchOrder} = searchOrderInternalSlice.actions
 export const fetchSearchOrderInternal = (searchQuery, currentPage, isLoadMore = false) => async (dispatch, getState) => {
-  const { statusExpiredToken } = getState().statusExpiredTokenState;
-  if (statusExpiredToken) return;
+  const { statusExpiredToken } = getState().statusExpiredTokenState
+  if (statusExpiredToken) return
 
-  const currentState = getState().searchOrderInternalState;
+  const currentState = getState().searchOrderInternalState
 
   if (currentState.isLoadMore && isLoadMore) {
-    return;
+    return
   }
 
   if (currentState.isLoadingSearchOrder && !isLoadMore) {
-    return;
+    return
   }
 
-  dispatch(setLoadingSearchOrder({ loading: true, isLoadMore }));
+  dispatch(setLoadingSearchOrder({ loading: true, isLoadMore }))
   try {
     const response = await axiosInstance.get(`${process.env.REACT_APP_GET_SEARCH_ORDER_INTERNAL_URL}`, {
       withCredentials: true,
@@ -1460,7 +1487,7 @@ export const fetchSearchOrderInternal = (searchQuery, currentPage, isLoadMore = 
         key: searchQuery,
         page: currentPage,
       },
-    });
+    })
 
     dispatch(
       fetchSuccessSearchOrder({
@@ -1470,34 +1497,34 @@ export const fetchSearchOrderInternal = (searchQuery, currentPage, isLoadMore = 
         totalCount: response.data?.totalCount || 0,
         totalRevenue: response.data?.totalRevenue || 0,
       })
-    );
+    )
   } catch (error) {
     if (error.response?.data?.code === 'TOKEN_EXPIRED') {
-      dispatch(setStatusExpiredToken(true));
+      dispatch(setStatusExpiredToken(true))
     }
 
     if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-      dispatch(setStatusExpiredInternalToken(true));
+      dispatch(setStatusExpiredInternalToken(true))
     }
 
     if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-      dispatch(setStatusExpiredUserToken(true));
+      dispatch(setStatusExpiredUserToken(true))
     }
 
     if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-      dispatch(setStatusServiceMaintenance(true));
+      dispatch(setStatusServiceMaintenance(true))
     }
 
-    dispatch(fetchErrorSearchOrder(error.response?.data?.error));
+    dispatch(fetchErrorSearchOrder(error.response?.data?.error))
   }
-};
+}
 
 
 const {fetchSuccessTablesInternal, fetchErrorTablesInternal, setLoadingTablesInternal} = getTablesInternalSlice.actions
 export const fetchTablesInternal = () => {
   return async (dispatch, getState) => {
-    const { statusExpiredToken } = getState().statusExpiredTokenState;
-    if (statusExpiredToken) return; 
+    const { statusExpiredToken } = getState().statusExpiredTokenState
+    if (statusExpiredToken) return 
 
     dispatch(setLoadingTablesInternal(true))
       try {
@@ -1517,15 +1544,15 @@ export const fetchTablesInternal = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(fetchErrorTablesInternal(error.response?.data?.error))
@@ -1539,8 +1566,8 @@ export const fetchTablesInternal = () => {
 const {fetchSuccessDataEmployeeInternal, fetchErrorDataEmployeeInternal, setLoadingDataEmployeeInternal} = getDataEmployeeInternalSlice.actions
 export const fetchDataEmployeeInternal = () => {
     return async (dispatch, getState) => {
-      const { statusExpiredToken } = getState().statusExpiredTokenState;
-      if (statusExpiredToken) return; 
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
 
       dispatch(setLoadingDataEmployeeInternal(true))
       try {
@@ -1557,15 +1584,15 @@ export const fetchDataEmployeeInternal = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
         
         dispatch(fetchErrorDataEmployeeInternal(error.response?.data?.error))
@@ -1597,15 +1624,15 @@ export const fetchAllEmployees = () => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
         
         dispatch(setErrorGetEmployees(error?.response?.data?.error))

@@ -17,18 +17,18 @@ export default function Buy() {
     const detailOrder = location.state?.detailOrder || {}
     const [orderTypeInvalid, setOrderTypeInvalid] = useState(false)
 
-    const [isCopied, setIsCopied] = useState(false);
+    const [isCopied, setIsCopied] = useState(false)
 
     const handleCopy = async () => {
-        const nomorRekening = detailOrder?.virtual_account_number || detailOrder?.unixNumber;
+        const nomorRekening = detailOrder?.virtual_account_number || detailOrder?.unixNumber
         try {
-            await navigator.clipboard.writeText(nomorRekening);
-            setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 2000);
+            await navigator.clipboard.writeText(nomorRekening)
+            setIsCopied(true)
+            setTimeout(() => setIsCopied(false), 2000)
         } catch (err) {
-            alert('Gagal menyalin');
+            alert('Gagal menyalin')
         }
-    };
+    }
     
     const {tableId, orderTakeAway, isClose} = useSelector((state) => state.persisted.orderType)
     useEffect(() => {
@@ -261,7 +261,7 @@ export default function Buy() {
                         <div className="p-6 space-y-3">
                             <div className="flex gap-3">
                                 <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">1</span>
-                                <p className="text-gray-700 leading-relaxed">Pilih Menu Lain &gt; Transfer.</p>
+                                <p className="text-gray-700 leading-relaxed">Pilih Menu Lain &gt Transfer.</p>
                             </div>
                             <div className="flex gap-3">
                                 <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">2</span>

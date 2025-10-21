@@ -25,7 +25,7 @@ export default function SetUsername() {
 
     useEffect(() => {
         if (errorFieldSetUsername) {
-            const errors = errorFieldSetUsername || [];
+            const errors = errorFieldSetUsername || []
             const errorUsername = errors.find((error) => error.Username)?.Username || null
             setUsername(errorUsername)
         }

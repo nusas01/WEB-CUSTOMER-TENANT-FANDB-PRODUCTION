@@ -23,36 +23,36 @@ import {
   Maximize, 
   Minimize,
   Menu,
-} from 'lucide-react';
+} from 'lucide-react'
 import { 
   fetchOrdersInternal,
   fetchOrdersFinishedInternal, 
   fetchSearchOrderInternal,
  } from "../actions/get.js"
 import { useDispatch, useSelector } from "react-redux"
-import { SpinnerRelative, SpinnerFixed } from "../helper/spinner.js";
-import { Toast, ToastPortal } from "../component/alert";
+import { SpinnerRelative, SpinnerFixed } from "../helper/spinner.js"
+import { Toast, ToastPortal } from "../component/alert"
 import { 
   getOrdersInternalSlice,
   getOrdersFinishedInternalSlice, 
   searchOrderInternalSlice,
- } from "../reducers/get.js";
+ } from "../reducers/get.js"
  import {
   toProgressOrderInternalSlice,
   toFinishedOrderInternalSlice,
-} from "../reducers/patch.js";
-import { da, se, tr } from "date-fns/locale";
-import { useNavigate } from "react-router-dom";
+} from "../reducers/patch.js"
+import { da, se, tr } from "date-fns/locale"
+import { useNavigate } from "react-router-dom"
 import {
   formatCurrency, 
   useInfiniteScroll,
   useFullscreen,
   useElementHeight,
-} from "../helper/helper.js";
+} from "../helper/helper.js"
 import { 
   toProgressOrderInternal, 
   toFinishedOrderInternal,
- } from "../actions/patch.js";
+ } from "../actions/patch.js"
  import {
   filterOrderInternalSlice,
   loadMoreOrderFinished,
@@ -61,16 +61,16 @@ import {
   headerHiddenInternalSlice
  } from "../reducers/reducers.js"
 import {DateFilterComponent} from '../helper/formatdate.js'
-import { set } from "date-fns";
+import { set } from "date-fns"
 
 export default function KasirOrders() {
-  const dispatch = useDispatch();
-  const [toast, setToast] = useState({ show: false, type: '', message: '' });
-  const [activeMenu, setActiveMenu] = useState("Orders");
+  const dispatch = useDispatch()
+  const [toast, setToast] = useState({ show: false, type: '', message: '' })
+  const [activeMenu, setActiveMenu] = useState("Orders")
 
   // maxsimaz minimaz layar
-  const contentRef = useRef(null);
-  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+  const contentRef = useRef(null)
+  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
   // handle sidebar and elemant header yang responsice
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
@@ -85,7 +85,7 @@ export default function KasirOrders() {
         show: true,
         type: 'error',
         message: errorOrdersInternal
-      });
+      })
     }
   }, [errorOrdersInternal])
 
@@ -99,7 +99,7 @@ export default function KasirOrders() {
         show: true,
         type: 'error',
         message: errorOrdersFinishedInternal
-      });
+      })
     }
   }, [errorOrdersFinishedInternal])
 
@@ -113,7 +113,7 @@ export default function KasirOrders() {
         show: true,
         type: 'error',
         message: errorToProgressOrder
-      });
+      })
     }
   }, [errorToProgressOrder])
 
@@ -123,7 +123,7 @@ export default function KasirOrders() {
         show: true,
         type: 'success',
         message: successToProgressOrder
-      });
+      })
     }
   }, [successToProgressOrder])
 
@@ -137,7 +137,7 @@ export default function KasirOrders() {
         show: true,
         type: 'error',
         message: errorToFinishedOrder
-      });
+      })
     }
   }, [errorToFinishedOrder])
 
@@ -147,18 +147,18 @@ export default function KasirOrders() {
         show: true,
         type: 'success',
         message: successToFinishedOrder
-      });
+      })
     }
   }, [successToFinishedOrder])
 
   // Handle toast close
   const handleToastClose = () => {
-    setToast({ show: false, type: '', message: '' });
+    setToast({ show: false, type: '', message: '' })
     // Reset all possible actions when manually closing
-    dispatch(resetErrorOrdersInternal());
-    dispatch(resetErrorOrdersFinishedInternal());
-    dispatch(resetToProgressOrder());
-    dispatch(resetToFinishedOrder());
+    dispatch(resetErrorOrdersInternal())
+    dispatch(resetErrorOrdersFinishedInternal())
+    dispatch(resetToProgressOrder())
+    dispatch(resetToFinishedOrder())
   }
 
   return (
@@ -211,19 +211,19 @@ export default function KasirOrders() {
 
 const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
   const navigate = useNavigate()
-  const [hasInitializedSearch, setHasInitializedSearch] = useState(false);
-  const [filteredOrders, setFilteredOrders] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [hasInitializedSearch, setHasInitializedSearch] = useState(false)
+  const [filteredOrders, setFilteredOrders] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
   const [stats, setStats] = useState({
     total: 0,
     progress: 0,
     received: 0,
     finished: 0,
     totalRevenue: 0
-  });
-  const dispatch = useDispatch();
-  const [spinnerRelative, setSpinnerRelative] = useState(false);
-  const [spinnerFixed, setSpinnerFixed] = useState(false);
+  })
+  const dispatch = useDispatch()
+  const [spinnerRelative, setSpinnerRelative] = useState(false)
+  const [spinnerFixed, setSpinnerFixed] = useState(false)
 
   // handle hidden header
   const {setHeaderHidden} = headerHiddenInternalSlice.actions
@@ -279,7 +279,7 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
     if (startDate === '' || endDate === '') {
       return
     }
-    dispatch(fetchOrdersFinishedInternal(startDate, endDate, 1, false));
+    dispatch(fetchOrdersFinishedInternal(startDate, endDate, 1, false))
   }
 
   useEffect(() => {
@@ -291,7 +291,7 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
         received: 0,
         totalRevenue: totalRevenueOrderFinished,
         finished: totalCountOrderFinished,
-      }));
+      }))
     }
   }, [dataOrdersFinishedInternal, hasInitializedSearch])
 
@@ -299,7 +299,7 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
   // Reset initialization when filter changes
   // useEffect(() => {
   //   if (statusFilter !== 'FINISHED') {
-  //     setHasInitialized(false);
+  //     setHasInitialized(false)
   //   }
   // }, [statusFilter, startDate, endDate])
 
@@ -313,7 +313,7 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
   // Load more callback - diperbaiki
   const loadMoreFinishedOrdersCallback = useCallback(() => {
     if (statusFilter === 'FINISHED' && hasMoreOrderFinished && !loadingOrdersFinishedInternal) {
-      dispatch(loadMoreOrderFinished());
+      dispatch(loadMoreOrderFinished())
     }
   }, [statusFilter, hasMoreOrderFinished, loadingOrdersFinishedInternal, dispatch])
 
@@ -350,14 +350,14 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
       transaction_id: orderId,
     }
     dispatch(toProgressOrderInternal(data))
-  };
+  }
 
   // handle status to finished order
   const { loadingToFinishedOrder } = useSelector((state) => state.toFinishedOrderInternalState)
   
   const handleFinishOrder = (data) => {
     dispatch(toFinishedOrderInternal(data))
-  };
+  }
 
   useEffect(() => {
     setSpinnerFixed(loadingToFinishedOrder)
@@ -367,21 +367,21 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'PROCESS': return 'bg-gradient-to-r from-amber-500 to-orange-500 text-white';
-      case 'PROGRESS': return 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white';
-      case 'FINISHED': return 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white';
-      default: return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white';
+      case 'PROCESS': return 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+      case 'PROGRESS': return 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white'
+      case 'FINISHED': return 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+      default: return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white'
     }
-  };
+  }
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'PROCESS': return <Clock className="w-4 h-4" />;
-      case 'PROGRESS': return <RefreshCw className="w-4 h-4" />;
-      case 'FINISHED': return <CheckCircle className="w-4 h-4" />;
-      default: return <AlertCircle className="w-4 h-4" />;
+      case 'PROCESS': return <Clock className="w-4 h-4" />
+      case 'PROGRESS': return <RefreshCw className="w-4 h-4" />
+      case 'FINISHED': return <CheckCircle className="w-4 h-4" />
+      default: return <AlertCircle className="w-4 h-4" />
     }
-  };
+  }
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('id-ID', {
@@ -390,8 +390,8 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    });
-  };
+    })
+  }
 
   // handle search to api 
   const { 
@@ -410,7 +410,7 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
           received: 0,
           finished: 0,
           totalRevenue: totalRevenueSearchOrder,
-        });
+        })
     }
   }, [dataSearchOrder])
 
@@ -423,14 +423,14 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
 
   // Handle search dengan reset page
   const handleSearch = () => {
-    setHasInitializedSearch(true);
-    dispatch(resetSearchOrder());
-    dispatch(fetchSearchOrderInternal(searchQuery, 1, false));
-  };
+    setHasInitializedSearch(true)
+    dispatch(resetSearchOrder())
+    dispatch(fetchSearchOrderInternal(searchQuery, 1, false))
+  }
 
   const loadMoreSearchOrderCallback = useCallback(() => {
     if (searchQuery !== '' && hasMoreSearchOrder && !loadingSearchOrder) {
-      dispatch(loadMoreSearchOrderInternal(searchQuery));
+      dispatch(loadMoreSearchOrderInternal(searchQuery))
     }
   }, [searchQuery, hasMoreSearchOrder, loadingSearchOrder])
 
@@ -456,47 +456,47 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
   // Filter orders effect
   useEffect(() => {
     if (dataOrdersFinishedInternal.length === 0 && !loadingOrdersFinishedInternal && !hasInitializedSearch) {
-      const allOrders = dataOrdersInternal || [];
-      let filtered = [];
-      let totalRevenue = 0;
-      let progress = 0;
-      let received = 0;
-      let finished = 0;
+      const allOrders = dataOrdersInternal || []
+      let filtered = []
+      let totalRevenue = 0
+      let progress = 0
+      let received = 0
+      let finished = 0
       
       allOrders.forEach(order => {
-        const status = order.order_status?.toUpperCase() || '';
+        const status = order.order_status?.toUpperCase() || ''
         
-        if (status === 'PROCESS') progress++;
-        if (status === 'PROGRESS') received++;
-        if (status === 'FINISHED') finished++;
-        totalRevenue += order.amount_price || 0;
-      });
+        if (status === 'PROCESS') progress++
+        if (status === 'PROGRESS') received++
+        if (status === 'FINISHED') finished++
+        totalRevenue += order.amount_price || 0
+      })
   
       filtered = allOrders.filter(order => {
-        const status = order.order_status?.toUpperCase() || '';
-        const username = order.username?.toLowerCase() || '';
-        const email = order.email?.toLowerCase() || '';
-        const table = order.table?.toString().toLowerCase() || '';
-        const id = order.id?.toString().toLowerCase() || '';
+        const status = order.order_status?.toUpperCase() || ''
+        const username = order.username?.toLowerCase() || ''
+        const email = order.email?.toLowerCase() || ''
+        const table = order.table?.toString().toLowerCase() || ''
+        const id = order.id?.toString().toLowerCase() || ''
         
-        const matchStatus = statusFilter === 'ALL' || status === statusFilter.toUpperCase();
+        const matchStatus = statusFilter === 'ALL' || status === statusFilter.toUpperCase()
         
-        return matchStatus;
-      });
+        return matchStatus
+      })
       
-      setFilteredOrders(filtered);
+      setFilteredOrders(filtered)
       setStats({
         total: allOrders.length,
         progress,
         received,
         finished,
         totalRevenue
-      });
+      })
     }
-  }, [dataOrdersInternal, hasInitializedSearch, dataSearchOrder, statusFilter]);
+  }, [dataOrdersInternal, hasInitializedSearch, dataSearchOrder, statusFilter])
 
   // handle sidebar and elemant header yang responsice
-  const { ref: headerRef, height: headerHeight } = useElementHeight();
+  const { ref: headerRef, height: headerHeight } = useElementHeight()
   const { setIsOpen } = navbarInternalSlice.actions
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -974,8 +974,8 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const NoOrdersContainer = () => {
   return (
@@ -1055,19 +1055,19 @@ const NoOrdersContainer = () => {
       <style jsx>{`
         @keyframes shimmer {
           0% {
-            transform: translateX(-100%) skewX(-12deg);
+            transform: translateX(-100%) skewX(-12deg)
           }
           100% {
-            transform: translateX(200%) skewX(-12deg);
+            transform: translateX(200%) skewX(-12deg)
           }
         }
         .animate-shimmer {
-          animation: shimmer 1.5s ease-in-out;
+          animation: shimmer 1.5s ease-in-out
         }
         .animation-delay-700 {
-          animation-delay: 700ms;
+          animation-delay: 700ms
         }
       `}</style>
     </>
-  );
-};
+  )
+}

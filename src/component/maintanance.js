@@ -1,15 +1,15 @@
-import React from 'react';
-import { Settings, Shield, RefreshCw, CheckCircle, AlertCircle, Cog, Wrench } from 'lucide-react';
+import React from 'react'
+import { Settings, Shield, RefreshCw, CheckCircle, AlertCircle, Cog, Wrench } from 'lucide-react'
 
 const MaintenanceComponent = () => {
-  const [currentTime, setCurrentTime] = React.useState(new Date());
+  const [currentTime, setCurrentTime] = React.useState(new Date())
 
   React.useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+      setCurrentTime(new Date())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   const maintenanceFeatures = [
     {
@@ -27,7 +27,7 @@ const MaintenanceComponent = () => {
       title: "Perbaruan Konfigurasi",
       description: "Meningkatkan kinerja dan stabilitas sistem"
     }
-  ];
+  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center p-4 relative">
@@ -134,12 +134,14 @@ const MaintenanceComponent = () => {
                   Jika Anda memiliki pertanyaan mendesak, silakan hubungi tim support kami
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-medium">
+                  <a
+                    href="https://wa.me/6289524474969" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-medium inline-block"
+                  >
                     Hubungi Support
-                  </button>
-                  <button className="border border-green-500 text-green-600 hover:bg-green-50 px-6 py-2 rounded-lg transition-colors duration-200 font-medium">
-                    Cek Status
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -159,7 +161,7 @@ const MaintenanceComponent = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MaintenanceComponent;
+export default MaintenanceComponent

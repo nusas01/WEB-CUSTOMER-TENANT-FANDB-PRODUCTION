@@ -29,44 +29,44 @@ export const UsedSSEContainer = () => {
 }
 
 export const useSSE = (url, onMessage) => {
-  const sourceRef = useRef(null);
-  const handlerRef = useRef(onMessage);
+  const sourceRef = useRef(null)
+  const handlerRef = useRef(onMessage)
 
   // selalu sync handler terbaru
   useEffect(() => {
-    handlerRef.current = onMessage;
-  }, [onMessage]);
+    handlerRef.current = onMessage
+  }, [onMessage])
 
   useEffect(() => {
-    if (!url || sourceRef.current) return;
+    if (!url || sourceRef.current) return
 
-    const evtSource = new EventSource(url, { withCredentials: true });
-    sourceRef.current = evtSource;
+    const evtSource = new EventSource(url, { withCredentials: true })
+    sourceRef.current = evtSource
 
     evtSource.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data);
+        const data = JSON.parse(event.data)
         if (handlerRef.current) {
-          handlerRef.current(data);
+          handlerRef.current(data)
         }
       } catch (err) {
       }
-    };
+    }
 
     evtSource.onerror = (err) => {
-    };
+    }
 
     return () => {
       if (sourceRef.current) {
-        sourceRef.current.close();
-        sourceRef.current = null;
+        sourceRef.current.close()
+        sourceRef.current = null
       }
-    };
-  }, [url]);
-};
+    }
+  }, [url])
+}
 
 
-const { updateTransactionOnGoingStatusById } = getTransactionOnGoingCustomerSlice.actions;
+const { updateTransactionOnGoingStatusById } = getTransactionOnGoingCustomerSlice.actions
 const SSETransactionOnGoingCustomer = () => {
     const dispatch = useDispatch()
     const encodedApiKey = encodeURIComponent(process.env.REACT_APP_API_KEY)
@@ -80,7 +80,7 @@ const SSETransactionOnGoingCustomer = () => {
 }
 
 
-const { addTransactionCashOnGoingInternal } = transactionCashOnGoingInternalSlice.actions;
+const { addTransactionCashOnGoingInternal } = transactionCashOnGoingInternalSlice.actions
 const SSETransactionCashOnGoingInternal = () => {
     const dispatch = useDispatch()
     const encodedApiKey = encodeURIComponent(process.env.REACT_APP_API_KEY)
@@ -94,7 +94,7 @@ const SSETransactionCashOnGoingInternal = () => {
 }
 
 
-const { addTransactionNonCashOnGoingInternal, removeTransactionNonCashOnGoingInternalById } = transactionNonCashOnGoingInternalSlice.actions;
+const { addTransactionNonCashOnGoingInternal, removeTransactionNonCashOnGoingInternalById } = transactionNonCashOnGoingInternalSlice.actions
 const SSETransactionNonCashOnGoingInternal = () => {
     const dispatch = useDispatch()
     const encodedApiKey = encodeURIComponent(process.env.REACT_APP_API_KEY)

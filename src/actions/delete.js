@@ -31,9 +31,9 @@ export const deleteTableInternal = (numberTable) => async (dispatch) => {
     }
     dispatch(setLoadingDeleteTableInternal(true))
     try {
-        const response = await axiosInstance.delete(`${process.env.REACT_APP_GET_POST_DELETE_TABLE_INTERNAL_URL}`, config);
+        const response = await axiosInstance.delete(`${process.env.REACT_APP_GET_POST_DELETE_TABLE_INTERNAL_URL}`, config)
         if (response.status === 200) {
-            dispatch(setSuccessDeleteTableInternal(response?.data?.success));
+            dispatch(setSuccessDeleteTableInternal(response?.data?.success))
             dispatch(deleteTableInternalByNumber())
         }
     } catch(error) {
@@ -42,22 +42,22 @@ export const deleteTableInternal = (numberTable) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
-        dispatch(setErrorDeleteTableInternal(error.response?.data?.error));
+        dispatch(setErrorDeleteTableInternal(error.response?.data?.error))
     } finally {
         dispatch(setLoadingDeleteTableInternal(false))
     }
-};
+}
 
 const {deleteCategoryById} = getCategoryInternalSlice.actions
 const {setSuccessDeleteCategoryInternal, setErrorDeleteCategoryInternal, setLoadingDeleteCategoryInternal} = deleteCategoryInternalSlice.actions
@@ -73,9 +73,9 @@ export const deleteCategoryInternal = (id) => async (dispatch) => {
     }
     dispatch(setLoadingDeleteCategoryInternal(true))
     try {
-        const response = await axiosInstance.delete(`${process.env.REACT_APP_DELETE_GET_CATEGORY_INTERNAL_URL}`, config);
+        const response = await axiosInstance.delete(`${process.env.REACT_APP_DELETE_GET_CATEGORY_INTERNAL_URL}`, config)
         if (response.status === 200) {
-            dispatch(setSuccessDeleteCategoryInternal(response?.data?.success));
+            dispatch(setSuccessDeleteCategoryInternal(response?.data?.success))
             dispatch(deleteCategoryById(id))
         }
     } catch(error) {
@@ -84,25 +84,25 @@ export const deleteCategoryInternal = (id) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorDeleteCategoryInternal({
             error: error.response?.data?.error,
             errorHasProduct: error.response?.data?.errorHasProduct,
-        }));
+        }))
     } finally {
         dispatch(setLoadingDeleteCategoryInternal(false))
     }
-};
+}
 
 const {
   setSuccessDeleteEmployee,
@@ -127,15 +127,15 @@ export const deleteEmployee = (id) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-            dispatch(setStatusExpiredInternalToken(true));
+            dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorDeleteEmployee(error?.response?.data?.error || 'Gagal menghapus employee'))

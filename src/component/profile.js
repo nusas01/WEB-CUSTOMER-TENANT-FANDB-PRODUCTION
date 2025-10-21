@@ -1,20 +1,18 @@
-import { Navigate, useLocation } from "react-router-dom";
-import "../style/profile.css";
-import BottomNavbar from "./bottomNavbar";
-import { useNavigate } from "react-router-dom";
-import { loginCustomerSlice } from "../reducers/reducers";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import {SpinnerRelative} from "../helper/spinner";
-import { OrderTypeInvalidAlert } from "./alert";
-import {Mail, Settings, Shield, ChevronRight, Key, LogOut} from "lucide-react"
-import { Toast, ToastPortal } from "./alert";
+import { useLocation } from "react-router-dom"
+import "../style/profile.css"
+import BottomNavbar from "./bottomNavbar"
+import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useState } from "react"
+import {SpinnerRelative} from "../helper/spinner"
+import { OrderTypeInvalidAlert } from "./alert"
+import {Mail, Shield, ChevronRight, Key, LogOut} from "lucide-react"
+import { Toast, ToastPortal } from "./alert"
 import { setOrderTypeContext, setIsClose } from "../reducers/reducers"
-import { resetApp } from '../reducers/state';
 import { 
     logoutCustomer, 
     fetchGetDataCustomer,
-} from "../actions/get";
+} from "../actions/get"
 import { 
     logoutCustomerSlice,
     getProductsCustomerSlice,
@@ -23,20 +21,20 @@ import {
     loginStatusCustomerSlice,
     getTransactionOnGoingCustomerSlice,
     getTransactionsHistoryCustomerSlice,
-} from "../reducers/get";
-import { setPasswordCustomerSlice } from "../reducers/patch";
-import { clearCart } from "../reducers/cartSlice";
-import { ModernStoreBrand } from "./model";
+} from "../reducers/get"
+import { setPasswordCustomerSlice } from "../reducers/patch"
+import { clearCart } from "../reducers/cartSlice"
+import { ModernStoreBrand } from "./model"
 
 
 export default function Profile() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const name = 'Raihan Malay';
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const name = 'Raihan Malay'
     const nameParts = name.trim().split(" ")
     const [spinner, setSpinner] = useState(false)
     const [orderTypeInvalid, setOrderTypeInvalid] = useState(false)
-    const [toast, setToast] = useState(null);
+    const [toast, setToast] = useState(null)
 
     const { successFetchProducts } = getProductsCustomerSlice.actions
     const { fetchSuccessGetDataCustomer } = getDataCustomerSlice.actions
@@ -72,7 +70,7 @@ export default function Profile() {
     }, [loadingLogout])
 
     // data customer
-    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer);
+    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
     const {data} = useSelector((state) => state.persisted.dataCustomer)
     useEffect(() => {
         if ((!data || Object.keys(data).length === 0) && loggedIn) {
@@ -90,13 +88,13 @@ export default function Profile() {
     const {tableId, orderTakeAway, isClose} = useSelector((state) => state.persisted.orderType)
     
     // get table id or order_tye_take_away = true from query
-    const location = useLocation();
+    const location = useLocation()
     if (orderTakeAway === null && tableId === null) {
-        const q = new URLSearchParams(location.search);
-        const orderTakeAways = q.get("order_type_take_away") === "true";
-        const tableIds = q.get("table_id");
+        const q = new URLSearchParams(location.search)
+        const orderTakeAways = q.get("order_type_take_away") === "true"
+        const tableIds = q.get("table_id")
 
-        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }));
+        dispatch(setOrderTypeContext({ orderTakeAway: orderTakeAways, tableId: tableIds }))
     }
 
     useEffect(() => {
@@ -107,14 +105,14 @@ export default function Profile() {
     }, [tableId, orderTakeAway, isClose])
 
     const getInitials = (username) => {
-    if (!username) return "";
+    if (!username) return ""
     return username
         .replace(/[^a-zA-Z]/g, "") // hapus angka & simbol
         .slice(0, 2)               // ambil 2 huruf awal
-        .toUpperCase();
-    };
+        .toUpperCase()
+    }
 
-    const initials = getInitials(data?.username);
+    const initials = getInitials(data?.username)
 
 
     const {resetSetPassCustomer} = setPasswordCustomerSlice.actions

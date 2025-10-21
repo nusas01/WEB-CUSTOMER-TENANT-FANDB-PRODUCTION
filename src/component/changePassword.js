@@ -6,7 +6,7 @@ import { SpinnerFixed } from "../helper/spinner"
 import { useState } from "react"
 import { useEffect } from "react"
 import {changePasswordCustomerSlice} from "../reducers/patch"
-import { Lock, EyeOff, Eye } from "lucide-react";
+import { Lock, EyeOff, Eye } from "lucide-react"
 import { setIsClose } from "../reducers/reducers"
 import { OrderTypeInvalidAlert, Toast, ToastPortal } from "./alert"
 
@@ -94,9 +94,9 @@ export default function ChangePassword() {
             setNewPassword(errorNewPassword)
         }
 
-        const passwordError = getErrorMessage("Password");
+        const passwordError = getErrorMessage("Password")
         if (passwordError) {
-            setLastPassword(passwordError);
+            setLastPassword(passwordError)
         }
 
         dispatch(resetChangePasswordCustomer())
@@ -118,20 +118,20 @@ export default function ChangePassword() {
 
 
     const getErrorMessage = (fieldName) => {
-        if (!errorField) return null;
+        if (!errorField) return null
     
         // Jika object langsung
         if (typeof errorField === 'object' && !Array.isArray(errorField)) {
-            return errorField[fieldName] || null;
+            return errorField[fieldName] || null
         }
     
         // Jika array of object
         if (Array.isArray(errorField)) {
-            const found = errorField.find((err) => err[fieldName]);
-            return found ? found[fieldName] : null;
+            const found = errorField.find((err) => err[fieldName])
+            return found ? found[fieldName] : null
         }
     
-        return null;
+        return null
     }
 
     const {tableId, orderTakeAway, isClose} = useSelector((state) => state.persisted.orderType)

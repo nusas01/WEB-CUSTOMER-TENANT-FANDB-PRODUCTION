@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react'
 import { 
   Eye, 
   Edit3, 
@@ -7,11 +7,11 @@ import {
   DollarSign, 
   Calendar, 
   Info 
-} from 'lucide-react';
+} from 'lucide-react'
 import {GeneralJournalForm} from './inputGeneralJournal'
-import { data, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector} from 'react-redux';
-import { dataDrafToVoidInternalSlice } from '../../reducers/reducers';
+import { data, useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector} from 'react-redux'
+import { dataDrafToVoidInternalSlice } from '../../reducers/reducers'
 import { getJournalDrafByJsonInternal } from '../../actions/post'
 
 export const DrafVoidDataComponent = ({ 
@@ -36,34 +36,34 @@ export const DrafVoidDataComponent = ({
         style: 'currency',
         currency: 'IDR',
         minimumFractionDigits: 0,
-      }).format(amount);
-    };
+      }).format(amount)
+    }
   
     const formatDate = (dateString) => {
       return new Date(dateString).toLocaleDateString('id-ID', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
-      });
-    };
+      })
+    }
   
     const getEventIcon = (eventName) => {
       switch (eventName) {
         case 'Pelunasan Piutang Usaha':
-          return DollarSign;
+          return DollarSign
         case 'Pencatatan Piutang Usaha':
-          return FileText;
+          return FileText
         case 'Pembeliaan Bahan Baku':
-          return FileText;
+          return FileText
         case 'Pencatatan Aset Tetap':
-          return FileText;
+          return FileText
         case 'Pencatatan Beban Gaji':
         case 'Pencatatan Beban Sewa':
-          return DollarSign;
+          return DollarSign
         default:
-          return Info;
+          return Info
       }
-    };
+    }
   
     const renderAccountDetails = (account) => {
       return (
@@ -100,12 +100,12 @@ export const DrafVoidDataComponent = ({
             </div>
           )}
         </div>
-      );
-    };
+      )
+    }
   
     const getTotalAmount = (accounts) => {
-      return accounts.reduce((total, account) => total + (account.amount || 0), 0);
-    };
+      return accounts.reduce((total, account) => total + (account.amount || 0), 0)
+    }
   
     if (drafData.length === 0) {
       return (
@@ -114,7 +114,7 @@ export const DrafVoidDataComponent = ({
           <h3 className="mt-2 text-sm font-medium text-gray-900">Tidak ada data draf</h3>
           <p className="mt-1 text-sm text-gray-500">Belum ada data draf yang tersedia untuk ditampilkan.</p>
         </div>
-      );
+      )
     }
 
     const {setDataDrafToVoid} = dataDrafToVoidInternalSlice.actions
@@ -122,25 +122,25 @@ export const DrafVoidDataComponent = ({
       
       // Validasi entry
       if (!entry || !entry.accounts || !Array.isArray(entry.accounts)) {
-        return;
+        return
       }
       
       // Buat data_general_journal yang menggabungkan semua account
-      const dataGeneralJournal = {};
+      const dataGeneralJournal = {}
       
       // Loop semua account dan masukkan ke data_general_journal
       entry.accounts.forEach(account => {
         // Gunakan account_name sebagai key, account_id sebagai value
-        dataGeneralJournal[account.account_name] = account.id;
-      });
+        dataGeneralJournal[account.account_name] = account.id
+      })
       
       // Tentukan type berdasarkan event name
-      let typeValue = "VOID";
+      let typeValue = "VOID"
       if (entry.event === "Pencatatan Aset Tetap"
           || entry.event === "Pencatatan Aset Tidak Berwujud"  
           || entry.event === "Penjualan Aset Tetap" 
           || entry.event === "Penjualan Aset Tidak Berwujud") {
-        typeValue = entry.event; // Ambil type dari account pertama
+        typeValue = entry.event // Ambil type dari account pertama
       }
       
       // Struktur data final - hanya satu objek per event
@@ -151,17 +151,17 @@ export const DrafVoidDataComponent = ({
           type: typeValue, // String kosong kecuali untuk event aset
           data_general_journal: dataGeneralJournal // Semua account_id dari event ini
         }
-      };
+      }
 
       dispatch(setDataDrafToVoid(voidData))
       handleConfirmModelVoid()
-    };
+    }
 
     return (
       <div className="space-y-6">
         {drafData.map((entry, entryIndex) => {
-          const IconComponent = getEventIcon(entry.event);
-          const totalAmount = getTotalAmount(entry.accounts);
+          const IconComponent = getEventIcon(entry.event)
+          const totalAmount = getTotalAmount(entry.accounts)
           
           return (
             <div key={entryIndex} className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -224,8 +224,8 @@ export const DrafVoidDataComponent = ({
                 </div>
               </div>
             </div>
-          );
+          )
         })}
       </div>
-    );
-  };
+    )
+  }

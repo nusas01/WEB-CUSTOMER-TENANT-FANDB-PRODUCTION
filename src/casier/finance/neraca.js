@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import { 
   Calendar, 
   TrendingUp, 
@@ -16,23 +16,23 @@ import {
   Minimize,
   Settings,
   Menu,
-} from 'lucide-react';
-import Sidebar from '../../component/sidebar';
-import {formatCurrency, useFullscreen, useElementHeight} from '../../helper/helper';
-import { useDispatch, useSelector } from 'react-redux';
+} from 'lucide-react'
+import Sidebar from '../../component/sidebar'
+import {formatCurrency, useFullscreen, useElementHeight} from '../../helper/helper'
+import { useDispatch, useSelector } from 'react-redux'
 import { filterDateNeracaInternalSlice, navbarInternalSlice } from '../../reducers/reducers'
-import { Toast, ToastPortal } from '../../component/alert';
-import { SpinnerRelative } from '../../helper/spinner';
+import { Toast, ToastPortal } from '../../component/alert'
+import { SpinnerRelative } from '../../helper/spinner'
 import {getNeracaInternalSlice} from '../../reducers/get'
 import {fetchNeracaInternal} from '../../actions/get'
-import { useNavigate } from 'react-router-dom';
-import { AccessDeniedModal } from '../../component/model';
+import { useNavigate } from 'react-router-dom'
+import { AccessDeniedModal } from '../../component/model'
 
 export default function NeracaDashboard() {
   const dispatch = useDispatch()
   const [activeMenu, setActiveMenu] = useState("neraca")
-  const [toast, setToast] = useState(null);
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
+  const [toast, setToast] = useState(null)
+  const [showAccessDenied, setShowAccessDenied] = useState(false)
   const {resetErrorNeracaInternal} = getNeracaInternalSlice.actions 
   const {errorNeracaIntenal, loadingNeracaInternal} = useSelector((state) => state.persisted.getNeracaInternal)
 
@@ -44,8 +44,8 @@ export default function NeracaDashboard() {
   }, [dataEmployeeInternal])
 
   // maxsimaz minimaz layar
-  const contentRef = useRef(null);
-  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef);
+  const contentRef = useRef(null)
+  const { isFullScreen, toggleFullScreen } = useFullscreen(contentRef)
 
   // handle sidebar and elemant header yang responsice
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
@@ -55,7 +55,7 @@ export default function NeracaDashboard() {
       setToast({
         message: errorNeracaIntenal,
         type: 'error'
-      });
+      })
     }
   }, [errorNeracaIntenal])
 
@@ -111,15 +111,15 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [spinner, setSpinner] = useState(false)
-  const [dateRangeError, setDateRangeError] = useState("");
+  const [dateRangeError, setDateRangeError] = useState("")
   const [expandedSections, setExpandedSections] = useState({
     aset: false,
     liabilitas: false,
     ekuitas: false
-  });
+  })
 
   // handle sidebar and elemant header yang responsice
-  const { ref: headerRef, height: headerHeight } = useElementHeight();
+  const { ref: headerRef, height: headerHeight } = useElementHeight()
   const { setIsOpen } = navbarInternalSlice.actions
   const { isOpen, isMobileDeviceType } = useSelector((state) => state.persisted.navbarInternal)
 
@@ -143,36 +143,36 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
   }, [])
 
   const handleFilterDate = () => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = new Date(startDate)
+    const end = new Date(endDate)
     
-    const maxRange = 366 * 24 * 60 * 60 * 1000; // 366 hari (tahun kabisat)
-    const diff = end - start;
+    const maxRange = 366 * 24 * 60 * 60 * 1000 // 366 hari (tahun kabisat)
+    const diff = end - start
 
     if (diff > maxRange) {
-      setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.");
+      setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.")
     } else if (start > end) {
-      setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.");
+      setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.")
     } else {
-      setDateRangeError("");
+      setDateRangeError("")
       dispatch(fetchNeracaInternal(startDate, endDate))
     }
   }
 
   useEffect(() => {
     if (startDate && endDate) {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
+        const start = new Date(startDate)
+        const end = new Date(endDate)
         
-        const maxRange = 366 * 24 * 60 * 60 * 1000; // 366 hari (tahun kabisat)
-        const diff = end - start;
+        const maxRange = 366 * 24 * 60 * 60 * 1000 // 366 hari (tahun kabisat)
+        const diff = end - start
   
         if (diff > maxRange) {
-          setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.");
+          setDateRangeError("Rentang tanggal tidak boleh lebih dari 1 tahun.")
         } else if (start > end) {
-          setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.");
+          setDateRangeError("Tanggal mulai tidak boleh setelah tanggal akhir.")
         } else {
-          setDateRangeError("");
+          setDateRangeError("")
         }
       }
   }, [startDate, endDate])
@@ -181,7 +181,7 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
   const isDataEmpty = !dataNeracaInternal || 
     (!dataNeracaInternal.aset?.length && 
      !dataNeracaInternal.liabilitas?.length && 
-     !dataNeracaInternal.ekuitas?.length);
+     !dataNeracaInternal.ekuitas?.length)
 
   // Calculate totals with safety checks
   const totals = useMemo(() => {
@@ -191,37 +191,37 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
         totalLiabilitas: 0,
         totalEkuitas: 0,
         netCashFlow: 0
-      };
+      }
     }
 
     const calculateTotal = (section) => {
-      if (!section || !Array.isArray(section)) return 0;
+      if (!section || !Array.isArray(section)) return 0
       return section.reduce((total, subKategori) => {
-        if (!subKategori.data || !Array.isArray(subKategori.data)) return total;
+        if (!subKategori.data || !Array.isArray(subKategori.data)) return total
         return total + subKategori.data.reduce((subTotal, item) => {
-          return subTotal + (item.saldo_akhir || 0);
-        }, 0);
-      }, 0);
-    };
+          return subTotal + (item.saldo_akhir || 0)
+        }, 0)
+      }, 0)
+    }
 
-    const totalAset = calculateTotal(dataNeracaInternal.aset);
-    const totalLiabilitas = calculateTotal(dataNeracaInternal.liabilitas);
-    const totalEkuitas = calculateTotal(dataNeracaInternal.ekuitas);
+    const totalAset = calculateTotal(dataNeracaInternal.aset)
+    const totalLiabilitas = calculateTotal(dataNeracaInternal.liabilitas)
+    const totalEkuitas = calculateTotal(dataNeracaInternal.ekuitas)
 
     return {
       totalAset,
       totalLiabilitas,
       totalEkuitas,
       netCashFlow: totalAset - totalLiabilitas
-    };
-  }, [dataNeracaInternal]);
+    }
+  }, [dataNeracaInternal])
 
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
       ...prev,
       [section]: !prev[section]
-    }));
-  };
+    }))
+  }
 
  // Empty State Component
   const EmptyState = () => (
@@ -244,7 +244,7 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
         </div>
       </div>
     </div>
-  );
+  )
 
   // Summary Cards Component
   const SummaryCards = () => (
@@ -297,10 +297,10 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
         </div>
       </div>
     </div>
-  );
+  )
 
   const renderSection = (title, data, sectionKey, icon, bgColor) => {
-    const isExpanded = expandedSections[sectionKey];
+    const isExpanded = expandedSections[sectionKey]
     
     if (!data || !Array.isArray(data)) {
       return (
@@ -320,15 +320,15 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
             Tidak ada data untuk {title.toLowerCase()}
           </div>
         </div>
-      );
+      )
     }
 
     const sectionTotal = data.reduce((total, subKategori) => {
-      if (!subKategori.data || !Array.isArray(subKategori.data)) return total;
+      if (!subKategori.data || !Array.isArray(subKategori.data)) return total
       return total + subKategori.data.reduce((subTotal, item) => {
-        return subTotal + (item.saldo_akhir || 0);
-      }, 0);
-    }, 0);
+        return subTotal + (item.saldo_akhir || 0)
+      }, 0)
+    }, 0)
 
     return (
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 sm:mb-6">
@@ -388,8 +388,8 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
           </div>
         )}
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4 md:p-6">
@@ -611,5 +611,5 @@ const NeracaComponent = ({isFullScreen, fullscreenchange}) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

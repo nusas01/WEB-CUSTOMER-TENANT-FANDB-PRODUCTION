@@ -1,6 +1,6 @@
-// import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import "../style/footer.css"; 
-import "../style/add.css";
+// import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa"
+import "../style/footer.css" 
+import "../style/add.css"
 
 export default function Footer() {
   return (
@@ -25,5 +25,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  );
+  )
 }

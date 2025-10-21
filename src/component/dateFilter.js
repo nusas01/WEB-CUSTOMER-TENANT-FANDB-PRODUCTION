@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import dayjs from "dayjs";
+import { useState, useEffect } from 'react'
+import dayjs from "dayjs"
 
 function FilterPanel({
   // State values
@@ -24,54 +24,54 @@ function FilterPanel({
 
   validationErrors,
 }) {
-  const [isDropdownOpenMethod, setIsDropdownOpenMethod] = useState(false);
-  const [isDropdownOpenStatus, setIsDropdownOpenStatus] = useState(false);
+  const [isDropdownOpenMethod, setIsDropdownOpenMethod] = useState(false)
+  const [isDropdownOpenStatus, setIsDropdownOpenStatus] = useState(false)
   const [isInvalidPeriode, setIsInvalidPeriode] = useState(null)
 
   const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const year = date.getFullYear()
+    return `${day}/${month}/${year}`
+  }
 
   const validateDateRange = (start, end) => {
-    const startDay = dayjs(start);
-    const endDay = dayjs(end);
-    const diff = endDay.diff(startDay, "day");
+    const startDay = dayjs(start)
+    const endDay = dayjs(end)
+    const diff = endDay.diff(startDay, "day")
 
     if (diff < 0) {
-      setIsInvalidPeriode("Tanggal akhir tidak boleh sebelum tanggal awal!");
-      return false;
+      setIsInvalidPeriode("Tanggal akhir tidak boleh sebelum tanggal awal!")
+      return false
     }
 
     if (diff >= 7) {
-      setIsInvalidPeriode("Rentang tanggal tidak boleh lebih dari 7 hari!");
-      return false;
+      setIsInvalidPeriode("Rentang tanggal tidak boleh lebih dari 7 hari!")
+      return false
     }
 
-    setIsInvalidPeriode(""); // Reset error jika valid
-    return true;
-  };
+    setIsInvalidPeriode("") // Reset error jika valid
+    return true
+  }
 
   const handleStartDateChange = (e) => {
-    const newStartDate = e.target.value;
-    onStartDateChange(newStartDate); // Update dulu
+    const newStartDate = e.target.value
+    onStartDateChange(newStartDate) // Update dulu
 
     if (endDate && !validateDateRange(newStartDate, endDate)) {
-      onEndDateChange(""); // Reset endDate jika tidak valid
+      onEndDateChange("") // Reset endDate jika tidak valid
     }
-  };
+  }
 
   const handleEndDateChange = (e) => {
-    const newEndDate = e.target.value;
+    const newEndDate = e.target.value
     if (startDate && !validateDateRange(startDate, newEndDate)) {
-      return onEndDateChange(""); // Reset endDate jika tidak valid
+      return onEndDateChange("") // Reset endDate jika tidak valid
     }
-    onEndDateChange(newEndDate); // Update jika valid
-  };
+    onEndDateChange(newEndDate) // Update jika valid
+  }
 
   return (
     <div className="border border-gray-200 bg-white z-50 relative rounded-lg px-4 py-4 w-80 font-sans shadow-sm">
@@ -122,8 +122,8 @@ function FilterPanel({
                     <button
                       key={method}
                       onClick={() => {
-                        onMethodChange(method);
-                        setIsDropdownOpenMethod(false);
+                        onMethodChange(method)
+                        setIsDropdownOpenMethod(false)
                       }}
                       className={`w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-blue-50 ${
                         filterMethod === method ? "font-medium" : ""
@@ -164,8 +164,8 @@ function FilterPanel({
                     <button
                       key={status}
                       onClick={() => {
-                        onStatusChange(status); // 2. Gunakan onStatusChange
-                        setIsDropdownOpenStatus(false);
+                        onStatusChange(status) // 2. Gunakan onStatusChange
+                        setIsDropdownOpenStatus(false)
                       }}
                       className={`w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-blue-50 ${
                         filterStatus === status ? "font-medium" : "" // 3. Bandingkan dengan filterStatus
@@ -210,8 +210,8 @@ function FilterPanel({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 
-export default FilterPanel;
+export default FilterPanel

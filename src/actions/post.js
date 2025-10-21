@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance.js";
+import axiosInstance from "./axiosInstance.js"
  import {
     loginStatusCustomerSlice,
     loginStatusInternalSlice,
@@ -48,7 +48,7 @@ const {setStatusExpiredInternalToken} = statusExpiredInternalTokenSlice.actions
 const {setStatusExpiredUserToken} = statusExpiredUserTokenSlice.actions
 const {setStatusServiceMaintenance} = statusServiceMaintenanceSlice.actions
 
-const { setLoadingSignCustomer, signupSuccessCustomer, signupErrorCustomer, resetSignupCustomer } = signupCustomerSlice.actions;
+const { setLoadingSignCustomer, signupSuccessCustomer, signupErrorCustomer, resetSignupCustomer } = signupCustomerSlice.actions
 export const signupCustomer = (data) => async (dispatch) => {
     const config = {
         headers: {
@@ -56,7 +56,7 @@ export const signupCustomer = (data) => async (dispatch) => {
             "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials: true,
-    };
+    }
     dispatch(setLoadingSignCustomer(true))
     try {
         const nonce_data = await customerCollectFingerprintAsync(dispatch)
@@ -66,37 +66,37 @@ export const signupCustomer = (data) => async (dispatch) => {
             nonce_data,
         }
 
-        const response = await axiosInstance.post(`${process.env.REACT_APP_SIGNUP_CUSTOMER_URL}`, formData, config);
-        dispatch(signupSuccessCustomer(response?.data?.success));
+        const response = await axiosInstance.post(`${process.env.REACT_APP_SIGNUP_CUSTOMER_URL}`, formData, config)
+        dispatch(signupSuccessCustomer(response?.data?.success))
     } catch(error) {
         if (error.response?.data?.code === "TOKEN_EXPIRED") {
             dispatch(setStatusExpiredToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const response = {
             error: error.response?.data?.error,
             errorObject: error.response?.data,
         }
-        dispatch(signupErrorCustomer(response));
+        dispatch(signupErrorCustomer(response))
     } finally {
         dispatch(setLoadingSignCustomer(false))
     }
-};
+}
 
 
-const { signupVerificationSuccessCustomer, signupVerificationFailsCustomer, setLoadingSignupVerificationCustomer } = verificationSignupCustomerSlice.actions;
+const { signupVerificationSuccessCustomer, signupVerificationFailsCustomer, setLoadingSignupVerificationCustomer } = verificationSignupCustomerSlice.actions
 export const verificationSignupCustomer = (data) => async (dispatch) => {
     const config = {
         headers: {
@@ -104,36 +104,36 @@ export const verificationSignupCustomer = (data) => async (dispatch) => {
             "x-api-key": process.env.REACT_APP_API_KEY,
         },
         withCredentials : true,
-    };
-    dispatch(setLoadingSignupVerificationCustomer(true));
+    }
+    dispatch(setLoadingSignupVerificationCustomer(true))
     try {
         const response = await axiosInstance.post(`${process.env.REACT_APP_SIGNUP_VERIFICATION_CUSTOMER_URL}`, data, config)
-        dispatch(signupVerificationSuccessCustomer(response?.data?.success));
+        dispatch(signupVerificationSuccessCustomer(response?.data?.success))
     } catch (error) {
         if (error.response?.data?.code === "TOKEN_EXPIRED") {
             dispatch(setStatusExpiredToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
     
         const message = {
             error: error.response?.data?.error,
             errorField: error.response?.data?.ErrorField,
             message: error.response?.data?.message,
-        };
-        dispatch(signupVerificationFailsCustomer(message));
+        }
+        dispatch(signupVerificationFailsCustomer(message))
     } finally {
-        dispatch(setLoadingSignupVerificationCustomer(false));
+        dispatch(setLoadingSignupVerificationCustomer(false))
     }
 }
 
@@ -148,9 +148,9 @@ export const loginCustomer = (data) => async (dispatch) => {
         },
         withCredentials: true,
     }
-    dispatch(setLoginLoadingCustomer(true));
+    dispatch(setLoginLoadingCustomer(true))
     try {
-        const nonce_data = await customerCollectFingerprintAsync(dispatch);
+        const nonce_data = await customerCollectFingerprintAsync(dispatch)
 
         const formData = {
             ...data,
@@ -164,7 +164,7 @@ export const loginCustomer = (data) => async (dispatch) => {
             messageLoginSuccess: response?.data?.success,
             statusCodeSuccess: response?.status,
         }
-        dispatch(loginSuccessCustomer(message));
+        dispatch(loginSuccessCustomer(message))
         dispatch(setLoginStatusCustomer(true))
     } catch(error) {
         if (error.response?.data?.code === "TOKEN_EXPIRED") {
@@ -172,15 +172,15 @@ export const loginCustomer = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
         
         const message = {
@@ -188,9 +188,9 @@ export const loginCustomer = (data) => async (dispatch) => {
             errPass: error.response?.data?.ErrorFields?.password, 
             errUsername: error.response?.data?.ErrorFields?.email,
         }
-        dispatch(loginErrorCustomer(message));
+        dispatch(loginErrorCustomer(message))
     }finally {
-        dispatch(setLoginLoadingCustomer(false));
+        dispatch(setLoginLoadingCustomer(false))
     }
 }
 
@@ -205,7 +205,7 @@ export const forgotPasswordCustomer = (data) => async (dispatch) => {
     }
     dispatch(setLoadingForgotPasswordCustomer(true))
     try {
-        const nonce_data = await customerCollectFingerprintAsync(dispatch);
+        const nonce_data = await customerCollectFingerprintAsync(dispatch)
 
         const formData = {
             ...data,
@@ -222,15 +222,15 @@ export const forgotPasswordCustomer = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorForgotPasswordCustomer({
@@ -242,7 +242,7 @@ export const forgotPasswordCustomer = (data) => async (dispatch) => {
     }
 }
 
-const { successCreateTransactionCustomer, errorCreateTransactionCustomer, setLoadingCreateTransactionCustomer } = createTransactionCustomerSlice.actions;
+const { successCreateTransactionCustomer, errorCreateTransactionCustomer, setLoadingCreateTransactionCustomer } = createTransactionCustomerSlice.actions
 export const createTransactionCustomer = (data) => async (dispatch) => {
     const state = store.getState().persisted.orderType
     const configJson = {
@@ -255,25 +255,25 @@ export const createTransactionCustomer = (data) => async (dispatch) => {
         },
         withCredentials: true,
     }
-    dispatch(setLoadingCreateTransactionCustomer(true));
+    dispatch(setLoadingCreateTransactionCustomer(true))
     try {
         const response = await axiosInstance.post(`${process.env.REACT_APP_CREATE_TRANSACTION_CUSTOMER_URL}`, data, configJson)
-        dispatch(successCreateTransactionCustomer(response?.data));
+        dispatch(successCreateTransactionCustomer(response?.data))
     } catch(error) {
         if (error.response?.data?.code === "TOKEN_EXPIRED") {
             dispatch(setStatusExpiredToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -288,7 +288,7 @@ export const createTransactionCustomer = (data) => async (dispatch) => {
         }
         dispatch(errorCreateTransactionCustomer(message))
     }finally {
-        dispatch(setLoadingCreateTransactionCustomer(false));
+        dispatch(setLoadingCreateTransactionCustomer(false))
     }
 }
 
@@ -311,15 +311,15 @@ export const loginGoogleCustomer = () => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
         
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(loginGoogleErrorCustomer(error.response?.data?.error))
@@ -364,15 +364,15 @@ export const loginInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -397,7 +397,7 @@ export const forgotPasswordInternal = (data) => async (dispatch) => {
     }
     dispatch(setLoadingForgotPasswordInternal(true))
     try {
-        const nonce_data = await customerCollectFingerprintAsync(dispatch);
+        const nonce_data = await customerCollectFingerprintAsync(dispatch)
 
         const formData = {
             ...data,
@@ -414,15 +414,15 @@ export const forgotPasswordInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorForgotPasswordInternal({
@@ -461,15 +461,15 @@ export const createTransactionInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -504,15 +504,15 @@ export const createCategoryInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -546,15 +546,15 @@ export const createProductInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         const message = {
@@ -588,15 +588,15 @@ export const DeleteProductInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorDeleteProductIntenal(error.response?.data?.error))
@@ -622,15 +622,15 @@ export const getJournalDrafByJsonInternal = (data) => async (dispatch, getState)
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorGetJournalByJsonIntenal(error.response?.data?.error))
@@ -653,18 +653,18 @@ export const inputGeneralJournalInternal = (data) => async (dispatch, getState) 
         const response = await axiosInstance.post(`${process.env.REACT_APP_INPUT_GENERAL_JOURNAL_INTERNAL_URL}`, data, configJson)
         dispatch(setSuccessInputGeneralJournalInternal(response?.data?.success))
         if (response.status === 200 || response.status === 201) {
-            const state = getState();
-            const { dataGeneralJournalByEventPerDayInternal } = state.getGeneralJournalByEventPerDayInternal || {};
+            const state = getState()
+            const { dataGeneralJournalByEventPerDayInternal } = state.getGeneralJournalByEventPerDayInternal || {}
 
             if (data.detail.action === "DRAF") {
-                dispatch(fetchGeneralJournalDrafInternal());
+                dispatch(fetchGeneralJournalDrafInternal())
             }
 
             if (data.detail.action === "FINALIZE") {
-                dispatch(fetchGeneralJournalByEventAllInternal());
+                dispatch(fetchGeneralJournalByEventAllInternal())
 
                 if (Array.isArray(dataGeneralJournalByEventPerDayInternal) && dataGeneralJournalByEventPerDayInternal.length > 0) {
-                dispatch(fetchGeneralJournalByEventPerDayInternal());
+                dispatch(fetchGeneralJournalByEventPerDayInternal())
                 }
             }
         }
@@ -674,15 +674,15 @@ export const inputGeneralJournalInternal = (data) => async (dispatch, getState) 
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorInputGeneralJournalIntenal(error.response?.data?.error))
@@ -717,15 +717,15 @@ export const createTabelInternal = (data) => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorCreateTableIntenal(error.response?.data?.error))
@@ -757,15 +757,15 @@ export const createQROrderTypeTakeAway = () => async (dispatch) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-            dispatch(setStatusExpiredUserToken(true));
+            dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-            dispatch(setStatusServiceMaintenance(true));
+            dispatch(setStatusServiceMaintenance(true))
         }
 
         dispatch(setErrorCreateQROrderTypeTakeAway(error.response?.data?.error))
@@ -797,15 +797,15 @@ export const createEmployee = (formData) => {
         }
 
         if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
-          dispatch(setStatusExpiredInternalToken(true));
+          dispatch(setStatusExpiredInternalToken(true))
         }
 
         if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
-          dispatch(setStatusExpiredUserToken(true));
+          dispatch(setStatusExpiredUserToken(true))
         }
 
         if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
-          dispatch(setStatusServiceMaintenance(true));
+          dispatch(setStatusServiceMaintenance(true))
         }
         
         dispatch(setErrorCreateEmployee({

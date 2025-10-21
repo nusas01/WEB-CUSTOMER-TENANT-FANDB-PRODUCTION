@@ -12,22 +12,22 @@ function Navbar({onCart, closeCart, statusCart}) {
     const {loggedIn} = useSelector((state) => state.persisted.loginStatusCustomer)
     // const handleShowCart = () => {
     //     if (statusCart) {
-    //         closeCart();
+    //         closeCart()
     //     } else if(cartItems.length > 0 && containerClass === 'container-main-cart') {
-    //         onCart();
+    //         onCart()
     //     } else if (cartItems.length > 0 && containerClass === 'container-main-cart-mobile') {
-    //         navigate('/cart');
+    //         navigate('/cart')
     //     }
-    // };
+    // }
 
     // useEffect(() => {
     //     if (containerClass === "container-main-cart-mobile") {
-    //         closeCart();
+    //         closeCart()
     //     }
     //     if (cartItems.length <= 0) {
-    //         closeCart();
+    //         closeCart()
     //     }
-    // }, [containerClass, cartItems.length]);
+    // }, [containerClass, cartItems.length])
 
     // const handleShowCart = () => {
     //     if (containerClass !== "container-main-cart") {
@@ -85,4 +85,4 @@ function Navbar({onCart, closeCart, statusCart}) {
     )
 }
 
-export default Navbar;
+export default Navbar
