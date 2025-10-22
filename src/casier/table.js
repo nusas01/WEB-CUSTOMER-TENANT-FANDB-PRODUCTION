@@ -144,11 +144,7 @@ export default function ModernKasirDashboard() {
     }, [loadingCreateTable])
 
     const handleAddTable = () => {
-      if (dataEmployeeInternal?.position === "Manager") {
-        dispatch(createTabelInternal())
-      } else {
-        setShowAccessDenied(true)
-      }
+      dispatch(createTabelInternal())
     }
 
     // handle delete table
