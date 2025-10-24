@@ -234,6 +234,7 @@ export default function RegisterPage() {
 
 
   // handle login dan signup google
+  const { orderTakeAway, tableId } = useSelector((state) => state.persisted.orderType)
   const {resetLoginGoogleCustomer} = loginGoogleCustomerSlice.actions
   const {errorLoginGoogleCustomer, loadingLoginGoogleCustomer} = useSelector((state) => state.loginGoogleCustomerState)
 
@@ -241,7 +242,7 @@ export default function RegisterPage() {
     setSpinner(loadingLoginGoogleCustomer)
   }, [loadingLoginGoogleCustomer])
   
-  
+
   const handleLoginAndSignupGoogle = () => {
     dispatch(setLoginStateNullCustomer())
     dispatch(resetSignupCustomer())
@@ -258,7 +259,13 @@ export default function RegisterPage() {
         repeatPassword: '',
       })
       
-      dispatch(loginGoogleCustomer())
+      dispatch(loginGoogleCustomer({
+        order_type_url: orderTakeAway
+          ? "/?order_type_take_away=true"
+          : tableId
+            ? "/?table_id=" + tableId
+            : ""
+      }));
   }
     
   useEffect(() => {

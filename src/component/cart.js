@@ -106,16 +106,16 @@ function Cart({ closeCart }) {
         }))
     }
     
-    const handleChoicePaymentMethodModel = () => {
-        if (Object.keys(dataPaymentMethodCustomer).length === 0 || !dataPaymentMethodCustomer) {
-            dispatch(fetchPaymentMethodsCustomer())
-        }
-
+    const handleChoicePaymentMethodModel = () => { 
         if (items.length <= 0) {
             window.scrollTo({ top: 0, behavior: "smooth" })
             return
         }
         
+        if (Object.keys(dataPaymentMethodCustomer).length === 0 || !dataPaymentMethodCustomer) {
+            dispatch(fetchPaymentMethodsCustomer())
+        }
+
         setIsPaymentMethod(prev => !prev)
     }
 

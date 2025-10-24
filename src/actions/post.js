@@ -294,12 +294,12 @@ export const createTransactionCustomer = (data) => async (dispatch) => {
 
 
 const {loginGoogleErrorCustomer, setLoadingLoginGoogleCustomer} = loginGoogleCustomerSlice.actions
-export const loginGoogleCustomer = () => async (dispatch) => {
+export const loginGoogleCustomer = (data) => async (dispatch) => {
     dispatch(setLoadingLoginGoogleCustomer(true))
     try {
-        const response = await axiosInstance.post(`${process.env.REACT_APP_LOGIN_SIGNUP_GOOGLE_CUSTOMER}`, {}, {
+        const response = await axiosInstance.post(`${process.env.REACT_APP_LOGIN_SIGNUP_GOOGLE_CUSTOMER}`, data, {
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
                 "x-api-key": process.env.REACT_APP_API_KEY,
             },
             withCredentials: true,

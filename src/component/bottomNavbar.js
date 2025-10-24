@@ -12,7 +12,7 @@ export default function BottomNavbar() {
     }
 
     const handleProfile = () => {
-       navigate('/profile')
+        navigate('/profile')
     }
 
     const { lengthTransactionOnGoing } = useSelector((state) => state.persisted.transactionOnGoingCustomer)

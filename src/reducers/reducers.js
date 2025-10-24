@@ -29,7 +29,7 @@ export const orderTypeSlice = createSlice({
 export const { setOrderTypeContext, setIsClose } = orderTypeSlice.actions
 
 const initialStoreInfoCustomerState = {
-    statusStoreInfo: false
+    statusStoreInfo: true,
 }
 export const storeInfoCustomerSlice = createSlice({
     name: "storeInfoCustomer",

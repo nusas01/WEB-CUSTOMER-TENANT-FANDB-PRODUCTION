@@ -1,6 +1,4 @@
 import "../App.css"
-import Footer from "./footer"
-import Navbar from "./navbar"
 import { AddProductToCart } from "./add"
 import { useState, useEffect, useRef } from "react"
 import Cart from "./cart"
@@ -383,7 +381,7 @@ function Home() {
 
 
   return (
-    <div style={{position: 'relative'}}>
+    <div style={{position: 'relative'}} className="h-[100vh]">
       <div className={"w-full z-10 bg-white flex flex-cols relative"}>
         {/* Modern Category Button Container */}
         <div className={`relative mx-auto ${"container-button-category-mobile"}`}>

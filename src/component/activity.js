@@ -47,6 +47,12 @@ export default function Activity() {
         }
     }, [])
 
+    useEffect(() => {
+        if (!loggedIn) {
+            navigate("/access")
+        }
+    }, [])
+
     // get data button active status
     const {setButtonActivity} = buttonActivityCustomerSlice.actions
     const {buttonActive} = useSelector((state) => state.persisted.buttonActivityCustomer)

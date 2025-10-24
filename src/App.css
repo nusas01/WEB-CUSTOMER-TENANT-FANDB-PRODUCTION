@@ -121,6 +121,7 @@ body {
 .container-bg {
   background-color: white;
   padding-top: 80px;
+  min-height: 100%;
 }
 
 .container-home {
