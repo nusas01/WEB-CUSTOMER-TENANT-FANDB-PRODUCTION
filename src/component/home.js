@@ -8,7 +8,7 @@ import BottomNavbar from "./bottomNavbar"
 import { useDispatch, useSelector } from "react-redux"
 import { setOrderTypeContext, setIsClose } from "../reducers/reducers"
 import {SpinnerFixed} from "../helper/spinner"
-import {OrderTypeInvalidAlert, ToastPortal} from "./alert"
+import {OrderTypeInvalidAlert, ToastPortal, QRErrorModal} from "./alert"
 import {
   fetchGetDataCustomer
 } from "../actions/get"
@@ -79,6 +79,11 @@ function Home() {
     setShowModelAddProduct(show)
     setProductData(product)
   }
+
+  // handle response invalid table
+  const {
+      invalidTable
+  } = useSelector((state) => state.persisted.getNumberTableCustomer)
 
   // Sync ref dengan state clickedCategory
   const [showLeftArrow, setShowLeftArrow] = useState(false)
@@ -733,6 +738,9 @@ function Home() {
         </div>
       </div>
 
+      {invalidTable && (
+        <QRErrorModal/>
+      )}
       
       {showModelAddProduct && (
           <AddProductToCart 

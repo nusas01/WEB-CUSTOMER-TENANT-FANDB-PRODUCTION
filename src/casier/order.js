@@ -224,6 +224,19 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
   const dispatch = useDispatch()
   const [spinnerRelative, setSpinnerRelative] = useState(false)
   const [spinnerFixed, setSpinnerFixed] = useState(false)
+   const [expandedOrders, setExpandedOrders] = useState(new Set());
+
+  const toggleExpanded = (orderId) => {
+    setExpandedOrders((prev) => {
+      const newSet = new Set(prev); 
+      if (newSet.has(orderId)) {
+        newSet.delete(orderId);
+      } else {
+        newSet.add(orderId);
+      }
+      return newSet; 
+    });
+  };
 
   // handle hidden header
   const {setHeaderHidden} = headerHiddenInternalSlice.actions
@@ -805,7 +818,10 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
                         <button className="p-2 hover:bg-gray-50 rounded-lg transition-colors">
                           <Eye className="w-4 h-4 text-gray-400" />
                         </button>
-                        <button className="p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                        <button 
+                          onClick={() => toggleExpanded(order.id)}
+                          className="p-2 hover:bg-gray-50 rounded-lg transition-colors"
+                        >
                           <MoreHorizontal className="w-4 h-4 text-gray-400" />
                         </button>
                         
@@ -928,6 +944,24 @@ const OrderDashboard = ({isFullScreen, fullscreenchange}) => {
                           <p className="text-xl font-bold text-gray-900">{formatCurrency(order.amount_price)}</p>
                         </div>
                       </div>
+
+                      {/* ➕ Fee Details (muncul saat MoreHorizontal diklik) */}
+                      {expandedOrders.has(order.id) && (
+                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-gray-100">
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Tax Rate Fee</p>
+                            <p className="font-semibold text-gray-900 text-sm">
+                              {formatCurrency(Number(order.tax_rate_fee ?? 0))}
+                            </p>
+                          </div>
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Transaction Fee</p>
+                            <p className="font-semibold text-gray-900 text-sm">
+                              {formatCurrency(Number(order.transaction_fee ?? 0))}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

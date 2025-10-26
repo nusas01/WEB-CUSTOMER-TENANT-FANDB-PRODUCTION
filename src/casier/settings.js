@@ -350,7 +350,7 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
 
   // handle change password
   const { resetChangePasswordInternal } = changePasswordInternalSlice.actions
-  const { errorValidatePassword, errorValidateNewPassword,  loadingChangePassword } = useSelector((state) => state.changePasswordInternalState)
+  const { successChangePassword, errorValidatePassword, errorValidateNewPassword,  loadingChangePassword } = useSelector((state) => state.changePasswordInternalState)
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -361,6 +361,21 @@ const SettingsDashboard = ({isFullScreen, fullscreenchange}) => {
     newPassword: '',
     confirmPassword: ''
   })
+
+  useEffect(() => {
+    if (successChangePassword) {
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      })
+      setPasswordErrors({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      })
+    }
+  }, [successChangePassword])
 
    const handlePasswordChange = (field, value) => {
     setPasswordData(prev => ({ ...prev, [field]: value }))

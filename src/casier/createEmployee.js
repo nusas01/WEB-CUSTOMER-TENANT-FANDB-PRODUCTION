@@ -235,7 +235,7 @@ const CreateEmployee = () => {
           if (!value) {
             errorMessage = 'Jenis kelamin wajib dipilih'
             newErrors.gender = errorMessage
-          } else if (!['Man', 'Women'].includes(value)) {
+          } else if (!['Man', 'Woman'].includes(value)) {
             errorMessage = 'Jenis kelamin harus man atau women'
             newErrors.gender = errorMessage
           } else {
@@ -349,7 +349,7 @@ const CreateEmployee = () => {
           case 'gender':
             if (!value) {
               errorMessage = 'Jenis kelamin wajib dipilih'
-            } else if (!['Man', 'Women'].includes(value)) {
+            } else if (!['Man', 'Woman'].includes(value)) {
               errorMessage = 'Jenis kelamin harus Laki-laki atau Perempuan'
             }
             break
@@ -724,8 +724,8 @@ const CreateEmployee = () => {
                       <input
                         type="radio"
                         name="gender"
-                        value="Women"
-                        checked={formData.gender === 'Women'}
+                        value="Woman"
+                        checked={formData.gender === 'Woman'}
                         onChange={handleInputChange}
                         className="w-4 h-4 text-gray-900 focus:ring-gray-900"
                       />

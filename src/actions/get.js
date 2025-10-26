@@ -219,7 +219,10 @@ export const fetchNumberTableCustomer = (id) => {
         dispatch(setStatusServiceMaintenance(true))
       }
 
-      dispatch(errorFetchNumberTableCustomer(error.response?.data?.error))
+      dispatch(errorFetchNumberTableCustomer({
+        error: error.response?.data?.error,
+        invalidTable: error.response?.data?.InvalidTable,
+      }))
     } finally {
       dispatch(setLoadingNumberTableCustomer(false))
     }

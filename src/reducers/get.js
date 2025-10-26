@@ -60,6 +60,7 @@ export const getDataCustomerSlice = createSlice({
 const initialGetNumberTableCustomerState = {
     numberTable: null,
     loading: false,
+    invalidTable: false,
     error: null,
 }
 export const getNumberTableCustomerSlice = createSlice({
@@ -74,7 +75,8 @@ export const getNumberTableCustomerSlice = createSlice({
             state.error = null
         },
         errorFetchNumberTableCustomer: (state, action) => {
-            state.error = action.payload
+            state.error = action.payload.error
+            state.invalidTable = action.payload.invalidTable || false
         }
     }
 })
