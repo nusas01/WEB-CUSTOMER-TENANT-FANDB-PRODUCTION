@@ -68,7 +68,7 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
   }, [loadingTransactionCashInternal])
 
   useEffect(() => {
-  if (filterTransaction === "methodCash" && dataTransactionCashInternal.length === 0) {
+  if (dataTransactionCashInternal.length === 0) {
       dispatch(fetchTransactionCashOnGoingInternal())
       setInitialFetchDone(prev => ({...prev, cash: true}))
     }
@@ -83,7 +83,7 @@ const TransactionTable = ({isFullScreen, fullscreenchange}) => {
   }, [loadingTransactionNonCashInternal])
 
   useEffect(() => {
-      if (filterTransaction === "methodNonCash" && dataTransactionNonCashInternal.length === 0) {
+      if (dataTransactionNonCashInternal.length === 0) {
         dispatch(fetchTransactionNonCashOnGoingInternal())
         setInitialFetchDone(prev => ({...prev, nonCash: true}))
       }

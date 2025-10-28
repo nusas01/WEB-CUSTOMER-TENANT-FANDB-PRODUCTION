@@ -11,8 +11,7 @@ import {
   Clock,
   Share2,
   UtensilsCrossed,
-  QrCode,
-  Loader2,
+  ShoppingBag,
   AlertCircle,
 } from "lucide-react"
 import { useRef } from "react"
@@ -193,7 +192,7 @@ export const ModernStoreBrand = ({
     error: tableError,
   } = useSelector((state) => state.persisted.getNumberTableCustomer)
 
-  const { tableId, orderType } = useSelector((state) => state.persisted.orderType)
+  const { tableId, orderTakeAway } = useSelector((state) => state.persisted.orderType)
 
   useEffect(() => {
     if (tableId && !numberTable) {
@@ -201,44 +200,27 @@ export const ModernStoreBrand = ({
     }
   }, [tableId, dispatch])
 
-  // Determine if we should show table section
-  const shouldShowTableSection = tableId && (tableLoading || tableError || numberTable)
-  const isValidTable = numberTable && !tableError && !tableLoading
-
-  // Determine order type display
-  const getOrderTypeInfo = () => {
-    if (orderType === 'dine-in') {
-      return {
-        icon: UtensilsCrossed,
-        label: 'Dine In',
-        color: 'from-emerald-50 to-green-50 border-emerald-200 text-emerald-700'
-      }
-    } else if (orderType === 'takeaway') {
-      return {
-        icon: QrCode,
-        label: 'Take Away',
-        color: 'from-teal-50 to-cyan-50 border-teal-200 text-teal-700'
-      }
-    }
-    return null
-  }
-
-  const orderTypeInfo = getOrderTypeInfo()
-    // Handle share location to WhatsApp
-    const handleShareToWhatsApp = () => {
+  // Handle share location to WhatsApp
+  const handleShareToWhatsApp = () => {
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`
-    const message = encodeURIComponent(
-      `🛍️ *${storeName}*\n` +
-      `📍 *Lokasi:* [Lihat di Google Maps](${googleMapsLink})\n` +
-      `⭐ *Rating:* ${rating} (${totalReviews.toLocaleString()} ulasan)\n` +
-      `🕒 *Status:* ${isOpen ? 'Buka' : 'Tutup'} | *Jam operasional:* 10:00 - 22:00\n\n` +
-      `Ayo kunjungi sekarang! 🔗`
-    )
 
-    const whatsappUrl = `https://wa.me/?text=${message}`
+    const message = [
+      `🏬 *${storeName}*`,
+      `📍 Lokasi: ${location}`,
+      `⭐ Rating: ${rating} (${totalReviews.toLocaleString()} ulasan)`,
+      `🕒 Status: ${isOpen ? 'Buka' : 'Tutup'} (10:00 - 22:00)`,
+      '',
+      `Lihat di Google Maps: ${googleMapsLink}`,
+      '',
+      `Kunjungi sekarang dan rasakan pelayanan terbaik dari kami! ✨`
+    ].join('\n')
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
   }
 
+  // Determine if we should show table section
+  const isValidTable = numberTable && !tableError && !tableLoading
 
   return (
     <div 
@@ -380,83 +362,73 @@ export const ModernStoreBrand = ({
                 </div>
               </div>
 
-              {/* Table Number Section - Only show if tableId exists */}
-              {shouldShowTableSection && (
-                <div className="mb-3 pb-3 border-b border-gray-100">
-                  {/* Loading State */}
-                  {tableLoading && (
-                    <div className="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-lg">
-                      <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" strokeWidth={2.5} />
-                      <span className="text-xs font-medium text-emerald-700">Memuat info meja...</span>
-                    </div>
-                  )}
-
-                  {/* Error State */}
-                  {tableError && !tableLoading && (
-                    <div className="px-3 py-2.5 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-lg">
-                      <div className="flex items-start gap-2 mb-1.5">
-                        <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                        <div className="flex-1">
-                          <p className="text-xs font-semibold text-red-700 mb-0.5">Gagal Memuat Info Meja</p>
-                          <p className="text-[10px] text-red-600">
-                            Tidak dapat mengambil data nomor meja. Pastikan Anda telah memindai QR code dari meja yang valid.
-                          </p>
+              {/* Table Number Section */}
+              <div className="mb-3 pb-3 border-b border-gray-100">
+                {/* Prioritas 1: Jika take away */}
+                {orderTakeAway ? (
+                  <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl p-3">
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 animate-shimmer" />
+                    <div className="relative flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-white/20 backdrop-blur-sm p-1.5 rounded-lg">
+                          <ShoppingBag className="w-4 h-4 text-white" strokeWidth={2.5} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-amber-100 font-medium">Tipe Pesanan</p>
+                          <p className="text-lg font-bold text-white">Take Away</p>
                         </div>
                       </div>
-                      <button
-                        onClick={() => dispatch(fetchNumberTableCustomer(tableId))}
-                        className="w-full mt-2 text-[10px] font-semibold text-red-700 bg-red-100 hover:bg-red-200 px-2 py-1 rounded transition-colors"
-                      >
-                        Coba Lagi
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Success State - Valid Table */}
-                  {isValidTable && (
-                    <div className="space-y-2">
-                      {/* Order Type Badge */}
-                      {orderTypeInfo && (
-                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold bg-gradient-to-r ${orderTypeInfo.color}`}>
-                          <orderTypeInfo.icon className="w-3.5 h-3.5" strokeWidth={2.5} />
-                          <span>{orderTypeInfo.label}</span>
-                        </div>
-                      )}
-
-                      {/* Table Number Display */}
-                      <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3">
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 animate-shimmer" />
-                        
-                        <div className="relative flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="bg-white/20 backdrop-blur-sm p-1.5 rounded-lg">
-                              <UtensilsCrossed className="w-4 h-4 text-white" strokeWidth={2.5} />
-                            </div>
-                            <div>
-                              <p className="text-[10px] text-emerald-100 font-medium">Nomor Meja</p>
-                              <p className="text-xl font-bold text-white">{numberTable}</p>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                            <span className="text-[10px] font-bold text-white">Verified</span>
-                          </div>
-                        </div>
-
-                        {/* Info Text */}
-                        <div className="mt-2 pt-2 border-t border-white/20">
-                          <p className="text-[10px] text-emerald-100">
-                            {orderType === 'dine-in' 
-                              ? '✓ QR Code meja berhasil dipindai'
-                              : '✓ QR Code take away berhasil dipindai'
-                            }
-                          </p>
-                        </div>
+                      <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                        <span className="text-[10px] font-bold text-white">Verified</span>
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
+                    <div className="mt-2 pt-2 border-t border-white/20">
+                      <p className="text-[10px] text-amber-100">✓ QR Code take away berhasil dipindai</p>
+                    </div>
+                  </div>
+                ) : tableId && numberTable ? (
+                  /* Prioritas 2: Jika dine-in dengan nomor meja valid */
+                  <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3">
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 animate-shimmer" />
+                    <div className="relative flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-white/20 backdrop-blur-sm p-1.5 rounded-lg">
+                          <UtensilsCrossed className="w-4 h-4 text-white" strokeWidth={2.5} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-emerald-100 font-medium">Nomor Meja</p>
+                          <p className="text-xl font-bold text-white">{numberTable}</p>
+                        </div>
+                      </div>
+                      <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                        <span className="text-[10px] font-bold text-white">Verified</span>
+                      </div>
+                    </div>
+                    <div className="mt-2 pt-2 border-t border-white/20">
+                      <p className="text-[10px] text-emerald-100">✓ QR Code meja berhasil dipindai</p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Prioritas 3: Jika dua-duanya tidak ada → tampilkan error */
+                  <div className="px-3 py-2.5 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-lg">
+                    <div className="flex items-start gap-2 mb-1.5">
+                      <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-red-700 mb-0.5">Gagal Memuat Info Meja</p>
+                        <p className="text-[10px] text-red-600">
+                          Tidak dapat mengambil data nomor meja. Pastikan Anda telah memindai QR code dari meja atau take away yang valid.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => dispatch(fetchNumberTableCustomer(tableId))}
+                      className="w-full mt-2 text-[10px] font-semibold text-red-700 bg-red-100 hover:bg-red-200 px-2 py-1 rounded transition-colors"
+                    >
+                      Coba Lagi
+                    </button>
+                  </div>
+                )}
+              </div>
 
               {/* Share to WhatsApp Button */}
               <button

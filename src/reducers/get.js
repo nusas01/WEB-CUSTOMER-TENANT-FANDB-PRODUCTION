@@ -305,6 +305,7 @@ export const logoutInternalSlice = createSlice({
 const initialTransactionCashOnGoingInternalState = {
     dataTransactionCashInternal: [],
     errorTransactionCashInternal: null,
+    lengthTransactionCashInternal: 0,
     loadingTransactionCashInternal: false,
 }
 export const transactionCashOnGoingInternalSlice = createSlice({
@@ -316,6 +317,7 @@ export const transactionCashOnGoingInternalSlice = createSlice({
         },
         fetchSuccessTransactionCashInternal: (state, action) => {
             state.dataTransactionCashInternal = action.payload
+            state.lengthTransactionCashInternal = action.payload?.length || 0
             state.errorTransactionCashInternal = null
         },
         fetchErrorTransactionCashInternal: (state, action) => {
@@ -326,6 +328,7 @@ export const transactionCashOnGoingInternalSlice = createSlice({
             state.dataTransactionCashInternal = state.dataTransactionCashInternal.filter(
                 (item) => item.id !== action.payload
             )
+            state.lengthTransactionCashInternal = state.dataTransactionCashInternal.length
         },
         updateStatusTransactionCashOnGoingInternalById: (state, action) => {
             const updated = state.dataTransactionCashInternal.map(item => {
@@ -341,6 +344,7 @@ export const transactionCashOnGoingInternalSlice = createSlice({
         },
         addTransactionCashOnGoingInternal: (state, action) => {
             state.dataTransactionCashInternal.push(action.payload)
+            state.lengthTransactionCashInternal = state.dataTransactionCashInternal.length
         }
     }
 })
@@ -348,6 +352,7 @@ export const transactionCashOnGoingInternalSlice = createSlice({
 
 const initialTransactionNonCashOnGoingInternalState = {
     dataTransactionNonCashInternal: [],
+    dataLengthTransactionNonCashInternal: 0,
     errorTransactionNonCashInternal: null,
     loadingTransactionNonCashInternal: false,
 }
@@ -360,6 +365,7 @@ export const transactionNonCashOnGoingInternalSlice  = createSlice({
         },
         fetchSuccessTransactionNonCashInternal: (state, action) => {
             state.dataTransactionNonCashInternal = action.payload
+            state.dataLengthTransactionNonCashInternal = action.payload?.length || 0
             state.errorTransactionNonCashInternal = null
         },
         fetchErrorTransactionNonCashInternal: (state, action) => {
@@ -370,6 +376,7 @@ export const transactionNonCashOnGoingInternalSlice  = createSlice({
             state.dataTransactionNonCashInternal = state.dataTransactionNonCashInternal.filter(
                 (item) => item.id !== action.payload
             )
+            state.dataLengthTransactionNonCashInternal = state.dataTransactionNonCashInternal.length
         },
         updateStatusTransactionNonCashOnGoingInternalById: (state, action) => {
             const updated = state.dataTransactionNonCashInternal.map(item => {
@@ -385,6 +392,7 @@ export const transactionNonCashOnGoingInternalSlice  = createSlice({
         }, 
         addTransactionNonCashOnGoingInternal: (state, action) => {
             state.dataTransactionNonCashInternal.push(action.payload)
+            state.dataLengthTransactionNonCashInternal = state.dataTransactionNonCashInternal.length
         }
     }
 })
@@ -1096,6 +1104,7 @@ export const getAssetsStoreInternalSlice = createSlice({
 
 const initialOrdersInternalState = {
     dataOrdersInternal: [],
+    lengthOrdersInternal: 0,
     errorOrdersInternal: null,
     loadingOrdersInternal: false,
 } 
@@ -1108,11 +1117,19 @@ export const getOrdersInternalSlice = createSlice({
         },
         fetchSuccessOrdersInternal: (state, action) => {
             state.dataOrdersInternal = action.payload || []
+            // hanya hitung order dengan status PROCESS atau PROGRESS
+            state.lengthOrdersInternal = state.dataOrdersInternal.filter(
+              (order) => {
+                const status = order.order_status?.toUpperCase()
+                return status === "PROCESS" || status === "PROGRESS"
+              }
+            ).length
             state.errorOrdersInternal = null
         },
         fetchErrorOrdersInternal: (state, action) => {
            state.errorOrdersInternal = action.payload
            state.dataOrdersInternal = []
+           state.lengthOrdersInternal = 0
         },
         resetErrorOrdersInternal: (state) => {
             state.errorOrdersInternal = null
@@ -1120,6 +1137,13 @@ export const getOrdersInternalSlice = createSlice({
         deleteOrderById: (state, action) => {
             const idToDelete = action.payload
             state.dataOrdersInternal = state.dataOrdersInternal.filter(item => item.id !== idToDelete)
+            // hitung ulang hanya PROCESS dan PROGRESS
+            state.lengthOrdersInternal = state.dataOrdersInternal.filter(
+              (order) => {
+                const status = order.order_status?.toUpperCase()
+                return status === "PROCESS" || status === "PROGRESS"
+              }
+            ).length
         },
         appendOrdersInternal: (state, action) => {
             const newOrders = Array.isArray(action.payload) ? action.payload : [action.payload]
@@ -1128,27 +1152,38 @@ export const getOrdersInternalSlice = createSlice({
                 const existing = state.dataOrdersInternal.find(item => item.id === order.id)
 
                 if (existing) {
-                // Update order_status (bisa ditambah update field lain jika perlu)
-                if (order.order_status !== undefined) {
-                    existing.order_status = order.order_status
-                }
+                    if (order.order_status !== undefined) {
+                        existing.order_status = order.order_status
+                    }
                 } else {
-                // Order belum ada, langsung push
-                state.dataOrdersInternal.push(order)
+                    state.dataOrdersInternal.push(order)
                 }
             })
+            // hitung ulang hanya PROCESS dan PROGRESS
+            state.lengthOrdersInternal = state.dataOrdersInternal.filter(
+              (order) => {
+                const status = order.order_status?.toUpperCase()
+                return status === "PROCESS" || status === "PROGRESS"
+              }
+            ).length
         },
         deleteOrdersExceptToday: (state) => {
             const now = new Date()
-
-            const todayString = now.toISOString().split("T")[0] // Contoh: "2025-07-16"
+            const todayString = now.toISOString().split("T")[0]
 
             state.dataOrdersInternal = state.dataOrdersInternal.filter(order => {
                 const orderDate = new Date(order.created_at).toISOString().split("T")[0]
                 return orderDate === todayString
             })
-        }
 
+            // hitung ulang hanya PROCESS dan PROGRESS
+            state.lengthOrdersInternal = state.dataOrdersInternal.filter(
+              (order) => {
+                const status = order.order_status?.toUpperCase()
+                return status === "PROCESS" || status === "PROGRESS"
+              }
+            ).length
+        }
     }
 })
 

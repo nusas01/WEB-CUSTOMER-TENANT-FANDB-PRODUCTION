@@ -118,7 +118,7 @@ const handleDownloadQR = async (
           ctx.font = '13px Arial, sans-serif'
           const securityPoints = [
             '✓ Alamat URL harus:',
-            `   https://${window.location.hostname}`,
+            `   https://${window.location.hostname}/...`,
             '',
             '✓ Browser menampilkan ikon gembok 🔒',
             '',

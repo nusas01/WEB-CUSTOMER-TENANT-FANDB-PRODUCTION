@@ -128,6 +128,15 @@ const Sidebar = ({activeMenu}) => {
   const { setIsOpen } = navbarInternalSlice.actions
   const {isOpen, isMobileDeviceType} = useSelector((state) => state.persisted.navbarInternal)
 
+  // length data transaction non cash
+  const {dataLengthTransactionNonCashInternal} = useSelector((state) => state.persisted.transactionNonCashOnGoingInternal)
+  // length data transaction cash
+  const {lengthTransactionCashInternal} = useSelector((state) => state.persisted.transactionCashOnGoingInternal)
+  const amountTransactions = dataLengthTransactionNonCashInternal + lengthTransactionCashInternal
+  
+  // length data 
+  const {lengthOrdersInternal} = useSelector((state) => state.persisted.dataOrdersInternal)
+
   // data employee
   const {dataEmployeeInternal} = useSelector((state) => state.persisted.getDataEmployeeInternal)
   const isManager = dataEmployeeInternal?.position === 'Manager'
@@ -226,12 +235,20 @@ const Sidebar = ({activeMenu}) => {
           {menuItems.map((item) => {
             const isDisabled = item.requiresManager && !isManager 
             const tooltipContent = item.inDevelopment ? "Fitur ini sedang dalam pengembangan" : isDisabled ? "Role Anda tidak dapat mengakses fitur ini" : null
-            
+
+            // jumlah notifikasi (badge)
+            const badgeCount =
+              item.title === "Transactions"
+                ? amountTransactions
+                : item.title === "Orders"
+                  ? lengthOrdersInternal
+                  : 0
+
             return (
               <Tooltip key={item.key} content={tooltipContent} show={isDisabled || item.inDevelopment} position="right">
                 <div
                   onClick={() => handleNavigate(item.path, item.requiresManager, item.inDevelopment)}
-                  className={`group flex items-center justify-between w-full rounded-xl cursor-pointer transition-all duration-200 ${
+                  className={`group relative flex items-center justify-between w-full rounded-xl cursor-pointer transition-all duration-200 ${
                     (isDisabled || item.inDevelopment)
                       ? 'opacity-50 cursor-not-allowed bg-gray-50' 
                       : activeMenu === item.key 
@@ -239,6 +256,13 @@ const Sidebar = ({activeMenu}) => {
                         : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
+                  {/* Badge untuk Transactions & Orders */}
+                  {badgeCount > 0 && (
+                    <span className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-semibold px-1.5 rounded-full shadow-sm">
+                      {badgeCount}
+                    </span>
+                  )}
+
                   <NavItem 
                     Icon={item.Icon} 
                     title={item.title}
@@ -308,6 +332,7 @@ const Sidebar = ({activeMenu}) => {
           </div>
         </div>
       </nav>
+
 
       {/* Desktop Footer */}
       <div className="p-4 border-t border-gray-200">
@@ -379,22 +404,41 @@ const Sidebar = ({activeMenu}) => {
           <div className="space-y-3">
             {menuItems.map((item) => {
               const isDisabled = item.requiresManager && !isManager
-              const tooltipContent = item.inDevelopment ? "Fitur ini sedang dalam pengembangan" : isDisabled ? "Role Anda tidak dapat mengakses fitur ini" : null
-              
+              const tooltipContent = item.inDevelopment
+                ? "Fitur ini sedang dalam pengembangan"
+                : isDisabled
+                  ? "Role Anda tidak dapat mengakses fitur ini"
+                  : null
+
+              // jumlah badge (Transactions & Orders)
+              const badgeCount =
+                item.title === "Transactions"
+                  ? amountTransactions
+                  : item.title === "Orders"
+                    ? lengthOrdersInternal
+                    : 0
+
               return (
                 <Tooltip key={item.key} content={tooltipContent} show={isDisabled || item.inDevelopment} position="top">
                   <div
                     onClick={() => handleNavigate(item.path, item.requiresManager, item.inDevelopment)}
-                    className={`group flex items-center justify-between w-full rounded-xl cursor-pointer transition-all duration-200 ${
-                      (isDisabled || item.inDevelopment) 
-                        ? 'opacity-50 cursor-not-allowed bg-gray-50' 
-                        : activeMenu === item.key 
-                          ? 'bg-blue-50 text-blue-700 shadow-sm' 
+                    className={`group relative flex items-center justify-between w-full rounded-xl cursor-pointer transition-all duration-200 ${
+                      (isDisabled || item.inDevelopment)
+                        ? 'opacity-50 cursor-not-allowed bg-gray-50'
+                        : activeMenu === item.key
+                          ? 'bg-blue-50 text-blue-700 shadow-sm'
                           : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    <NavItem 
-                      Icon={item.Icon} 
+                    {/* Badge untuk Transactions & Orders */}
+                    {badgeCount > 0 && (
+                      <span className="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-semibold px-1.5 rounded-full shadow-sm">
+                        {badgeCount}
+                      </span>
+                    )}
+
+                    <NavItem
+                      Icon={item.Icon}
                       title={item.title}
                       className="flex-1 p-4"
                       isDisabled={isDisabled || item.inDevelopment}
@@ -404,9 +448,11 @@ const Sidebar = ({activeMenu}) => {
                     ) : isDisabled ? (
                       <Lock className="w-4 h-4 mr-4 text-gray-400" />
                     ) : (
-                      <ChevronRight className={`w-4 h-4 mr-4 transition-colors ${
-                        activeMenu === item.key ? 'text-blue-500' : 'text-gray-400'
-                      }`} />
+                      <ChevronRight
+                        className={`w-4 h-4 mr-4 transition-colors ${
+                          activeMenu === item.key ? 'text-blue-500' : 'text-gray-400'
+                        }`}
+                      />
                     )}
                   </div>
                 </Tooltip>
@@ -418,8 +464,8 @@ const Sidebar = ({activeMenu}) => {
               <button
                 onClick={() => setOpenFinance(!openFinance)}
                 className={`group flex items-center justify-between w-full rounded-xl cursor-pointer transition-all duration-200 ${
-                  activeMenu === "finances" 
-                    ? 'bg-blue-50 text-blue-700' 
+                  activeMenu === "finances"
+                    ? 'bg-blue-50 text-blue-700'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -446,8 +492,8 @@ const Sidebar = ({activeMenu}) => {
                           className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 transition-colors ${
                             isDisabled
                               ? 'opacity-50 cursor-not-allowed bg-gray-50'
-                              : activeMenu === subItem.key 
-                                ? 'bg-blue-50 text-blue-700 font-medium' 
+                              : activeMenu === subItem.key
+                                ? 'bg-blue-50 text-blue-700 font-medium'
                                 : 'text-gray-600 hover:bg-gray-50'
                           }`}
                         >
