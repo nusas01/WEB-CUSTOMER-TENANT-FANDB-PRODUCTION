@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { verificationSignupCustomerSlice } from "../reducers/post"
 import { OrderTypeInvalidAlert, Toast, ToastPortal } from "./alert"
 import { setIsClose } from "../reducers/reducers"
-import { Mail, Clock, ShieldCheck, Info } from "lucide-react"
+import { Mail, Clock, ShieldCheck, Info, AlertCircle } from "lucide-react"
 
 export default function Verification() {
     const navigate = useNavigate()
@@ -126,6 +126,20 @@ export default function Verification() {
                             </div>
                         </div>
                     </div>
+
+                    {/* New Information Box - Added */}
+                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
+                        <div className="flex items-start gap-3">
+                            <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <div>
+                                <p className="text-sm font-medium text-gray-700">Belum menerima kode?</p>
+                                <p className="text-xs text-gray-600 mt-1">
+                                    Kami telah mengirimkan kode verifikasi ke email Anda. Jika tidak menerima dalam 5 menit, harap periksa folder <span className="font-medium">Spam</span> atau <span className="font-medium">Promosi</span>, atau hubungi tim dukungan kami.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Input Field */}
