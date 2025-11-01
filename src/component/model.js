@@ -183,8 +183,14 @@ export const ModernStoreBrand = ({
 }) => {
   const dispatch = useDispatch()
 
-  const { setStoreInfoCustomer: setIsMinimized } = storeInfoCustomerSlice.actions
-  const { statusStoreInfo: isMinimized } = useSelector((state) => state.persisted.storeInfoCustomer)
+  const { setStoreInfoCustomer: setIsMinimized, setModelPosition} = storeInfoCustomerSlice.actions
+  const { statusStoreInfo: isMinimized, modelPosition} = useSelector((state) => state.persisted.storeInfoCustomer)
+
+  useEffect(() => {
+    if (!modelPosition || Object.keys(modelPosition).length === 0) {
+      dispatch(setModelPosition({ x: 25, y: 70 }))
+    }
+  }, [dispatch])
 
   const {
     numberTable,
@@ -222,249 +228,248 @@ export const ModernStoreBrand = ({
   // Determine if we should show table section
   const isValidTable = numberTable && !tableError && !tableLoading
 
-  return (
-    <div 
-      className={`fixed top-4 left-4 z-10 pt-20 pl-3 transition-all duration-500 pointer-events-none`}
-    >
-      {/* Main Brand Container */}
-      <div className="relative group">
-        {/* Main Card */}
-        <div 
-          className={`relative bg-white/95 backdrop-blur-sm border border-gray-200 shadow-xl overflow-hidden transition-all duration-500 pointer-events-auto ${
-            isMinimized 
-              ? 'rounded-2xl w-[80px]' 
-              : 'rounded-3xl w-[300px]'
-          }`}
-        >
-          {/* Decorative Pattern Overlay */}
-          {!isMinimized && (
-            <div className="absolute inset-0 opacity-5 pointer-events-none">
-              <div className="absolute inset-0" style={{
-                backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
-                backgroundSize: '24px 24px',
-                color: '#10b981'
-              }} />
-            </div>
-          )}
+  const elRef = useRef(null)
+  const dragging = useRef(false)
+  const offsetRef = useRef({ x: 0, y: 0 })
 
-          {/* Top Gradient Bar */}
-          <div className="h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 relative overflow-hidden">
+  useEffect(() => {
+    // Pas mount, set posisi awal dari Redux
+    if (elRef.current) {
+      elRef.current.style.transform = `translate3d(${modelPosition.x}px, ${modelPosition.y}px, 0)`
+    }
+  }, [modelPosition])
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (!dragging.current) return
+      e.preventDefault()
+
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX
+      const clientY = e.clientY ?? e.touches?.[0]?.clientY
+
+      const newX = clientX - offsetRef.current.x
+      const newY = clientY - offsetRef.current.y
+
+      if (elRef.current) {
+        elRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0)`
+      }
+
+      dispatch(setModelPosition({ x: newX, y: newY }))
+    }
+
+    const onEnd = () => {
+      if (!dragging.current) return
+      dragging.current = false
+      if (elRef.current) {
+        elRef.current.style.cursor = 'grab'
+      }
+    }
+
+    window.addEventListener('mousemove', onMove, { passive: false })
+    window.addEventListener('mouseup', onEnd)
+    window.addEventListener('touchmove', onMove, { passive: false })
+    window.addEventListener('touchend', onEnd)
+
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onEnd)
+      window.removeEventListener('touchmove', onMove)
+      window.removeEventListener('touchend', onEnd)
+    }
+  }, [dispatch])
+
+  const onStart = (e) => {
+    e.preventDefault()
+    dragging.current = true
+
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY
+
+    const rect = elRef.current.getBoundingClientRect()
+    offsetRef.current = {
+      x: clientX - rect.left,
+      y: clientY - rect.top
+    }
+
+    if (elRef.current) {
+      elRef.current.style.cursor = 'grabbing'
+    }
+  }
+  
+  return (
+    <div
+      ref={elRef}
+      onMouseDown={onStart}
+      onTouchStart={onStart}
+      style={{
+        position: "fixed",
+        top: "20px",
+        left: "20px",
+        transform: `translate3d(${modelPosition.x}px, ${modelPosition.y}px, 0)`,
+        zIndex: 20,
+        cursor: "grab",
+        touchAction: "none",
+        willChange: "transform",
+        userSelect: "none",
+      }}
+    >
+      <div className="relative group select-none">
+        <div
+          className={`relative bg-white/95 backdrop-blur-sm border border-gray-200 shadow-lg overflow-hidden pointer-events-auto ${
+            isMinimized ? "rounded-xl w-[70px]" : "rounded-2xl w-[260px]"
+          } transition-all duration-300`}
+        >
+          {/* Gradient top bar */}
+          <div className="h-0.5 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
           </div>
 
           {/* MINIMIZED VIEW */}
           {isMinimized ? (
-            <div className="relative p-4">
+            <div className="p-3 flex flex-col items-center gap-1">
               <button
                 onClick={() => dispatch(setIsMinimized(false))}
-                className="w-full flex flex-col items-center gap-2 group/expand"
+                className="flex flex-col items-center gap-1"
                 aria-label="Expand store info"
               >
-                {/* Store Icon Minimized */}
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl blur-md opacity-40" />
-                  <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 p-2.5 rounded-xl transform group-hover/expand:scale-110 group-hover/expand:rotate-12 transition-all duration-300">
-                    <Store className="w-5 h-5 text-white" strokeWidth={2.5} />
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg blur-md opacity-40" />
+                  <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 p-2 rounded-lg">
+                    <Store className="w-4 h-4 text-white" strokeWidth={2.5} />
                   </div>
                 </div>
 
-                {/* Status Indicator */}
                 {isOpen && (
-                  <div className="relative flex h-2 w-2">
+                  <div className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
                   </div>
                 )}
 
-                {/* Table Number Badge (if valid) */}
                 {isValidTable && (
-                  <div className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  <div className="bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
                     {numberTable}
                   </div>
                 )}
 
-                {/* Expand Icon */}
-                <ChevronDown className="w-4 h-4 text-gray-400 group-hover/expand:text-green-600 transition-colors rotate-90 group-hover/expand:translate-x-1" strokeWidth={2.5} />
+                <ChevronDown className="w-3 h-3 text-gray-400 rotate-90" strokeWidth={2.5} />
               </button>
             </div>
           ) : (
             /* EXPANDED VIEW */
-            <div className="relative p-5">
-              {/* Minimize Button */}
+            <div className="p-4">
               <button
                 onClick={(e) => {
                   e.stopPropagation()
                   dispatch(setIsMinimized(true))
                 }}
-                className="absolute top-3 right-3 z-10 p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg border border-gray-200 transition-all duration-300 hover:scale-110 active:scale-95 group/minimize"
+                className="absolute top-2 right-2 z-10 p-1 bg-gray-100 hover:bg-gray-200 rounded-md border border-gray-200 transition-all duration-200"
                 aria-label="Minimize"
               >
-                <ChevronDown className="w-3.5 h-3.5 text-gray-600 group-hover/minimize:text-gray-800 transition-colors -rotate-90" strokeWidth={2.5} />
+                <ChevronDown className="w-3 h-3 text-gray-600 -rotate-90" strokeWidth={2.5} />
               </button>
 
-              {/* Header Section */}
-              <div className="flex items-start gap-3 mb-4 pr-8">
-                {/* Store Icon */}
+              <div className="flex items-start gap-2 mb-3 pr-6">
                 <div className="relative flex-shrink-0">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl blur-md opacity-40" />
-                  <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 p-2.5 rounded-xl transform group-hover:scale-105 transition-all duration-300">
-                    <Store className="w-5 h-5 text-white" strokeWidth={2.5} />
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg blur-md opacity-40" />
+                  <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 p-1.5 rounded-lg">
+                    <Store className="w-4 h-4 text-white" strokeWidth={2.5} />
                   </div>
                 </div>
 
-                {/* Store Name & Info */}
                 <div className="flex-1 min-w-0">
-                  <h1 className="text-lg font-bold text-gray-900 mb-1 truncate">
-                    {storeName}
-                  </h1>
-                  
-                  {/* Location */}
-                  <div className="flex items-center gap-1.5 text-gray-600 mb-2">
+                  <h1 className="text-sm font-bold text-gray-900 mb-0.5 truncate">{storeName}</h1>
+                  <div className="flex items-center gap-1 text-gray-600 mb-1">
                     <MapPin className="w-3 h-3 text-green-500 flex-shrink-0" strokeWidth={2.5} />
-                    <span className="text-xs truncate">{location}</span>
+                    <span className="text-[10px] truncate">{location}</span>
                   </div>
-
-                  {/* Rating */}
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1 bg-gradient-to-r from-amber-50 to-yellow-50 px-2 py-0.5 rounded-lg border border-amber-200/50">
-                      <Star className="w-3 h-3 text-amber-500 fill-amber-500" strokeWidth={2.5} />
-                      <span className="text-xs font-bold text-amber-700">{rating}</span>
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-0.5 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50">
+                      <Star className="w-2.5 h-2.5 text-amber-500 fill-amber-500" strokeWidth={2.5} />
+                      <span className="text-[10px] font-bold text-amber-700">{rating}</span>
                     </div>
-                    <span className="text-[10px] text-gray-500">({totalReviews.toLocaleString()})</span>
+                    <span className="text-[9px] text-gray-500">({totalReviews.toLocaleString()})</span>
                   </div>
                 </div>
               </div>
 
-              {/* Status Badge */}
-              <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
-                <div className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg font-semibold text-xs transition-all duration-300 ${
-                  isOpen
-                    ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 border border-green-200'
-                    : 'bg-gradient-to-r from-red-50 to-orange-50 text-red-700 border border-red-200'
-                }`}>
+              {/* Status */}
+              <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+                <div
+                  className={`flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-semibold ${
+                    isOpen
+                      ? "bg-green-50 text-green-700 border border-green-200"
+                      : "bg-red-50 text-red-700 border border-red-200"
+                  }`}
+                >
                   <Clock className="w-3 h-3" strokeWidth={2.5} />
-                  <span className="text-[11px]">{isOpen ? 'Buka' : 'Tutup'}</span>
-                  {isOpen && (
-                    <div className="absolute -right-0.5 -top-0.5">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                      </span>
-                    </div>
-                  )}
+                  <span>{isOpen ? "Buka" : "Tutup"}</span>
                 </div>
-
-                {/* Opening Hours */}
-                <div className="text-[10px] text-gray-600 flex items-center gap-1">
-                  <span className="font-medium">10:00</span>
-                  <span className="text-gray-400">-</span>
-                  <span className="font-medium">22:00</span>
+                <div className="text-[9px] text-gray-600">
+                  <span className="font-medium">10:00</span> - <span className="font-medium">22:00</span>
                 </div>
               </div>
 
-              {/* Table Number Section */}
-              <div className="mb-3 pb-3 border-b border-gray-100">
-                {/* Prioritas 1: Jika take away */}
+              {/* Table Info */}
+              <div className="mb-2 pb-2 border-b border-gray-100">
                 {orderTakeAway ? (
-                  <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl p-3">
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 animate-shimmer" />
-                    <div className="relative flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="bg-white/20 backdrop-blur-sm p-1.5 rounded-lg">
-                          <ShoppingBag className="w-4 h-4 text-white" strokeWidth={2.5} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-amber-100 font-medium">Tipe Pesanan</p>
-                          <p className="text-lg font-bold text-white">Take Away</p>
-                        </div>
+                  <div className="bg-gradient-to-br from-amber-500 to-yellow-600 rounded-lg p-2 text-white text-xs font-medium">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-1">
+                        <ShoppingBag className="w-3.5 h-3.5" strokeWidth={2.5} />
+                        <span>Take Away</span>
                       </div>
-                      <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                        <span className="text-[10px] font-bold text-white">Verified</span>
-                      </div>
-                    </div>
-                    <div className="mt-2 pt-2 border-t border-white/20">
-                      <p className="text-[10px] text-amber-100">✓ QR Code take away berhasil dipindai</p>
+                      <span className="text-[9px] bg-white/20 px-1.5 py-0.5 rounded">Verified</span>
                     </div>
                   </div>
                 ) : tableId && numberTable ? (
-                  /* Prioritas 2: Jika dine-in dengan nomor meja valid */
-                  <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-3">
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 animate-shimmer" />
-                    <div className="relative flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="bg-white/20 backdrop-blur-sm p-1.5 rounded-lg">
-                          <UtensilsCrossed className="w-4 h-4 text-white" strokeWidth={2.5} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-emerald-100 font-medium">Nomor Meja</p>
-                          <p className="text-xl font-bold text-white">{numberTable}</p>
-                        </div>
+                  <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-lg p-2 text-white text-xs font-medium">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-1">
+                        <UtensilsCrossed className="w-3.5 h-3.5" strokeWidth={2.5} />
+                        <span>Meja {numberTable}</span>
                       </div>
-                      <div className="bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                        <span className="text-[10px] font-bold text-white">Verified</span>
-                      </div>
-                    </div>
-                    <div className="mt-2 pt-2 border-t border-white/20">
-                      <p className="text-[10px] text-emerald-100">✓ QR Code meja berhasil dipindai</p>
+                      <span className="text-[9px] bg-white/20 px-1.5 py-0.5 rounded">Verified</span>
                     </div>
                   </div>
                 ) : (
-                  /* Prioritas 3: Jika dua-duanya tidak ada → tampilkan error */
-                  <div className="px-3 py-2.5 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-lg">
-                    <div className="flex items-start gap-2 mb-1.5">
-                      <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" strokeWidth={2.5} />
-                      <div className="flex-1">
-                        <p className="text-xs font-semibold text-red-700 mb-0.5">Gagal Memuat Info Meja</p>
-                        <p className="text-[10px] text-red-600">
-                          Tidak dapat mengambil data nomor meja. Pastikan Anda telah memindai QR code dari meja atau take away yang valid.
-                        </p>
-                      </div>
+                  <div className="px-2 py-1.5 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="flex items-start gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 text-red-600 mt-0.5" strokeWidth={2.5} />
+                      <p className="text-[9px] text-red-700">
+                        Gagal memuat data meja. Coba scan ulang QR code.
+                      </p>
                     </div>
-                    <button
-                      onClick={() => dispatch(fetchNumberTableCustomer(tableId))}
-                      className="w-full mt-2 text-[10px] font-semibold text-red-700 bg-red-100 hover:bg-red-200 px-2 py-1 rounded transition-colors"
-                    >
-                      Coba Lagi
-                    </button>
                   </div>
                 )}
               </div>
 
-              {/* Share to WhatsApp Button */}
+              {/* Share */}
               <button
                 onClick={handleShareToWhatsApp}
-                className="group/share relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95 overflow-hidden"
+                className="w-full bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 active:scale-95 transition-transform"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/share:translate-x-[100%] transition-transform duration-700" />
-                
-                <Share2 className="w-4 h-4 relative z-10 group-hover/share:rotate-12 transition-transform duration-300" strokeWidth={2.5} />
-                <span className="relative z-10">Bagikan Lokasi</span>
+                <Share2 className="w-3.5 h-3.5" strokeWidth={2.5} />
+                Bagikan Lokasi
               </button>
 
-              {/* Info Badge */}
-              <div className="mt-3 flex items-center justify-center gap-2 text-[10px] text-gray-500">
-                <div className="flex items-center gap-1">
-                  <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" />
-                  <span>Verified Store</span>
-                </div>
+              <div className="mt-2 flex justify-center text-[9px] text-gray-500 gap-1 items-center">
+                <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" />
+                <span>Verified Store</span>
               </div>
             </div>
           )}
         </div>
-
-        {/* Info Tooltip - only show when minimized */}
-        {isMinimized && (
-          <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-gray-900 text-white px-3 py-1.5 rounded-lg text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            Klik untuk info toko
-            <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900" />
-          </div>
-        )}
       </div>
 
       <style jsx>{`
         @keyframes shimmer {
-          0% { transform: translateX(-100%) }
-          100% { transform: translateX(100%) }
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
         }
       `}</style>
     </div>

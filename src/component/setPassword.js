@@ -33,7 +33,7 @@ export default function SetPassword() {
     }, [])
 
     useEffect(() => {
-        if (!dataCustomer?.password) {
+        if (dataCustomer?.password) {
             navigate('/profile')
         }
     }, [])

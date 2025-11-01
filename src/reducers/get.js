@@ -44,12 +44,10 @@ export const getDataCustomerSlice = createSlice({
         fetchSuccessGetDataCustomer: (state, action) => {
             state.data = action.payload
             state.statusCode =  200
-            state.loading = false
         },
         fetchErrorGetDataCustomer: (state, action) => {
             state.error = action.payload.error
             state.statusCode = action.payload.statusCode
-            state.loading = false
         },
         resetGetDataCustomer: (state) => {
             state.data = {}

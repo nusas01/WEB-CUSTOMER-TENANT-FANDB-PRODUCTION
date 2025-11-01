@@ -4,9 +4,8 @@ import BottomNavbar from "./bottomNavbar"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
-import {SpinnerRelative} from "../helper/spinner"
 import { OrderTypeInvalidAlert } from "./alert"
-import {Mail, Shield, ChevronRight, Key, LogOut} from "lucide-react"
+import {Mail, Shield, ChevronRight, Key, LogOut, Loader2} from "lucide-react"
 import { Toast, ToastPortal } from "./alert"
 import { setOrderTypeContext, setIsClose } from "../reducers/reducers"
 import { 
@@ -26,13 +25,62 @@ import { setPasswordCustomerSlice } from "../reducers/patch"
 import { clearCart } from "../reducers/cartSlice"
 import { ModernStoreBrand } from "./model"
 
+function ProfileActivitySkeleton() {
+  return (
+    <div 
+      className="bg-gray-50 pt-4 min-h-screen"
+      role="status"
+      aria-label="Loading profile"
+    >
+      <span className="sr-only">Loading...</span>
+      
+      {/* Header Skeleton */}
+      <div className="bg-white rounded-b-3xl shadow-lg border-b border-gray-100 px-10 py-4 mx-4 sm:mx-0">
+        <div className="flex items-center mx-auto w-full space-x-4">
+          {/* Profile Circle */}
+          <div className="relative">
+            <div className="w-20 h-20 bg-gray-200 rounded-full animate-pulse" />
+          </div>
+          {/* Text Skeleton */}
+          <div className="flex-1 min-w-0 space-y-3">
+            <div className="h-5 w-40 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-3 w-60 bg-gray-200 rounded animate-pulse"></div>
+            <div className="flex items-center space-x-2 mt-2">
+              <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse"></div>
+              <div className="h-3 w-20 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Content Skeleton */}
+      <div className="px-6 py-6 space-y-3 mx-4 sm:mx-0">
+        {[1, 2, 3].map((item) => (
+          <div 
+            key={item}
+            className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-5"
+          >
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gray-200 rounded-xl animate-pulse"></div>
+              <div className="flex-1 min-w-0 space-y-2">
+                <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-3 w-40 bg-gray-300 rounded animate-pulse"></div>
+              </div>
+              {item === 3 && (
+                <div className="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Profile() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const name = 'Raihan Malay'
     const nameParts = name.trim().split(" ")
-    const [spinner, setSpinner] = useState(false)
     const [orderTypeInvalid, setOrderTypeInvalid] = useState(false)
     const [toast, setToast] = useState(null)
 
@@ -65,17 +113,20 @@ export default function Profile() {
         }
     }, [message])
 
-    useEffect (() => {
-        setSpinner(loadingLogout)
-    }, [loadingLogout])
-
     // data customer
     const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
-    const {data} = useSelector((state) => state.persisted.dataCustomer)
+    const {data, loading} = useSelector((state) => state.persisted.dataCustomer)
+    const [initialLoad, setInitialLoad] = useState(true) 
+    
     useEffect(() => {
-        if ((!data || Object.keys(data).length === 0) && loggedIn) {
-            dispatch(fetchGetDataCustomer())
+        const loadData = async () => {
+            if ((!data || Object.keys(data).length === 0) && loggedIn) {
+                await dispatch(fetchGetDataCustomer())
+            }
+            setInitialLoad(false) // Set false setelah selesai
         }
+        
+        loadData()
     }, [])
 
     useEffect(() => {
@@ -156,15 +207,15 @@ export default function Profile() {
                 )}
 
                 <ModernStoreBrand 
-                    storeName="Nusas Resto"
-                    location="Serpong"
+                    storeName="mora coffe"
+                    location="kp tunngul jaya rt/rw 007/001, serang, Banten"
                     rating={5}
                     totalReviews={1000}
                     phone="6289524474969"
                 />
 
                 <div className="body-activity">
-                    {!spinner ? (
+                    {!loading && !initialLoad ? (
                         <div className="container-activity bg-light pt-4">
                             {/* Header Profile Section */}
                             <div className="bg-white rounded-b-3xl shadow-lg border-b border-gray-100 px-10 py-4 mx-4 sm:mx-0">
@@ -272,13 +323,17 @@ export default function Profile() {
                                                 <p className="text-sm text-gray-500">Logout dari akun</p>
                                             </div>
                                         </div>
+                                        {loadingLogout ? (
+                                        <Loader2 className="w-5 h-5 text-green-500 animate-spin flex-shrink-0 ml-2" />
+                                        ) : (
                                         <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-colors flex-shrink-0 ml-2" />
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        <SpinnerRelative h="h-[90vh]"/>
+                        <ProfileActivitySkeleton/>
                     )}
                 </div>
                 <BottomNavbar/>
@@ -286,3 +341,6 @@ export default function Profile() {
         </div>
     )
 }
+
+
+

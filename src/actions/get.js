@@ -461,7 +461,7 @@ export const fetchPaymentMethodsCustomer = () => {
         }
 
         const message = {
-          error: error.response?.data?.error,
+          error: error.response?.data?.error || "Something error in our server, let try again",
           statusCode: error.response?.status,
         }
         dispatch(fetchErrorGetPaymentMethodsCustomer(message))

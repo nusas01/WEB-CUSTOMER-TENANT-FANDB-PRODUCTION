@@ -51,7 +51,6 @@ function Cart({ closeCart }) {
     const [spinnerTransaction, setSpinnerTrannsaction] = useState(false)
     const [eventNotes, setEventNotes] = useState(0)
     const [orderTypeInvalid, setOrderTypeInvalid] = useState(false)
-    const [alertError, setAlertError] = useState(false)
     const [invalidAmountPrice, setInvalidAmountPrice] = useState(false)
     const [paymentUnavailable, setPaymentUnavailable] = useState(false)
     const [methodWithTransacion, setMethodWithTransacion] = useState(false)
@@ -68,12 +67,22 @@ function Cart({ closeCart }) {
         product: []
     })
 
+    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
+
+    const {data} = useSelector((state) => state.persisted.dataCustomer)
+    useEffect(() => {
+        if ((!data || Object.keys(data).length === 0) && loggedIn) {
+        dispatch(fetchGetDataCustomer())
+        }
+    }, [])
+
     useEffect(() => {
         if (errorPaymentMethodsCustomer) {
             setToast({
                 type: 'error',
                 message: errorPaymentMethodsCustomer,
             })
+            setIsPaymentMethod(prev => !prev)
         }
     }, [errorPaymentMethodsCustomer])
 
@@ -109,6 +118,11 @@ function Cart({ closeCart }) {
     const handleChoicePaymentMethodModel = () => { 
         if (items.length <= 0) {
             window.scrollTo({ top: 0, behavior: "smooth" })
+            return
+        }
+
+        if (!loggedIn) {
+            navigate('/access')
             return
         }
         
@@ -407,14 +421,6 @@ function Cart({ closeCart }) {
         setSpinnerTrannsaction(loadingOnGoingTransaction)
     }, [loadingOnGoingTransaction])
 
-    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
-
-    const {data} = useSelector((state) => state.persisted.dataCustomer)
-    useEffect(() => {
-        if ((!data || Object.keys(data).length === 0) && loggedIn) {
-        dispatch(fetchGetDataCustomer())
-        }
-    }, [])
     
     const handleCreateTransaction = () => {
         if (!loggedIn) {
@@ -558,8 +564,8 @@ function Cart({ closeCart }) {
         <div>
             <div className="item-container-cart p-6 bg-gray-50">
                 <ModernStoreBrand 
-                    storeName="Nusas Resto"
-                    location="Serpong"
+                    storeName="mora coffe"
+                    location="kp tunngul jaya rt/rw 007/001, serang, Banten"
                     rating={5}
                     totalReviews={1000}
                     phone="6289524474969"

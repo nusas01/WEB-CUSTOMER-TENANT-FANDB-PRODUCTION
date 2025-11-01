@@ -59,7 +59,6 @@ import EmployeeManagement from './casier/employee'
 import CreateEmployee from './casier/createEmployee'
 import ForgotPasswordComponent from './component/forgotPassword'
 import { ScrollToTop } from './helper/helper'
-import { useSingleTab } from './helper/helper'
 import { setOrderTypeContext } from "./reducers/reducers"
 import { clearCart } from "./reducers/cartSlice"
 
@@ -201,8 +200,6 @@ function AppContent() {
       dispatch(clearStatusServiceMaintenance())
     }
   }, [statusServiceMaintenance])
-  
-  useSingleTab()
   
   return (
     <div> 

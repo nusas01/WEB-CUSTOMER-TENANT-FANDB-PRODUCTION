@@ -288,12 +288,18 @@ export default function DetailActivity() {
                         </div>
                         <div className="flex-1">
                             <div className="flex items-center justify-between mb-2">
-                                <h3 className="text-sm font-semibold text-gray-800">Informasi Toko</h3>
-                                {detailOrder?.table && (
-                                    <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full border border-blue-200">
-                                        Meja {detailOrder.table}
-                                    </span>
-                                )}
+                              <h3 className="text-sm font-semibold text-gray-800">Informasi Toko</h3>
+                              {detailOrder?.table !== undefined && (
+                                detailOrder.table === 0 ? (
+                                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full border border-yellow-200">
+                                    Take Away
+                                  </span>
+                                ) : (
+                                  <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full border border-blue-200">
+                                    Meja {detailOrder.table}
+                                  </span>
+                                )
+                              )}
                             </div>
                             <h4 className="font-semibold text-gray-900 mb-1">{detailOrder?.name_store}</h4>
                             <p className="text-sm text-gray-600 leading-relaxed">

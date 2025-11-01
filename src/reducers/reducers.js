@@ -30,6 +30,7 @@ export const { setOrderTypeContext, setIsClose } = orderTypeSlice.actions
 
 const initialStoreInfoCustomerState = {
     statusStoreInfo: true,
+    modelPosition: {},
 }
 export const storeInfoCustomerSlice = createSlice({
     name: "storeInfoCustomer",
@@ -37,7 +38,10 @@ export const storeInfoCustomerSlice = createSlice({
     reducers: {
         setStoreInfoCustomer: (state, action) => {
             state.statusStoreInfo = action.payload 
-        }
+        },
+        setModelPosition: (state, action) => {
+            state.modelPosition = action.payload
+        },
     }
 })
 

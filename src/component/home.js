@@ -389,7 +389,7 @@ function Home() {
     <div style={{position: 'relative'}} className="h-[100vh]">
       <div className={"w-full z-10 bg-white flex flex-cols relative"}>
         {/* Modern Category Button Container */}
-        <div className={`relative mx-auto ${"container-button-category-mobile"}`}>
+        <div className={`relative ${"container-button-category-mobile"}`}>
           {/* Left Arrow */}
           <div className={`absolute left-0 top-0 bottom-0 z-20 flex items-center transition-all duration-300 ${
             showLeftArrow ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -540,14 +540,14 @@ function Home() {
         )}
 
       <ModernStoreBrand 
-        storeName="Nusas Resto"
-        location="Serpong"
+        storeName="mora coffe"
+        location="kp tunngul jaya rt/rw 007/001, serang, Banten"
         rating={5}
         totalReviews={1000}
         phone="6289524474969"
       />
 
-      <div className="container-bg">
+      <div className="container-bg items-center mx-auto max-w-[600px]">
         <div className={containerClass === "container-main-cart" ? "container-home" : `container-home-mobile`}>
           {datas.map((item, categoryIndex) => (
             <div
@@ -568,10 +568,9 @@ function Home() {
               </div>
 
               {/* Product Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
+              <div className="grid grid-cols-2 gap-4">
                 {item.products.map((product, index) => {
                   const isAvailable = product.available
-
                   return (
                     <div
                       className={`group bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 relative ${
@@ -736,6 +735,8 @@ function Home() {
             </div>
           ))}
         </div>
+        
+        <BottomNavbar/>
       </div>
 
       {invalidTable && (
@@ -753,10 +754,6 @@ function Home() {
             type={"CUSTOMER"}
           />
         )}
-
-       { containerClass === "container-main-cart-mobile" && (
-        <BottomNavbar/>
-       )}      
 
        { spinner && (
         <SpinnerFixed colors={'fill-green-500'}/>

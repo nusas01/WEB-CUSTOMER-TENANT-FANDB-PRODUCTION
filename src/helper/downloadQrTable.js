@@ -17,7 +17,7 @@ const handleDownloadQR = async (
     image.src = `https://assets.nusas.id/${imageUrl}`
 
     await new Promise((resolve, reject) => {
-      image.onload = () => {
+      image.onload = async () => {
         try {
           const width = 400
           const padding = 30
@@ -29,7 +29,7 @@ const handleDownloadQR = async (
           const titleText = isTakeAway ? 'TAKE AWAY QR' : `MEJA ${tableNumber}`
           
           // Hitung total tinggi canvas
-          const totalHeight = 720
+          const totalHeight = 660
 
           canvas.width = width
           canvas.height = totalHeight
@@ -85,74 +85,120 @@ const handleDownloadQR = async (
           // QR Code
           ctx.drawImage(image, qrX, qrY, qrSize, qrSize)
 
-          // === SECURITY INFO SECTION ===
+          // === LOGO NUSAS DI POJOK KANAN BAWAH QR ===
+          const logo = new Image()
+          logo.crossOrigin = 'anonymous'
+          logo.src = 'https://assets.nusas.id/logo_nusas_1.png' // Sesuaikan dengan path logo Anda
+          
+          await new Promise((resolveLoad) => {
+            logo.onload = () => {
+              const logoSize = 45 // Ukuran logo yang kecil
+              const logoX = qrX + qrSize - logoSize - 5
+              const logoY = qrY + qrSize - logoSize - 5
+              
+              // Background putih untuk logo
+              ctx.fillStyle = '#ffffff'
+              ctx.fillRect(logoX - 3, logoY - 3, logoSize + 6, logoSize + 6)
+              
+              // Logo
+              ctx.drawImage(logo, logoX, logoY, logoSize, logoSize)
+              resolveLoad()
+            }
+            logo.onerror = () => {
+              // Jika logo gagal dimuat, lanjutkan tanpa logo
+              resolveLoad()
+            }
+          })
+
+          // === SECURITY INFO SECTION (REDESIGNED) ===
           let currentY = qrY + qrSize + 50
           
           // Security Header
-          ctx.fillStyle = '#1a1a1a'
-          ctx.font = 'bold 18px Arial, sans-serif'
+          ctx.fillStyle = '#2c3e50'
+          ctx.font = 'bold 16px Arial, sans-serif'
           ctx.textAlign = 'center'
-          ctx.fillText('⚠️ INFORMASI PENTING', width / 2, currentY)
-          currentY += 30
-
-          // Security box background
-          const securityBoxY = currentY
-          const securityBoxHeight = 200
-          
-          ctx.fillStyle = '#fff3cd'
-          ctx.strokeStyle = '#ffc107'
-          ctx.lineWidth = 2
-          const boxPadding = 20
-          ctx.fillRect(boxPadding, securityBoxY, width - (boxPadding * 2), securityBoxHeight)
-          ctx.strokeRect(boxPadding, securityBoxY, width - (boxPadding * 2), securityBoxHeight)
-
-          // Security info text
-          ctx.fillStyle = '#1a1a1a'
-          ctx.font = 'bold 14px Arial, sans-serif'
-          ctx.textAlign = 'left'
+          ctx.fillText('INFORMASI PENTING', width / 2, currentY)
           currentY += 25
+
+          // Security box background - Lebih profesional
+          const securityBoxY = currentY
+          const securityBoxHeight = 145
+          
+          // Gradient background untuk box
+          const boxGradient = ctx.createLinearGradient(0, securityBoxY, 0, securityBoxY + securityBoxHeight)
+          boxGradient.addColorStop(0, '#fffbf0')
+          boxGradient.addColorStop(1, '#fff8e6')
+          
+          const boxPadding = 20
+          const boxRadius = 8
+          
+          // Rounded rectangle function
+          const roundRect = (x, y, w, h, r) => {
+            ctx.beginPath()
+            ctx.moveTo(x + r, y)
+            ctx.lineTo(x + w - r, y)
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+            ctx.lineTo(x + w, y + h - r)
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+            ctx.lineTo(x + r, y + h)
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+            ctx.lineTo(x, y + r)
+            ctx.quadraticCurveTo(x, y, x + r, y)
+            ctx.closePath()
+          }
+          
+          roundRect(boxPadding, securityBoxY, width - (boxPadding * 2), securityBoxHeight, boxRadius)
+          ctx.fillStyle = boxGradient
+          ctx.fill()
+          
+          // Border
+          ctx.strokeStyle = '#f39c12'
+          ctx.lineWidth = 2
+          ctx.stroke()
+
+          // Security info text - Lebih clean dan profesional
+          ctx.fillStyle = '#2c3e50'
+          ctx.font = 'bold 13px Arial, sans-serif'
+          ctx.textAlign = 'left'
+          currentY += 22
           
           ctx.fillText('Pastikan sebelum scan:', boxPadding + 15, currentY)
           currentY += 25
 
-          ctx.font = '13px Arial, sans-serif'
+          ctx.font = '12px Arial, sans-serif'
           const securityPoints = [
-            '✓ Alamat URL harus:',
-            `   https://${window.location.hostname}/...`,
-            '',
-            '✓ Browser menampilkan ikon gembok 🔒',
-            '',
-            '⚠️ Jika browser menampilkan peringatan',
-            '   "Situs Tidak Aman" atau URL berbeda,',
-            '   JANGAN LANJUTKAN dan segera',
-            '   laporkan ke staff kami.'
+            { text: '✓ Alamat URL harus:', color: '#2c3e50', bold: false },
+            { text: `   https://${window.location.hostname}/...`, color: '#2980b9', bold: true, mono: true },
+            { text: '', color: '', bold: false },
+            { text: 'Jika browser menampilkan peringatan "Situs Tidak Aman"', color: '#e74c3c', bold: true },
+            { text: 'atau URL berbeda, JANGAN LANJUTKAN dan segera', color: '#e74c3c', bold: false },
+            { text: 'laporkan ke staff kami.', color: '#e74c3c', bold: false }
           ]
 
-          securityPoints.forEach((point, index) => {
-            if (point.startsWith('   https://')) {
-              ctx.fillStyle = '#0066cc'
-              ctx.font = 'bold 12px monospace'
-            } else if (point.startsWith('⚠️')) {
-              ctx.fillStyle = '#d32f2f'
-              ctx.font = 'bold 13px Arial, sans-serif'
-            } else if (point.startsWith('   ')) {
-              ctx.fillStyle = '#d32f2f'
-              ctx.font = '12px Arial, sans-serif'
-            } else {
-              ctx.fillStyle = '#1a1a1a'
-              ctx.font = '13px Arial, sans-serif'
+          securityPoints.forEach((point) => {
+            if (point.text === '') {
+              currentY += 8
+              return
             }
-            ctx.fillText(point, boxPadding + 15, currentY)
-            currentY += point === '' ? 8 : 20
+            
+            ctx.fillStyle = point.color
+            if (point.mono) {
+              ctx.font = point.bold ? 'bold 11px monospace' : '11px monospace'
+            } else {
+              ctx.font = point.bold ? 'bold 12px Arial, sans-serif' : '12px Arial, sans-serif'
+            }
+            
+            ctx.fillText(point.text, boxPadding + 15, currentY)
+            currentY += 19
           })
 
           // === FOOTER ===
           currentY = totalHeight - 40
-          ctx.fillStyle = '#6c757d'
+          ctx.fillStyle = '#7f8c8d'
           ctx.font = '11px Arial, sans-serif'
           ctx.textAlign = 'center'
           ctx.fillText('Keamanan dan kenyamanan Anda adalah prioritas kami', width / 2, currentY)
-          ctx.fillText('Terima kasih telah berkunjung! 😊', width / 2, currentY + 18)
+          ctx.fillText('Terima kasih telah berkunjung!', width / 2, currentY + 18)
 
           // Download
           const filename = isTakeAway ? `qr-take-away.png` : `qr-meja-${tableNumber}.png`

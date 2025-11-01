@@ -321,109 +321,115 @@ export default function ModernKasirDashboard() {
             <div className="flex flex-col gap-6 max-w-7xl mx-auto p-4" style={{marginTop: headerHeight}}>
               {/* Take Away Section */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <ShoppingBag className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-900">Take Away QR Code</h2>
-                    <p className="text-gray-600 text-sm">QR code untuk pemesanan take away</p>
-                  </div>
-                </div>
-
-                {orderTypeTakeAway ? (
-                  // QR Code exists - show QR code and details
-                  <div className="flex items-center gap-6">
-                    <div className="p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-                      <QRCodePlaceholder size={160} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="space-y-4">
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                          <div className="flex items-center gap-2 text-green-700 mb-1">
-                            <CheckCircle className="w-4 h-4" />
-                            <span className="text-sm font-medium">QR Code Active</span>
-                          </div>
-                          <p className="text-xs text-green-600">Pelanggan dapat memindai QR code untuk memesan take away</p>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <ShoppingBag className="w-4 h-4" />
-                            <span className="text-sm">Type: Take Away Orders</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex gap-2 mt-4">
-                        <button 
-                          onClick={() => handleDownloadQRWithLoading(null, 'take away', orderTypeTakeAway)}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                        >
-                          {downloadingStates['takeaway'] ? (
-                              <>
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Downloading...
-                              </>
-                            ) : (
-                              <>
-                                <Download className="w-4 h-4" />
-                                Download QR Code
-                              </>
-                            )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                { loadingTablesInternal ? (
+                  <SpinnerRelative/>
                 ) : (
-                  // No QR Code - show create button and informative content
-                  <div className="text-center">
-                    <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <QrCode className="w-10 h-10 text-orange-400" />
-                    </div>
-                    
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
-                      Belum Ada QR Code Take Away
-                    </h3>
-                    
-                    <p className="text-gray-600 text-sm mb-4 max-w-md mx-auto">
-                      QR code ini mengarahkan pelanggan ke halaman pemesanan take away.
-                    </p>
-
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 max-w-2xl mx-auto">
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                          <Smartphone className="w-4 h-4 text-blue-600" />
+                  <div>
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                          <ShoppingBag className="w-5 h-5 text-orange-600" />
                         </div>
-                        <h4 className="font-medium text-gray-900 text-sm mb-1">Mudah Diakses</h4>
-                        <p className="text-xs text-gray-600">Pelanggan hanya perlu memindai QR code</p>
-                      </div>
-                      
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                          <Clock className="w-4 h-4 text-green-600" />
+                        <div>
+                          <h2 className="text-xl font-semibold text-gray-900">Take Away QR Code</h2>
+                          <p className="text-gray-600 text-sm">QR code untuk pemesanan take away</p>
                         </div>
-                        <h4 className="font-medium text-gray-900 text-sm mb-1">Hemat Waktu</h4>
-                        <p className="text-xs text-gray-600">Proses pemesanan lebih cepat dan efisien</p>
                       </div>
-                      
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                          <BarChart3 className="w-4 h-4 text-purple-600" />
+      
+                      {orderTypeTakeAway ? (
+                        // QR Code exists - show QR code and details
+                        <div className="flex items-center gap-6">
+                          <div className="p-4 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                            <QRCodePlaceholder size={160} />
+                          </div>
+                          <div className="flex-1">
+                            <div className="space-y-4">
+                              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                                <div className="flex items-center gap-2 text-green-700 mb-1">
+                                  <CheckCircle className="w-4 h-4" />
+                                  <span className="text-sm font-medium">QR Code Active</span>
+                                </div>
+                                <p className="text-xs text-green-600">Pelanggan dapat memindai QR code untuk memesan take away</p>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2 text-gray-600">
+                                  <ShoppingBag className="w-4 h-4" />
+                                  <span className="text-sm">Type: Take Away Orders</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-2 mt-4">
+                              <button 
+                                onClick={() => handleDownloadQRWithLoading(null, 'take away', orderTypeTakeAway)}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                              >
+                                {downloadingStates['takeaway'] ? (
+                                    <>
+                                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                      Downloading...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Download className="w-4 h-4" />
+                                      Download QR Code
+                                    </>
+                                  )}
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                        <h4 className="font-medium text-gray-900 text-sm mb-1">Tracking Order</h4>
-                        <p className="text-xs text-gray-600">Monitor pesanan dengan mudah</p>
-                      </div>
-                    </div>
-                    
-                    <button 
-                      onClick={() => handleCreateTakeAwayQR()}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium"
-                    >
-                      <Plus className="w-5 h-5" />
-                      Create QR Code Take Away
-                    </button>
+                      ) : (
+                        // No QR Code - show create button and informative content
+                        <div className="text-center">
+                          <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <QrCode className="w-10 h-10 text-orange-400" />
+                          </div>
+                          
+                          <h3 className="text-lg font-medium text-gray-900 mb-2">
+                            Belum Ada QR Code Take Away
+                          </h3>
+                          
+                          <p className="text-gray-600 text-sm mb-4 max-w-md mx-auto">
+                            QR code ini mengarahkan pelanggan ke halaman pemesanan take away.
+                          </p>
+      
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 max-w-2xl mx-auto">
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                <Smartphone className="w-4 h-4 text-blue-600" />
+                              </div>
+                              <h4 className="font-medium text-gray-900 text-sm mb-1">Mudah Diakses</h4>
+                              <p className="text-xs text-gray-600">Pelanggan hanya perlu memindai QR code</p>
+                            </div>
+                            
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                <Clock className="w-4 h-4 text-green-600" />
+                              </div>
+                              <h4 className="font-medium text-gray-900 text-sm mb-1">Hemat Waktu</h4>
+                              <p className="text-xs text-gray-600">Proses pemesanan lebih cepat dan efisien</p>
+                            </div>
+                            
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                <BarChart3 className="w-4 h-4 text-purple-600" />
+                              </div>
+                              <h4 className="font-medium text-gray-900 text-sm mb-1">Tracking Order</h4>
+                              <p className="text-xs text-gray-600">Monitor pesanan dengan mudah</p>
+                            </div>
+                          </div>
+                          
+                          <button 
+                            onClick={() => handleCreateTakeAwayQR()}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium"
+                          >
+                            <Plus className="w-5 h-5" />
+                            Create QR Code Take Away
+                          </button>
+                        </div>
+                      )}
                   </div>
                 )}
               </div>
