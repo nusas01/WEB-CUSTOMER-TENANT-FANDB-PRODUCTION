@@ -17,7 +17,7 @@ import {
   User,
   Lock,
   Construction,
-  Type,
+  Loader2,
 } from "lucide-react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
@@ -29,7 +29,6 @@ import {
 } from "../reducers/patch"
 import {resetApp} from "../reducers/state"
 import {logoutInternalSlice} from "../reducers/get"
-import {SpinnerFixed} from "../helper/spinner"
 import {useDeviceDetection} from "../helper/helper"
 import {navbarInternalSlice} from "../reducers/reducers"
 import {Toast, ToastPortal} from "./alert"
@@ -340,8 +339,17 @@ const Sidebar = ({activeMenu}) => {
           onClick={handleLogout}
           className="w-full flex items-center space-x-3 py-2 px-4 rounded-xl bg-gray-900 hover:bg-gray-800 text-white transition-colors"
         >
-          <LogOut className="w-5 h-5" />
-          <span className="font-medium">Logout</span>
+          {spinner ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span className="font-medium">Logout</span>
+            </>
+          ) : (
+            <>
+              <LogOut className="w-5 h-5" />
+              <span className="font-medium">Logout</span>
+            </>
+          )}
         </button>
       </div>
     </div>
@@ -517,8 +525,17 @@ const Sidebar = ({activeMenu}) => {
             onClick={handleLogout}
             className="w-full flex items-center justify-center space-x-3 p-4 rounded-xl bg-gray-900 hover:bg-gray-800 text-white transition-colors shadow-sm"
           >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Logout</span>
+            {spinner ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span className="font-medium">Logging out...</span>
+              </>
+            ) : (
+              <>
+                <LogOut className="w-5 h-5" />
+                <span className="font-medium">Logout</span>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -552,9 +569,6 @@ const Sidebar = ({activeMenu}) => {
               </div>
           </ToastPortal>
       )}
-
-      {/* Loading Spinner */}
-      {spinner && <SpinnerFixed colors="fill-blue-500" />}
     </>
   )
 }

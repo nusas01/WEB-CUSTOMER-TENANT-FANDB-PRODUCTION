@@ -647,7 +647,145 @@
     }
   }
   
+  @media (max-width: 360px) {
+    /* Grid container */
+    .product-grid-small {
+      gap: 0.75rem !important; /* Kurangi gap dari 1rem ke 0.75rem */
+    }
+    
+    /* Product card */
+    .product-card-small {
+      border-radius: 1rem !important; /* Dari 1.5rem ke 1rem */
+    }
+    
+    /* Unavailable overlay content */
+    .product-card-small .unavailable-overlay-content {
+      padding: 0.5rem !important;
+    }
+    
+    .product-card-small .unavailable-overlay-content .icon-wrapper {
+      width: 2.5rem !important; /* Dari 3rem/3.5rem ke 2.5rem */
+      height: 2.5rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+    
+    .product-card-small .unavailable-overlay-content .icon-wrapper svg {
+      width: 1.25rem !important; /* Dari 1.5rem/1.75rem ke 1.25rem */
+      height: 1.25rem !important;
+    }
+    
+    .product-card-small .unavailable-overlay-content .title {
+      font-size: 0.75rem !important; /* Dari 0.875rem/1rem ke 0.75rem */
+      margin-bottom: 0.25rem !important;
+    }
+    
+    .product-card-small .unavailable-overlay-content .subtitle {
+      font-size: 0.625rem !important; /* Dari 0.75rem/0.875rem ke 0.625rem */
+      padding: 0.125rem 0.5rem !important;
+    }
+    
+    /* Badges */
+    .product-card-small .badge-available,
+    .product-card-small .badge-category {
+      font-size: 0.625rem !important; /* Dari 0.75rem ke 0.625rem */
+      padding: 0.125rem 0.5rem !important; /* Kurangi padding */
+      top: 0.5rem !important; /* Dari 0.75rem ke 0.5rem */
+    }
+    
+    .product-card-small .badge-available {
+      left: 0.5rem !important;
+    }
+    
+    .product-card-small .badge-category {
+      right: 0.5rem !important;
+    }
+    
+    /* Image section */
+    .product-card-small .image-container {
+      height: 7rem !important; /* Dari 9rem ke 7rem (28px) */
+    }
+    
+    /* Quick add button overlay */
+    .product-card-small .quick-add-btn {
+      padding: 0.5rem !important; /* Dari 0.75rem ke 0.5rem */
+    }
+    
+    .product-card-small .quick-add-btn svg {
+      width: 1rem !important; /* Dari 1.25rem ke 1rem */
+      height: 1rem !important;
+    }
+    
+    /* Content section */
+    .product-card-small .content-section {
+      padding: 0.75rem !important; /* Dari 1rem/1.25rem ke 0.75rem */
+      gap: 0.5rem !important; /* Dari 0.75rem ke 0.5rem */
+    }
+    
+    .product-card-small .content-section .text-wrapper {
+      gap: 0.25rem !important; /* Dari 0.5rem ke 0.25rem */
+    }
+    
+    /* Product title */
+    .product-card-small .product-title {
+      font-size: 0.813rem !important; /* Dari 1rem/1.125rem ke 0.813rem */
+      line-height: 1.2 !important;
+    }
+    
+    /* Product description */
+    .product-card-small .product-desc {
+      font-size: 0.688rem !important; /* Dari 0.875rem ke 0.688rem */
+      line-height: 1.3 !important;
+    }
+    
+    /* Price section */
+    .product-card-small .price-section {
+      padding-top: 0.5rem !important; /* Dari 0.75rem ke 0.5rem */
+    }
+    
+    .product-card-small .price-label {
+      font-size: 0.625rem !important; /* Dari 0.75rem ke 0.625rem */
+      margin-bottom: 0.125rem !important;
+    }
+    
+    .product-card-small .price-value {
+      font-size: 0.938rem !important; /* Dari 1.125rem/1.25rem ke 0.938rem */
+    }
+    
+    /* Add button */
+    .product-card-small .add-btn {
+      padding: 0.2rem !important; /* Dari 0.75rem ke 0.5rem */
+      border-radius: 0.75rem !important; /* Dari 0.75rem ke 0.75rem */
+      width: 22.5px;
+    }
+    
+    .product-card-small .add-btn svg {
+      width: 1rem !important; /* Dari 1.25rem/1.5rem ke 1rem */
+      height: 1rem !important;
+    }
+  }
 
+  /* Media query untuk layar antara 361px - 400px (optional safety net) */
+  @media (min-width: 361px) and (max-width: 400px) {
+    .product-grid-small {
+      gap: 0.875rem !important;
+    }
+    
+    .product-card-small .image-container {
+      height: 8rem !important;
+    }
+    
+    .product-card-small .content-section {
+      padding: 0.875rem !important;
+    }
+    
+    .product-card-small .product-title {
+      font-size: 0.875rem !important;
+    }
+    
+    .product-card-small .price-value {
+      font-size: 1rem !important;
+    }
+  }
 
   /********** footer *****************/
   /* Tambahkan di file CSS Anda */

@@ -148,7 +148,7 @@ export default function Activity() {
 
                 <div className="body-activity p-6">
                     <ModernStoreBrand 
-                        storeName="mora coffe"
+                        storeName="nusas resto"
                         location="kp tunngul jaya rt/rw 007/001, serang, Banten"
                         rating={5}
                         totalReviews={1000}

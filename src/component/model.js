@@ -352,7 +352,7 @@ export const ModernStoreBrand = ({
                   </div>
                 )}
 
-                <ChevronDown className="w-3 h-3 text-gray-400 rotate-90" strokeWidth={2.5} />
+                <ChevronDown className="w-4.2 h-4.2 text-gray-400 rotate-90" strokeWidth={2.5} />
               </button>
             </div>
           ) : (
@@ -363,10 +363,10 @@ export const ModernStoreBrand = ({
                   e.stopPropagation()
                   dispatch(setIsMinimized(true))
                 }}
-                className="absolute top-2 right-2 z-10 p-1 bg-gray-100 hover:bg-gray-200 rounded-md border border-gray-200 transition-all duration-200"
+                className="absolute top-2 right-2 z-10 p-1 bg-gray-100 hover:bg-gray-200 rounded-md border border-gray-200 transition-all duration-200 btn-minimize"
                 aria-label="Minimize"
               >
-                <ChevronDown className="w-3 h-3 text-gray-600 -rotate-90" strokeWidth={2.5} />
+                <ChevronDown className="w-4.2 h-4.2 text-gray-600 -rotate-90" strokeWidth={2.5} />
               </button>
 
               <div className="flex items-start gap-2 mb-3 pr-6">

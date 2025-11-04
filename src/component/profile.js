@@ -207,7 +207,7 @@ export default function Profile() {
                 )}
 
                 <ModernStoreBrand 
-                    storeName="mora coffe"
+                    storeName="nusas resto"
                     location="kp tunngul jaya rt/rw 007/001, serang, Banten"
                     rating={5}
                     totalReviews={1000}

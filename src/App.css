@@ -124,6 +124,12 @@ body {
   min-height: 100%;
 }
 
+@media (max-width: 360px) {
+  .container-bg {
+    padding-top: 0;
+  }
+}
+
 .container-home {
   width: 80%;
   align-items: center;
@@ -327,7 +333,285 @@ body {
   }
 }
 
+/* Responsive overrides for small devices only */
+
+/* Extra small devices (≤360px) */
+@media (max-width: 360px) {
+  /* Container adjustments - more compact */
+  .cart-item-responsive {
+    padding: 0.75rem 0.625rem !important;
+  }
+
+  /* Main flex container - adjust gap */
+  .cart-item-responsive > .flex.gap-6 {
+    gap: 0.75rem !important;
+    align-items: center !important;
+  }
+
+  /* Image wrapper - smaller */
+  .cart-item-responsive .min-w-\[120px\] {
+    min-width: 80px !important;
+  }
+
+  .cart-item-responsive .w-32 {
+    width: 80px !important;
+  }
+
+  .cart-item-responsive .h-32 {
+    height: 80px !important;
+  }
+
+  .cart-item-responsive .rounded-xl {
+    border-radius: 0.5rem !important;
+  }
+
+  /* Badge - adjust position and size */
+  .cart-item-responsive .absolute.-top-2.-right-2 {
+    top: -0.375rem !important;
+    right: -0.375rem !important;
+  }
+
+  .cart-item-responsive .text-sm.font-medium.px-2\.5.py-1 {
+    font-size: 0.6875rem !important;
+    padding: 0.125rem 0.375rem !important;
+  }
+
+  /* Content section - restructure */
+  .cart-item-responsive .flex-1.space-y-3 {
+    gap: 0.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Header section with title and delete button */
+  .cart-item-responsive .flex.justify-between.items-start {
+    width: 100% !important;
+    position: relative !important;
+  }
+
+  /* Title container */
+  .cart-item-responsive .flex.justify-between.items-start > div:first-child {
+    flex: 1 !important;
+    padding-right: 2rem !important;
+  }
+
+  /* Title - smaller and line clamp */
+  .cart-item-responsive .text-lg.font-bold {
+    font-size: 0.875rem !important;
+    line-height: 1.25 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  /* Price */
+  .cart-item-responsive .text-lg.text-primary-600 {
+    font-size: 0.875rem !important;
+    margin-top: 0 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Delete button - position absolute top right */
+  .cart-item-responsive button.p-2.-mt-2.-mr-2 {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    padding: 0.5rem !important;
+    margin: 0 !important;
+    z-index: 10 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: end !important;
+  }
+
+  .cart-item-responsive button.p-2.-mt-2.-mr-2 .h-5.w-5 {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+  }
+
+  /* Controls section - full width below */
+  .cart-item-responsive .flex.items-center.gap-3 {
+    width: 100% !important;
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
+    margin-top: 0.375rem !important;
+  }
+
+  /* Quantity control wrapper */
+  .cart-item-responsive .flex.items-center.bg-gray-50 {
+    flex-shrink: 0 !important;
+  }
+
+  /* Quantity buttons - adjust size */
+  .cart-item-responsive .w-5.h-10 {
+    width: 1.75rem !important;
+    height: 2rem !important;
+  }
+
+  .cart-item-responsive .text-xl.font-light {
+    font-size: 1.125rem !important;
+  }
+
+  /* Quantity input */
+  .cart-item-responsive .w-11 {
+    width: 2.5rem !important;
+    padding: 0 0.25rem !important;
+  }
+
+  .cart-item-responsive input.text-lg {
+    font-size: 0.875rem !important;
+  }
+
+  /* Notes button - adjust size */
+  .cart-item-responsive .h-5.w-5.mr-1\.5 {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+    margin-right: 0.375rem !important;
+  }
+
+  .cart-item-responsive .text-sm.font-medium {
+    font-size: 0.75rem !important;
+  }
+
+  /* Notes textarea */
+  .cart-item-responsive textarea.mt-3.p-3.text-sm {
+    margin-top: 0.5rem !important;
+    padding: 0.5rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 0.5rem !important;
+  }
+}
+
+/* Very small devices (≤320px) */
+@media (max-width: 320px) {
+  .cart-item-responsive {
+    padding: 0.625rem 0.5rem !important;
+  }
+
+  .cart-item-responsive > .flex.gap-6 {
+    gap: 0.625rem !important;
+  }
+
+  .cart-item-responsive .min-w-\[120px\] {
+    min-width: 70px !important;
+  }
+
+  .cart-item-responsive .w-32 {
+    width: 70px !important;
+  }
+
+  .cart-item-responsive .h-32 {
+    height: 70px !important;
+  }
+
+  .cart-item-responsive .text-lg.font-bold {
+    font-size: 0.8125rem !important;
+  }
+
+  .cart-item-responsive .text-lg.text-primary-600 {
+    font-size: 0.8125rem !important;
+  }
+
+  .cart-item-responsive .w-5.h-10 {
+    width: 1.625rem !important;
+    height: 1.875rem !important;
+  }
+
+  .cart-item-responsive .w-11 {
+    width: 2.25rem !important;
+  }
+
+  .cart-item-responsive input.text-lg {
+    font-size: 0.8125rem !important;
+  }
+
+  .cart-item-responsive .text-sm.font-medium {
+    font-size: 0.6875rem !important;
+  }
+
+  .cart-item-responsive button.p-2.-mt-2.-mr-2 .h-5.w-5 {
+    width: 1rem !important;
+    height: 1rem !important;
+  }
+}
+
+/* Default tambahan (agar tidak bentrok dengan inline style) */
+.modal-delete-confirm .modal-box {
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 25px 0 20px 0;
+}
+
+.modal-delete-confirm .modal-box p {
+  padding: 0 10px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.modal-delete-confirm .modal-buttons {
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+}
+
+.modal-delete-confirm .modal-buttons button:first-child {
+  margin-right: 30px;
+  background-color: #00a650;
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 2px;
+}
+
+.modal-delete-confirm .modal-buttons button:last-child {
+  color: #b8babe;
+  border: 1px solid #b8babe;
+  padding: 10px 20px;
+}
+
+/* ✅ RESPONSIVE MODE — untuk layar kecil ≤ 360px */
+@media screen and (max-width: 360px) {
+  .modal-delete-confirm .modal-box {
+    width: 90%;
+    padding: 20px 0 15px 0;
+  }
+
+  .modal-delete-confirm .modal-box p {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+
+  .modal-delete-confirm .modal-buttons {
+    gap: 10px;
+    padding-top: 0;
+  }
+
+  .modal-delete-confirm .modal-buttons button {
+    width: 30%;
+    margin: 0;
+    font-size: 14px;
+    padding: 10px 0;
+  }
+
+  .modal-delete-confirm .modal-buttons button:first-child {
+    margin-right: 0;
+  }
+}
 
 
+/* ✅ Saat layar sangat kecil (<= 360px) */
+@media screen and (max-width: 360px) {
+  .btn-minimize {
+    width: 28px;
+    height: 28px;
+    transform: scale(0.9);
+  }
+
+  .btn-minimize svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+}
 
 

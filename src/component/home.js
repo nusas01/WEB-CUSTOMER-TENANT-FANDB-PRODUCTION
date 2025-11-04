@@ -387,142 +387,144 @@ function Home() {
 
   return (
     <div style={{position: 'relative'}} className="h-[100vh]">
-      <div className={"w-full z-10 bg-white flex flex-cols relative"}>
-        {/* Modern Category Button Container */}
-        <div className={`relative ${"container-button-category-mobile"}`}>
-          {/* Left Arrow */}
-          <div className={`absolute left-0 top-0 bottom-0 z-20 flex items-center transition-all duration-300 ${
-            showLeftArrow ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}>
-            <div className="bg-gradient-to-r from-white via-white to-transparent pl-2 pr-6 h-full flex items-center">
-              <button
-                onClick={() => scrollCategory('left')}
-                className="group p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 hover:shadow-xl hover:bg-white transition-all duration-200 hover:scale-105 active:scale-95"
-                aria-label="Scroll ke kiri"
-              >
-                <ChevronLeft className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
-              </button>
-            </div>
-          </div>
-
-          {/* Right Arrow */}
-          <div className={`absolute right-0 top-0 bottom-0 z-20 flex items-center transition-all duration-300 ${
-            showRightArrow ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}>
-            <div className="bg-gradient-to-l from-white via-white to-transparent pr-2 pl-6 h-full flex items-center">
-              <button
-                onClick={() => scrollCategory('right')}
-                className="group p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 hover:shadow-xl hover:bg-white transition-all duration-200 hover:scale-105 active:scale-95"
-                aria-label="Scroll ke kanan"
-              >
-                <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
-              </button>
-            </div>
-          </div>
-
-          {/* Scrollable Button Container */}
-          <div 
-            ref={categoryScrollRef}
-            className="overflow-x-auto no-scrollbar scroll-smooth"
-            style={{ 
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              WebkitScrollbar: { display: 'none' }
-            }}
-          >
-            <div className="inline-flex px-4 gap-3 py-2.5 min-w-full">
-              {/* Left Padding Spacer */}
-              <div className={`flex-shrink-0 transition-all duration-300 ${showLeftArrow ? 'w-8' : 'w-0'}`} />
-              
-              {Array.isArray(datas) && datas.map((item) => {
-              const isActive = activeCategory === item.category_name
-              const Icon = getIconByCategory(item.category_name)
-
-              return (
+      { window.innerWidth > 360 && (    
+        <div className={"w-full z-10 bg-white flex flex-cols relative"}>
+          {/* Modern Category Button Container */}
+          <div className={`relative ${"container-button-category-mobile"}`}>
+            {/* Left Arrow */}
+            <div className={`absolute left-0 top-0 bottom-0 z-20 flex items-center transition-all duration-300 ${
+              showLeftArrow ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+            }`}>
+              <div className="bg-gradient-to-r from-white via-white to-transparent pl-2 pr-6 h-full flex items-center">
                 <button
-                  key={item.category}
-                  data-category={item.category_name}
-                  className={`group relative flex-shrink-0 px-5 py-3 rounded-2xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 overflow-hidden ${
-                    isActive
-                      ? 'bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-white text-gray-700 border-2 border-gray-100 hover:border-green-300 hover:text-green-600 hover:shadow-md'
-                  }`}
-                  onClick={() => scrollToCategory(item.category_name)}
+                  onClick={() => scrollCategory('left')}
+                  className="group p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 hover:shadow-xl hover:bg-white transition-all duration-200 hover:scale-105 active:scale-95"
+                  aria-label="Scroll ke kiri"
                 >
-                  {/* Animated Background */}
-                  <div className={`absolute inset-0 transition-all duration-500 ${
-                    isActive
-                      ? 'bg-gradient-to-tr from-white/20 via-transparent to-white/10 opacity-100'
-                      : 'bg-gradient-to-br from-green-500/0 to-emerald-500/0 opacity-0 group-hover:opacity-100 group-hover:from-green-500/10 group-hover:to-emerald-500/5'
-                  }`} />
-                  
-                  {/* Shimmer Effect for Active */}
-                  {isActive && (
-                    <div className="absolute inset-0 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" 
-                           style={{
-                             animation: 'shimmer 3s infinite',
-                             backgroundSize: '200% 100%'
-                           }} />
-                    </div>
-                  )}
-                  
-                  {/* Content Container */}
-                  <div className="relative z-10 flex items-center gap-2">
-                    {/* Icon with Background */}
-                    <div className={`relative p-1 rounded-lg transition-all duration-300 ${
+                  <ChevronLeft className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right Arrow */}
+            <div className={`absolute right-0 top-0 bottom-0 z-20 flex items-center transition-all duration-300 ${
+              showRightArrow ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+            }`}>
+              <div className="bg-gradient-to-l from-white via-white to-transparent pr-2 pl-6 h-full flex items-center">
+                <button
+                  onClick={() => scrollCategory('right')}
+                  className="group p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 hover:shadow-xl hover:bg-white transition-all duration-200 hover:scale-105 active:scale-95"
+                  aria-label="Scroll ke kanan"
+                >
+                  <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable Button Container */}
+            <div 
+              ref={categoryScrollRef}
+              className="overflow-x-auto no-scrollbar scroll-smooth"
+              style={{ 
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitScrollbar: { display: 'none' }
+              }}
+            >
+              <div className="inline-flex px-4 gap-3 py-2.5 min-w-full">
+                {/* Left Padding Spacer */}
+                <div className={`flex-shrink-0 transition-all duration-300 ${showLeftArrow ? 'w-8' : 'w-0'}`} />
+                
+                {Array.isArray(datas) && datas.map((item) => {
+                const isActive = activeCategory === item.category_name
+                const Icon = getIconByCategory(item.category_name)
+
+                return (
+                  <button
+                    key={item.category}
+                    data-category={item.category_name}
+                    className={`group relative flex-shrink-0 px-5 py-3 rounded-2xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 active:scale-95 overflow-hidden ${
                       isActive
-                        ? 'bg-white/20'
-                        : 'bg-gray-100 group-hover:bg-green-100'
-                    }`}>
-                      <Icon className={`w-4 h-4 transition-all duration-300 ${
-                        isActive 
-                          ? 'text-white' 
-                          : 'text-gray-600 group-hover:text-green-600'
-                      }`} strokeWidth={2.5} />
+                        ? 'bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 text-white shadow-lg hover:shadow-xl'
+                        : 'bg-white text-gray-700 border-2 border-gray-100 hover:border-green-300 hover:text-green-600 hover:shadow-md'
+                    }`}
+                    onClick={() => scrollToCategory(item.category_name)}
+                  >
+                    {/* Animated Background */}
+                    <div className={`absolute inset-0 transition-all duration-500 ${
+                      isActive
+                        ? 'bg-gradient-to-tr from-white/20 via-transparent to-white/10 opacity-100'
+                        : 'bg-gradient-to-br from-green-500/0 to-emerald-500/0 opacity-0 group-hover:opacity-100 group-hover:from-green-500/10 group-hover:to-emerald-500/5'
+                    }`} />
+                    
+                    {/* Shimmer Effect for Active */}
+                    {isActive && (
+                      <div className="absolute inset-0 overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" 
+                            style={{
+                              animation: 'shimmer 3s infinite',
+                              backgroundSize: '200% 100%'
+                            }} />
+                      </div>
+                    )}
+                    
+                    {/* Content Container */}
+                    <div className="relative z-10 flex items-center gap-2">
+                      {/* Icon with Background */}
+                      <div className={`relative p-1 rounded-lg transition-all duration-300 ${
+                        isActive
+                          ? 'bg-white/20'
+                          : 'bg-gray-100 group-hover:bg-green-100'
+                      }`}>
+                        <Icon className={`w-4 h-4 transition-all duration-300 ${
+                          isActive 
+                            ? 'text-white' 
+                            : 'text-gray-600 group-hover:text-green-600'
+                        }`} strokeWidth={2.5} />
+                      </div>
+                      
+                      {/* Text */}
+                      <span className="whitespace-nowrap font-medium">
+                        {item.category_name}
+                      </span>
                     </div>
                     
-                    {/* Text */}
-                    <span className="whitespace-nowrap font-medium">
-                      {item.category_name}
-                    </span>
-                  </div>
-                  
-                  {/* Active Indicator Dot */}
-                  {isActive && (
-                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
-                      <div className="w-1.5 h-1.5 bg-white rounded-full shadow-lg animate-pulse" />
-                    </div>
-                  )}
-                  
-                  {/* Glow Effect */}
-                  <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
-                    isActive
-                      ? 'shadow-lg shadow-green-500/30'
-                      : 'shadow-none group-hover:shadow-md group-hover:shadow-green-500/15'
-                  }`} />
-                </button>
-              )
-            })}
-            
+                    {/* Active Indicator Dot */}
+                    {isActive && (
+                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
+                        <div className="w-1.5 h-1.5 bg-white rounded-full shadow-lg animate-pulse" />
+                      </div>
+                    )}
+                    
+                    {/* Glow Effect */}
+                    <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+                      isActive
+                        ? 'shadow-lg shadow-green-500/30'
+                        : 'shadow-none group-hover:shadow-md group-hover:shadow-green-500/15'
+                    }`} />
+                  </button>
+                )
+              })}
               
-              {/* Right Padding Spacer */}
-              <div className={`flex-shrink-0 transition-all duration-300 ${showRightArrow ? 'w-8' : 'w-0'}`} />
+                
+                {/* Right Padding Spacer */}
+                <div className={`flex-shrink-0 transition-all duration-300 ${showRightArrow ? 'w-8' : 'w-0'}`} />
+              </div>
+            </div>
+
+            {/* Progress Indicator */}
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-100">
+              <div 
+                className="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-300 rounded-full"
+                style={{
+                  width: `${((categoryScrollRef.current?.scrollLeft || 0) / 
+                    Math.max(1, (categoryScrollRef.current?.scrollWidth || 1) - (categoryScrollRef.current?.clientWidth || 0))) * 100}%`
+                }}
+              />
             </div>
           </div>
-
-          {/* Progress Indicator */}
-          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-100">
-            <div 
-              className="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-300 rounded-full"
-              style={{
-                width: `${((categoryScrollRef.current?.scrollLeft || 0) / 
-                  Math.max(1, (categoryScrollRef.current?.scrollWidth || 1) - (categoryScrollRef.current?.clientWidth || 0))) * 100}%`
-              }}
-            />
-          </div>
         </div>
-      </div>
+      )}
 
       {showModelCart && containerClass === "container-main-cart" && (
         <div class="container-cart">
@@ -540,7 +542,7 @@ function Home() {
         )}
 
       <ModernStoreBrand 
-        storeName="mora coffe"
+        storeName="nusas resto"
         location="kp tunngul jaya rt/rw 007/001, serang, Banten"
         rating={5}
         totalReviews={1000}
@@ -568,12 +570,13 @@ function Home() {
               </div>
 
               {/* Product Grid */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="product-grid-small grid grid-cols-2 gap-4">
                 {item.products.map((product, index) => {
-                  const isAvailable = product.available
+                  const isAvailable = product.available;
+
                   return (
                     <div
-                      className={`group bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 relative ${
+                      className={`product-card-small group bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 relative ${
                         isAvailable
                           ? 'hover:shadow-2xl hover:border-green-200 cursor-pointer transform hover:-translate-y-2 hover:scale-[1.0]'
                           : 'cursor-not-allowed opacity-80'
@@ -587,19 +590,18 @@ function Home() {
                             harga: product.price,
                             image: product.image,
                             desc: product.desc
-                          })
+                          });
                         }
                       }}
                     >
                       {/* UNAVAILABLE OVERLAY */}
                       {!isAvailable && (
                         <div className="absolute inset-0 bg-white/90 backdrop-blur-sm z-20 flex items-center justify-center">
-                          <div className="text-center p-3">
-                            <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                          <div className="unavailable-overlay-content text-center p-3">
+                            <div className="icon-wrapper w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
                               <X className="w-6 h-6 md:w-7 md:h-7 text-red-500" />
                             </div>
-                            <p className="text-sm md:text-base font-semibold text-gray-800 mb-1">Tidak Tersedia</p>
-                            <p className="text-xs md:text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+                            <p className="subtitle text-xs md:text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
                               Sementara habis
                             </p>
                           </div>
@@ -609,7 +611,7 @@ function Home() {
                       {/* AVAILABILITY BADGE */}
                       {isAvailable && (
                         <div className="absolute top-3 left-3 z-10">
-                          <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+                          <div className="badge-available bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
                             Tersedia
                           </div>
                         </div>
@@ -617,13 +619,13 @@ function Home() {
 
                       {/* CATEGORY BADGE */}
                       <div className="absolute top-3 right-3 z-10">
-                        <div className="bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-medium px-2 py-1 rounded-full shadow-sm border border-gray-200">
+                        <div className="badge-category bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-medium px-2 py-1 rounded-full shadow-sm border border-gray-200">
                           {item.category_name}
                         </div>
                       </div>
 
                       {/* IMAGE SECTION */}
-                      <div className="relative h-36 md:h-44 lg:h-52 w-full overflow-hidden">
+                      <div className="image-container relative h-36 md:h-44 lg:h-52 w-full overflow-hidden">
                         <img
                           className={`w-full h-full object-cover transition-all duration-500 ${
                             isAvailable
@@ -643,16 +645,16 @@ function Home() {
                         {isAvailable && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-all duration-300">
                             <button
-                              className="bg-white/90 backdrop-blur-sm text-green-600 p-3 rounded-full shadow-xl transform scale-75 group-hover:scale-100 transition-all duration-200 hover:bg-white hover:shadow-2xl"
+                              className="quick-add-btn bg-white/90 backdrop-blur-sm text-green-600 p-3 rounded-full shadow-xl transform scale-75 group-hover:scale-100 transition-all duration-200 hover:bg-white hover:shadow-2xl"
                               onClick={(e) => {
-                                e.stopPropagation()
+                                e.stopPropagation();
                                 handleShowModal(true, {
                                   id: product.product_id,
                                   name: product.name,
                                   harga: product.price,
                                   image: product.image,
                                   desc: product.desc
-                                })
+                                });
                               }}
                             >
                               <ShoppingBag className="w-5 h-5" />
@@ -662,14 +664,14 @@ function Home() {
                       </div>
 
                       {/* CONTENT SECTION */}
-                      <div className="p-4 md:p-5 space-y-3">
-                        <div className="space-y-2">
-                          <h3 className={`text-base md:text-lg font-bold line-clamp-2 leading-tight transition-colors ${
+                      <div className="content-section p-4 md:p-5 space-y-3">
+                        <div className="text-wrapper space-y-2">
+                          <h3 className={`product-title text-base md:text-lg font-bold line-clamp-2 leading-tight transition-colors ${
                             isAvailable ? 'text-gray-800 group-hover:text-green-700' : 'text-gray-500'
                           }`}>
                             {product.name}
                           </h3>
-                          <p className={`text-sm line-clamp-2 leading-relaxed ${
+                          <p className={`product-desc text-sm line-clamp-2 leading-relaxed ${
                             isAvailable ? 'text-gray-600' : 'text-gray-400'
                           }`}>
                             {product.desc || 'Deskripsi tidak tersedia'}
@@ -677,10 +679,10 @@ function Home() {
                         </div>
 
                         {/* PRICE AND ACTION SECTION */}
-                        <div className="flex justify-between items-center pt-3 border-t border-gray-100">
+                        <div className="price-section flex justify-between items-center pt-3 border-t border-gray-100">
                           <div className="flex flex-col">
-                            <span className="text-xs text-gray-500 mb-1">Harga</span>
-                            <p className={`text-lg md:text-xl font-bold transition-colors ${
+                            <span className="price-label text-xs text-gray-500 mb-1">Harga</span>
+                            <p className={`price-value text-lg md:text-xl font-bold transition-colors ${
                               isAvailable ? 'text-gray-800' : 'text-gray-400'
                             }`}>
                               Rp {product.price.toLocaleString("id-ID")}
@@ -689,16 +691,16 @@ function Home() {
 
                           {isAvailable ? (
                             <button
-                              className="group/btn relative p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+                              className="add-btn group/btn relative p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
                               onClick={(e) => {
-                                e.stopPropagation()
+                                e.stopPropagation();
                                 handleShowModal(true, {
                                   id: product.product_id,
                                   name: product.name,
                                   harga: product.price,
                                   image: product.image,
                                   desc: product.desc
-                                })
+                                });
                               }}
                             >
                               <Plus className="h-5 w-5 md:h-6 md:w-6 text-white transition-transform group-hover/btn:rotate-90" />
@@ -707,14 +709,14 @@ function Home() {
                               <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover/btn:opacity-20 group-active/btn:opacity-30 transition-opacity"></div>
                             </button>
                           ) : (
-                            <div className="p-3 bg-gradient-to-r from-gray-300 to-gray-400 rounded-xl shadow-inner">
+                            <div className="add-btn p-3 bg-gradient-to-r from-gray-300 to-gray-400 rounded-xl shadow-inner">
                               <Plus className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
                             </div>
                           )}
                         </div>
                       </div>
                     </div>
-                  )
+                  );
                 })}
               </div>
 

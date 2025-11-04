@@ -564,86 +564,117 @@ function Cart({ closeCart }) {
         <div>
             <div className="item-container-cart p-6 bg-gray-50">
                 <ModernStoreBrand 
-                    storeName="mora coffe"
+                    storeName="nusas resto"
                     location="kp tunngul jaya rt/rw 007/001, serang, Banten"
                     rating={5}
                     totalReviews={1000}
                     phone="6289524474969"
                 />
                 {items.length > 0 ? items.map((item, index) => (
-                    <div key={index} className="group relative bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 py-6 px-3">
-                        <div className="flex gap-6 items-start"> 
+                    <div
+                    key={index}
+                    className="cart-item-responsive group relative bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 py-6 px-3"
+                    >
+                        <div className="flex gap-6 items-start">
                             <div className="min-w-[120px] relative">
-                                <img 
-                                    src={`https://assets.nusas.id/${item.image}`}
-                                    className="w-32 h-32 rounded-xl object-cover border border-gray-200"
-                                    alt={item.name}
-                                />
-                                <span className="absolute -top-2 -right-2 bg-primary-500 text-white text-sm font-medium px-2.5 py-1 rounded-full">
-                                    {item.quantity}x
-                                </span>
+                            <img
+                                src={`https://assets.nusas.id/${item.image}`}
+                                className="w-32 h-32 rounded-xl object-cover border border-gray-200"
+                                alt={item.name}
+                            />
+                            <span className="absolute -top-2 -right-2 bg-primary-500 text-white text-sm font-medium px-2.5 py-1 rounded-full">
+                                {item.quantity}x
+                            </span>
                             </div>
-                            
+
                             <div className="flex-1 space-y-3">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
-                                        <p className="text-lg  text-primary-600 mt-1">
-                                            Rp {item.harga.toLocaleString("id-ID")}
-                                        </p>
-                                    </div>
-                                    <button 
-                                        onClick={() => setIdModelNotifDelete(item.id)}
-                                        className="text-gray-400 hover:text-red-500 transition-colors duration-200 p-2 -mt-2 -mr-2"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                        </svg>
-                                    </button>
+                            <div className="flex justify-between items-start">
+                                <div>
+                                <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
+                                <p className="text-lg text-primary-600 mt-1">
+                                    Total: Rp {item.amountPrice?.toLocaleString("id-ID")}
+                                </p>
+                                <p className="text-sm text-gray-500 mt-0.5">
+                                    Rp {item.harga.toLocaleString("id-ID")}
+                                </p>
                                 </div>
 
-                                <div className="flex items-center gap-3">
-                                    <div className="flex items-center bg-gray-50 rounded-lg border border-gray-200">
-                                        <button 
-                                            className="w-5 h-10 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center"
-                                            onClick={() => handleUpdateDecrement(item.id, item.harga, item.quantity)}
-                                            disabled={item.quantity === 1}
-                                        >
-                                            <span className="text-xl font-light">−</span>
-                                        </button>
-                                        <input 
-                                            className="w-11 px-2 bg-transparent text-center text-lg font-medium border-0 focus:ring-0"
-                                            value={item.quantity}
-                                            onChange={(e) => handleQuantityChange(Number(e.target.value), item.id, item.harga)}
-                                        />
-                                        <button 
-                                            className="w-5 h-10 hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center"
-                                            onClick={() => handleUpdateIncerement(item.id, item.harga, item.quantity)}
-                                        >
-                                            <span className="text-xl font-light">+</span>
-                                        </button>
-                                    </div>
-                                    
-                                    <button 
-                                        onClick={() => handleShowNotes(item.name)}
-                                        className="flex items-center text-gray-500 hover:text-primary-600 transition-colors duration-200 group/note"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-                                        </svg>
-                                        <span className="text-sm font-medium">Catatan</span>
-                                    </button>
-                                </div>
-
-                                {notesId === item.name && (
-                                    <textarea
-                                        value={item.notes} 
-                                        onChange={(e) => handleUpdateNotes(e.target.value, item.id)}
-                                        className="w-full mt-3 p-3 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                        placeholder="Tulis catatan khusus..."
-                                        rows="2"
+                                <button
+                                onClick={() => setIdModelNotifDelete(item.id)}
+                                className="text-gray-400 hover:text-red-500 transition-colors duration-200 p-2 -mt-2 -mr-2"
+                                >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                    fillRule="evenodd"
+                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                    clipRule="evenodd"
                                     />
-                                )}
+                                </svg>
+                                </button>
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-center bg-gray-50 rounded-lg border border-gray-200">
+                                <button
+                                    className="w-5 h-10 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center"
+                                    onClick={() =>
+                                    handleUpdateDecrement(item.id, item.harga, item.quantity)
+                                    }
+                                    disabled={item.quantity === 1}
+                                >
+                                    <span className="text-xl font-light">−</span>
+                                </button>
+                                <input
+                                    className="w-11 px-2 bg-transparent text-center text-lg font-medium border-0 focus:ring-0"
+                                    value={item.quantity}
+                                    onChange={(e) =>
+                                    handleQuantityChange(
+                                        Number(e.target.value),
+                                        item.id,
+                                        item.harga
+                                    )
+                                    }
+                                />
+                                <button
+                                    className="w-5 h-10 hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center"
+                                    onClick={() =>
+                                    handleUpdateIncerement(item.id, item.harga, item.quantity)
+                                    }
+                                >
+                                    <span className="text-xl font-light">+</span>
+                                </button>
+                                </div>
+
+                                <button
+                                onClick={() => handleShowNotes(item.name)}
+                                className="flex items-center text-gray-500 hover:text-primary-600 transition-colors duration-200 group/note"
+                                >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5 mr-1.5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                                </svg>
+                                <span className="text-sm font-medium">Catatan</span>
+                                </button>
+                            </div>
+
+                            {notesId === item.name && (
+                                <textarea
+                                value={item.notes}
+                                onChange={(e) => handleUpdateNotes(e.target.value, item.id)}
+                                className="w-full mt-3 p-3 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                placeholder="Tulis catatan khusus..."
+                                rows="2"
+                                />
+                            )}
                             </div>
                         </div>
                     </div>
@@ -669,14 +700,19 @@ function Cart({ closeCart }) {
 
             {/* model make sure about delete item */}
             { idmodelNotifDelete !== '' && (
-                <div className="bg-black bg-opacity-50 backdrop-blur-sm fixed flex items-center justify-center p-4 z-100" 
-                style={ containerClass === "container-main-cart" ? {width: '100%', height: '100%', top: 0, zIndex: '100'} 
-                    : {width: '100%', height: '100%', top: 0, zIndex: '100'}}>
-                    <div style={{backgroundColor: '#fff', borderRadius: '2px', padding: '25px 0 20px 0'}}>
-                        <p style={{padding: '0 10px', marginBottom: '25px'}}>Anda Yakin menghapus produk ini?</p>
-                        <div style={{display: 'flex', justifyContent: 'center', paddingTop: '5px'}}>
-                            <button onClick={() => handleDeleteItem(idmodelNotifDelete)} style={{marginRight: '30px', backgroundColor: '#00a650', color: '#fff', padding: '10px 30px', borderRadius: '2px'}}>Ya</button>
-                            <button onClick={() => setIdModelNotifDelete('')} style={{ color: '#b8babe', border: '1px solid #b8babe', padding: '10px 20px', }}>Tidak</button>
+                <div
+                    className="bg-black bg-opacity-50 backdrop-blur-sm fixed flex items-center justify-center p-4 z-100 modal-delete-confirm"
+                    style={
+                        containerClass === "container-main-cart"
+                        ? { width: "100%", height: "100%", top: 0, zIndex: "100" }
+                        : { width: "100%", height: "100%", top: 0, zIndex: "100" }
+                    }
+                    >
+                    <div className="modal-box">
+                        <p>Anda Yakin menghapus produk ini?</p>
+                        <div className="modal-buttons">
+                        <button onClick={() => handleDeleteItem(idmodelNotifDelete)}>Ya</button>
+                        <button onClick={() => setIdModelNotifDelete("")}>Tidak</button>
                         </div>
                     </div>
                 </div>
