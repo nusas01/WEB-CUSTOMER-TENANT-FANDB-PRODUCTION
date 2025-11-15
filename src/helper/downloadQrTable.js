@@ -2,6 +2,7 @@ const handleDownloadQR = async (
   tableNumber = null,
   takeAway = null,
   imageUrl = '',
+  storeName = 'Nama Toko',
   callbacks = {} // { onStart, onSuccess, onError, onFinally }
 ) => {
   const { onStart, onSuccess, onError, onFinally } = callbacks
@@ -19,120 +20,94 @@ const handleDownloadQR = async (
     await new Promise((resolve, reject) => {
       image.onload = async () => {
         try {
-          const width = 400
-          const padding = 30
-          const qrSize = 280
-          const qrX = (width - qrSize) / 2
-          const qrY = padding + 60
-
-          const isTakeAway = Boolean(takeAway)
-          const titleText = isTakeAway ? 'TAKE AWAY QR' : `MEJA ${tableNumber}`
-          
-          // Hitung total tinggi canvas
-          const totalHeight = 660
+          // Layout horizontal - lebih lebar
+          const width = 900
+          const height = 500
+          const padding = 40
 
           canvas.width = width
-          canvas.height = totalHeight
+          canvas.height = height
 
-          // === BACKGROUND GRADIENT ===
-          const gradient = ctx.createLinearGradient(0, 0, 0, totalHeight)
-          gradient.addColorStop(0, '#f8f9fa')
-          gradient.addColorStop(1, '#e9ecef')
-          ctx.fillStyle = gradient
-          ctx.fillRect(0, 0, width, totalHeight)
+          const isTakeAway = Boolean(takeAway)
 
-          // === HEADER SECTION ===
-          ctx.fillStyle = '#1a1a1a'
-          ctx.fillRect(0, 0, width, 100)
-          
-          // Title
-          ctx.fillStyle = '#ffffff'
-          ctx.font = 'bold 26px Arial, sans-serif'
-          ctx.textAlign = 'center'
-          ctx.fillText(titleText, width / 2, 50)
-          
-          // Subtitle
-          ctx.font = '14px Arial, sans-serif'
-          ctx.fillStyle = '#e0e0e0'
+          // === BACKGROUND ===
+          // Modern gradient background
+          const bgGradient = ctx.createLinearGradient(0, 0, width, height)
+          bgGradient.addColorStop(0, '#ffffff')
+          bgGradient.addColorStop(1, '#f8fafc')
+          ctx.fillStyle = bgGradient
+          ctx.fillRect(0, 0, width, height)
+
+          // === LEFT SECTION - INFORMASI ===
+          const leftWidth = 480
+          const rightStart = leftWidth + 40
+
+          // Header
+          ctx.fillStyle = '#0f172a'
+          ctx.font = 'bold 36px Arial, sans-serif'
+          ctx.textAlign = 'left'
+          const titleText = isTakeAway ? 'Pesanan Take Away' : `Meja ${tableNumber}`
+          ctx.fillText(titleText, padding, padding + 40)
+
+          // Subtitle dengan icon scan effect
+          ctx.fillStyle = '#64748b'
+          ctx.font = '16px Arial, sans-serif'
           const subtitleText = isTakeAway 
-            ? 'Scan untuk pesan Take Away' 
-            : 'Scan untuk pesan dari meja ini'
-          ctx.fillText(subtitleText, width / 2, 75)
+            ? 'Scan kode QR untuk pesan take away' 
+            : 'Scan kode QR untuk melakukan pemesanan'
+          ctx.fillText(subtitleText, padding, padding + 75)
 
-          // === QR CODE CONTAINER WITH SHADOW ===
-          // Shadow
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.15)'
-          ctx.shadowBlur = 20
-          ctx.shadowOffsetX = 0
-          ctx.shadowOffsetY = 8
-          
-          // White container
-          ctx.fillStyle = '#ffffff'
-          const containerPadding = 15
-          ctx.fillRect(
-            qrX - containerPadding, 
-            qrY - containerPadding, 
-            qrSize + (containerPadding * 2), 
-            qrSize + (containerPadding * 2)
-          )
-          
-          // Reset shadow
-          ctx.shadowColor = 'transparent'
-          ctx.shadowBlur = 0
-          ctx.shadowOffsetX = 0
-          ctx.shadowOffsetY = 0
+          // Divider line
+          ctx.strokeStyle = '#e2e8f0'
+          ctx.lineWidth = 2
+          ctx.beginPath()
+          ctx.moveTo(padding, padding + 100)
+          ctx.lineTo(leftWidth - padding, padding + 100)
+          ctx.stroke()
 
-          // QR Code
-          ctx.drawImage(image, qrX, qrY, qrSize, qrSize)
+          // === HOW TO USE SECTION ===
+          let currentY = padding + 140
 
-          // === LOGO NUSAS DI POJOK KANAN BAWAH QR ===
-          const logo = new Image()
-          logo.crossOrigin = 'anonymous'
-          logo.src = 'https://assets.nusas.id/logo_nusas_1.png' // Sesuaikan dengan path logo Anda
-          
-          await new Promise((resolveLoad) => {
-            logo.onload = () => {
-              const logoSize = 45 // Ukuran logo yang kecil
-              const logoX = qrX + qrSize - logoSize - 5
-              const logoY = qrY + qrSize - logoSize - 5
-              
-              // Background putih untuk logo
-              ctx.fillStyle = '#ffffff'
-              ctx.fillRect(logoX - 3, logoY - 3, logoSize + 6, logoSize + 6)
-              
-              // Logo
-              ctx.drawImage(logo, logoX, logoY, logoSize, logoSize)
-              resolveLoad()
-            }
-            logo.onerror = () => {
-              // Jika logo gagal dimuat, lanjutkan tanpa logo
-              resolveLoad()
-            }
+          ctx.fillStyle = '#1e293b'
+          ctx.font = 'bold 18px Arial, sans-serif'
+          ctx.fillText('How to Order:', padding, currentY)
+          currentY += 35
+
+          const steps = [
+            { num: '1', text: 'Open your phone camera' },
+            { num: '2', text: 'Point at the QR code' },
+            { num: '3', text: 'Tap the notification' },
+            { num: '4', text: 'Browse & order easily' }
+          ]
+
+          ctx.font = '15px Arial, sans-serif'
+          steps.forEach((step, index) => {
+            // Number circle
+            ctx.fillStyle = '#3b82f6'
+            ctx.beginPath()
+            ctx.arc(padding + 15, currentY - 5, 15, 0, Math.PI * 2)
+            ctx.fill()
+
+            ctx.fillStyle = '#ffffff'
+            ctx.font = 'bold 14px Arial, sans-serif'
+            ctx.textAlign = 'center'
+            ctx.fillText(step.num, padding + 15, currentY + 1)
+
+            // Step text
+            ctx.fillStyle = '#475569'
+            ctx.font = '15px Arial, sans-serif'
+            ctx.textAlign = 'left'
+            ctx.fillText(step.text, padding + 45, currentY)
+
+            currentY += 32
           })
 
-          // === SECURITY INFO SECTION (REDESIGNED) ===
-          let currentY = qrY + qrSize + 50
-          
-          // Security Header
-          ctx.fillStyle = '#2c3e50'
-          ctx.font = 'bold 16px Arial, sans-serif'
-          ctx.textAlign = 'center'
-          ctx.fillText('INFORMASI PENTING', width / 2, currentY)
-          currentY += 25
-
-          // Security box background - Lebih profesional
+          // === SECURITY INFO BOX ===
+          currentY += 10
           const securityBoxY = currentY
-          const securityBoxHeight = 145
-          
-          // Gradient background untuk box
-          const boxGradient = ctx.createLinearGradient(0, securityBoxY, 0, securityBoxY + securityBoxHeight)
-          boxGradient.addColorStop(0, '#fffbf0')
-          boxGradient.addColorStop(1, '#fff8e6')
-          
-          const boxPadding = 20
-          const boxRadius = 8
-          
-          // Rounded rectangle function
+          const securityBoxHeight = 120
+
+          // Security box with modern style
           const roundRect = (x, y, w, h, r) => {
             ctx.beginPath()
             ctx.moveTo(x + r, y)
@@ -146,62 +121,142 @@ const handleDownloadQR = async (
             ctx.quadraticCurveTo(x, y, x + r, y)
             ctx.closePath()
           }
+
+          roundRect(padding, securityBoxY, leftWidth - padding * 2, securityBoxHeight, 12)
           
-          roundRect(boxPadding, securityBoxY, width - (boxPadding * 2), securityBoxHeight, boxRadius)
-          ctx.fillStyle = boxGradient
+          // Gradient background
+          const secGradient = ctx.createLinearGradient(padding, securityBoxY, padding, securityBoxY + securityBoxHeight)
+          secGradient.addColorStop(0, '#fef3c7')
+          secGradient.addColorStop(1, '#fef9e7')
+          ctx.fillStyle = secGradient
           ctx.fill()
-          
+
           // Border
-          ctx.strokeStyle = '#f39c12'
+          ctx.strokeStyle = '#f59e0b'
           ctx.lineWidth = 2
           ctx.stroke()
 
-          // Security info text - Lebih clean dan profesional
-          ctx.fillStyle = '#2c3e50'
-          ctx.font = 'bold 13px Arial, sans-serif'
-          ctx.textAlign = 'left'
-          currentY += 22
-          
-          ctx.fillText('Pastikan sebelum scan:', boxPadding + 15, currentY)
-          currentY += 25
+          // Security icon area (simulated)
+          ctx.fillStyle = '#f59e0b'
+          ctx.beginPath()
+          ctx.arc(padding + 20, securityBoxY + 25, 12, 0, Math.PI * 2)
+          ctx.fill()
 
-          ctx.font = '12px Arial, sans-serif'
-          const securityPoints = [
-            { text: '✓ Alamat URL harus:', color: '#2c3e50', bold: false },
-            { text: `   https://${window.location.hostname}/...`, color: '#2980b9', bold: true, mono: true },
-            { text: '', color: '', bold: false },
-            { text: 'Jika browser menampilkan peringatan "Situs Tidak Aman"', color: '#e74c3c', bold: true },
-            { text: 'atau URL berbeda, JANGAN LANJUTKAN dan segera', color: '#e74c3c', bold: false },
-            { text: 'laporkan ke staff kami.', color: '#e74c3c', bold: false }
+          ctx.fillStyle = '#ffffff'
+          ctx.font = 'bold 14px Arial, sans-serif'
+          ctx.textAlign = 'center'
+          ctx.fillText('!', padding + 20, securityBoxY + 30)
+
+          // Security text
+          ctx.fillStyle = '#92400e'
+          ctx.font = 'bold 15px Arial, sans-serif'
+          ctx.textAlign = 'left'
+          ctx.fillText('Security Check', padding + 45, securityBoxY + 30)
+
+          ctx.fillStyle = '#78716c'
+          ctx.font = '13px Arial, sans-serif'
+          const securityLines = [
+            `Verify URL: https://${window.location.hostname}`,
+            'Ensure browser shows "Secure" connection',
+            'Report any suspicious warnings to staff'
           ]
 
-          securityPoints.forEach((point) => {
-            if (point.text === '') {
-              currentY += 8
-              return
-            }
-            
-            ctx.fillStyle = point.color
-            if (point.mono) {
-              ctx.font = point.bold ? 'bold 11px monospace' : '11px monospace'
-            } else {
-              ctx.font = point.bold ? 'bold 12px Arial, sans-serif' : '12px Arial, sans-serif'
-            }
-            
-            ctx.fillText(point.text, boxPadding + 15, currentY)
-            currentY += 19
+          let secY = securityBoxY + 55
+          securityLines.forEach(line => {
+            ctx.fillText(line, padding + 20, secY)
+            secY += 22
           })
 
+          // === RIGHT SECTION - QR CODE ===
+          const qrSize = 320
+          const qrX = rightStart + 30
+          const qrY = (height - qrSize) / 2 - 20
+
+          // QR Container with elegant shadow
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.08)'
+          ctx.shadowBlur = 30
+          ctx.shadowOffsetX = 0
+          ctx.shadowOffsetY = 10
+
+          const qrPadding = 20
+          roundRect(
+            qrX - qrPadding,
+            qrY - qrPadding,
+            qrSize + qrPadding * 2,
+            qrSize + qrPadding * 2,
+            16
+          )
+          ctx.fillStyle = '#ffffff'
+          ctx.fill()
+
+          // Reset shadow
+          ctx.shadowColor = 'transparent'
+          ctx.shadowBlur = 0
+          ctx.shadowOffsetX = 0
+          ctx.shadowOffsetY = 0
+
+          // Border
+          ctx.strokeStyle = '#e2e8f0'
+          ctx.lineWidth = 1
+          ctx.stroke()
+
+          // QR Code
+          ctx.drawImage(image, qrX, qrY, qrSize, qrSize)
+
+          // === LOGO NUSAS IN QR CORNER ===
+          const logo = new Image()
+          logo.crossOrigin = 'anonymous'
+          logo.src = 'https://assets.nusas.id/logo_nusas_1.png'
+          
+          await new Promise((resolveLoad) => {
+            logo.onload = () => {
+              const logoSize = 50
+              const logoX = qrX + qrSize - logoSize - 8
+              const logoY = qrY + qrSize - logoSize - 8
+              
+              // White rounded background for logo
+              ctx.fillStyle = '#ffffff'
+              roundRect(logoX - 4, logoY - 4, logoSize + 8, logoSize + 8, 8)
+              ctx.fill()
+              
+              ctx.strokeStyle = '#e2e8f0'
+              ctx.lineWidth = 1
+              ctx.stroke()
+              
+              // Logo
+              ctx.drawImage(logo, logoX, logoY, logoSize, logoSize)
+              resolveLoad()
+            }
+            logo.onerror = () => resolveLoad()
+          })
+
+          // === STORE NAME BELOW QR ===
+          const storeY = qrY + qrSize + qrPadding + 30
+          
+          ctx.fillStyle = '#0f172a'
+          ctx.font = 'bold 22px Arial, sans-serif'
+          ctx.textAlign = 'center'
+          ctx.fillText(storeName, qrX + qrSize / 2, storeY)
+
+          // Powered by nusas
+          ctx.fillStyle = '#94a3b8'
+          ctx.font = '12px Arial, sans-serif'
+          ctx.fillText('powered by nusas', qrX + qrSize / 2, storeY + 25)
+
           // === FOOTER ===
-          currentY = totalHeight - 40
-          ctx.fillStyle = '#7f8c8d'
+          ctx.fillStyle = '#cbd5e1'
           ctx.font = '11px Arial, sans-serif'
           ctx.textAlign = 'center'
-          ctx.fillText('Keamanan dan kenyamanan Anda adalah prioritas kami', width / 2, currentY)
-          ctx.fillText('Terima kasih telah berkunjung!', width / 2, currentY + 18)
+          ctx.fillText('Your safety and comfort are our priority • Thank you for visiting!', width / 2, height - 20)
+
+          // === DECORATIVE ELEMENTS ===
+          // Top-left corner accent
+          ctx.fillStyle = '#3b82f6'
+          ctx.fillRect(0, 0, 4, 60)
+          ctx.fillRect(0, 0, 60, 4)
 
           // Download
-          const filename = isTakeAway ? `qr-take-away.png` : `qr-meja-${tableNumber}.png`
+          const filename = isTakeAway ? `qr-takeaway.png` : `qr-table-${tableNumber}.png`
 
           const link = document.createElement('a')
           link.download = filename
@@ -217,7 +272,7 @@ const handleDownloadQR = async (
       }
 
       image.onerror = () => {
-        reject(new Error('Gagal memuat gambar QR'))
+        reject(new Error('Failed to load QR image'))
       }
     })
   } catch (error) {
