@@ -7,8 +7,13 @@ export default function BottomNavbar() {
     const navigate = useNavigate()
     const location = useLocation()
 
+    const { loggedIn } = useSelector((state) => state.persisted.loginStatusCustomer)
     const handleActivity = () => {
-        navigate('/activity')
+        if (!loggedIn) {
+            navigate("/access")
+        } else {
+            navigate('/activity')
+        }
     }
 
     const handleProfile = () => {

@@ -155,6 +155,36 @@ export const getTransactionsHistoryCustomerSlice = createSlice({
     }
 })
 
+const initialCheckStatusTransactionCustomerState = {
+    checkStatustransactionCustomerId: null,
+    statusCheckTransactionCustomer: null, 
+    errorCheckStatusTransactionCustomer: null,
+    loadingCheckTransactionCustomer: false,
+}
+export const checkStatusTransactionCustomerSlice = createSlice({
+    name: 'checkStatusTransactionCustomer',
+    initialState: initialCheckStatusTransactionCustomerState,
+    reducers: {
+        checkTransactionStatusCustomerSuccess: (state, action) => {
+            state.checkStatustransactionCustomerId = action.payload.transaction_id
+            state.statusCheckTransactionCustomer = action.payload.status_payment_gateway
+            state.errorCheckStatusTransactionCustomer = null
+        },
+        checkTransactionStatusCustomerError: (state, action) => {
+            state.errorCheckStatusTransactionCustomer = action.payload
+            state.statusCheckTransactionCustomer = null
+            state.checkStatustransactionCustomerId = null
+        },
+        setLoadingCheckStatusTransactionCustomer: (state, action) => {
+            state.loadingCheckTransactionCustomer = action.payload
+        },
+        resetCheckTransactionNonCash: (state) => {
+            state.checkStatustransactionCustomerId = null
+            state.statusCheckTransactionCustomer = null
+            state.errorCheckStatusTransactionCustomer = null
+        }
+    }
+})
 
 const initialDetailTransactionsHistoryCustomer = {
     dataDetailTransactionHistory: null,

@@ -1,22 +1,22 @@
-// import { useForm } from "react-hook-form"
-// import { FcGoogle } from "react-icons/fc"
-// import { FaApple } from "react-icons/fa"
-// import { BsMicrosoft } from "react-icons/bs"
-import { useEffect, useState } from "react"
-import "../style/loginSignup.css"
-import { LogIn } from "lucide-react"
-import { useDispatch, useSelector } from "react-redux"
-import { signupCustomer, loginCustomer, loginGoogleCustomer, loginInternal } from "../actions/post"
-import { useLocation, useNavigate } from "react-router-dom"
+// import { useForm } from "react-hook-form";
+// import { FcGoogle } from "react-icons/fc";
+// import { FaApple } from "react-icons/fa";
+// import { BsMicrosoft } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import "../style/loginSignup.css";
+import { useDispatch, useSelector } from "react-redux";
+import { signupCustomer, loginCustomer, loginGoogleCustomer, loginInternal } from "../actions/post";
+import { useLocation, useNavigate } from "react-router-dom";
 import { 
   loginCustomerSlice, 
   signupCustomerSlice, 
   loginGoogleCustomerSlice,
   loginInternalSlice,
-} from "../reducers/post"
-import {SpinnerFixed} from "../helper/spinner"
-import { setIsClose } from "../reducers/reducers"
-import { OrderTypeInvalidAlert, Toast, ToastPortal } from "./alert"
+} from "../reducers/post";
+import {SpinnerFixed} from "../helper/spinner";
+import { setIsClose } from "../reducers/reducers";
+import { LogIn, Eye, EyeOff } from "lucide-react";
+import { OrderTypeInvalidAlert, Toast, ToastPortal } from "./alert";
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -27,7 +27,8 @@ export default function RegisterPage() {
   const [showAlertError, setShowAlertError] = useState(false)
   const [toast, setToast] = useState(null)
   const location = useLocation()
-  const [showPassword, setShowPassword] = useState(false)
+  
+
 
   const isInternal = location.pathname.startsWith('/internal')
 
@@ -105,20 +106,20 @@ export default function RegisterPage() {
 
   useEffect(() => {
 
-    const errors = errorObject?.ErrorField || []
+    const errors = errorObject?.ErrorField || [];
 
-    const emailError = errors.find(err => err.Email)?.Email || null
-    const usernameError = errors.find(err => err.Username)?.Username || null
-    const passwordError = errors.find(err => err.Password)?.Password || null
+    const emailError = errors.find(err => err.Email)?.Email || null;
+    const usernameError = errors.find(err => err.Username)?.Username || null;
+    const passwordError = errors.find(err => err.Password)?.Password || null;
 
     setFormSignup(prev => ({
       ...prev,
       repeatPassword: ''
     }))
     
-    setEmailErrSign(emailError)
-    setUsernameErrSign(usernameError)
-    setPasswordErrSign(passwordError)
+    setEmailErrSign(emailError);
+    setUsernameErrSign(usernameError);
+    setPasswordErrSign(passwordError);
   }, [errorObject])
 
 
@@ -146,7 +147,7 @@ export default function RegisterPage() {
       setFormSignup((prev) => ({
         ...prev,
         [name]: value,
-      }))
+      }));
     } else {
       setFormLogin((prev) => ({
         ...prev,
@@ -209,15 +210,15 @@ export default function RegisterPage() {
 
   // useEffect(() => {
   //   if (data) {
-  //     setShowAlertVerificationSuccess(true)
+  //     setShowAlertVerificationSuccess(true);
 
   //     const timer = setTimeout(() => {
-  //       setShowAlertVerificationSuccess(false)
-  //     }, 2000)
+  //       setShowAlertVerificationSuccess(false);
+  //     }, 2000);
 
-  //     return () => clearTimeout(timer)
+  //     return () => clearTimeout(timer);
   //   }
-  // }, [data])
+  // }, [data]);
 
   useEffect(() => {
     if (data) {
@@ -225,16 +226,15 @@ export default function RegisterPage() {
             type: 'success',
             message: 'Verifikasi berhasil! Silakan login.',
         })
-
         // Clear state after showing toast
-        navigate(location.pathname, { replace: true })
+        navigate(location.pathname, { replace: true });
     }
   }, [data])
 
 
 
   // handle login dan signup google
-  const { orderTakeAway, tableId } = useSelector((state) => state.persisted.orderType)
+  const {tableId, orderTakeAway, isClose} = useSelector((state) => state.persisted.orderType)
   const {resetLoginGoogleCustomer} = loginGoogleCustomerSlice.actions
   const {errorLoginGoogleCustomer, loadingLoginGoogleCustomer} = useSelector((state) => state.loginGoogleCustomerState)
 
@@ -242,7 +242,7 @@ export default function RegisterPage() {
     setSpinner(loadingLoginGoogleCustomer)
   }, [loadingLoginGoogleCustomer])
   
-
+  
   const handleLoginAndSignupGoogle = () => {
     dispatch(setLoginStateNullCustomer())
     dispatch(resetSignupCustomer())
@@ -258,7 +258,7 @@ export default function RegisterPage() {
         password: '',
         repeatPassword: '',
       })
-      
+
       dispatch(loginGoogleCustomer({
         order_type_url: orderTakeAway
           ? "/?order_type_take_away=true"
@@ -278,22 +278,21 @@ export default function RegisterPage() {
   }, [errorLoginGoogleCustomer, errorLoginInternal, errorLogin])
 
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false)
+  
   // Determine current password value
-  const passwordValue = signup ? formSignup?.password : formLogin?.password
+  const passwordValue = signup ? formSignup?.password : formLogin?.password;
 
   // Determine if field has error
   const hasError = !signup
     ? (isInternal ? !!errPassInternal : !!errPass)
-    : !!passwordErrSign
+    : !!passwordErrSign;
 
   // Get error message
   const errorMessage = !signup
     ? (isInternal ? errPassInternal : errPass)
-    : passwordErrSign
+    : passwordErrSign;
 
 
   const handleToForgotPassword = () => {
@@ -415,7 +414,7 @@ export default function RegisterPage() {
                   </svg>
                 </div>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={signup ? formSignup?.password : formLogin?.password}
                   onChange={handleChange}
@@ -427,6 +426,19 @@ export default function RegisterPage() {
                   }`}
                   required
                 />
+                {signup && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(prev => !prev)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                )}
               </div>
               {(!signup ? (isInternal ? errPassInternal : errPass) : passwordErrSign) && (
                 <p className="text-red-500 text-sm">
@@ -448,7 +460,7 @@ export default function RegisterPage() {
                     </svg>
                   </div>
                   <input
-                    type="password"
+                    type={showRepeatPassword ? "text" : "password"}
                     name="repeatPassword"
                     value={formSignup.repeatPassword}
                     onChange={handleChange}
@@ -458,6 +470,17 @@ export default function RegisterPage() {
                     }`}
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowRepeatPassword(prev => !prev)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  >
+                    {showRepeatPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
                 {repeatPassword && (
                   <p className="text-red-500 text-sm">
@@ -472,13 +495,12 @@ export default function RegisterPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
-                    id="remember-me"
-                    name="remember-me"
+                    onChange={(e) => setShowPassword(e.target.checked)}
                     type="checkbox"
                     className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                   />
                   <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                    Remember me
+                    Show Password
                   </label>
                 </div>
                 <div className="text-sm">
@@ -571,5 +593,5 @@ export default function RegisterPage() {
         <SpinnerFixed colors={isInternal ? 'fill-gray-900' : 'fill-green-500'} />
       )}
     </div>
-  )
+  );
 }

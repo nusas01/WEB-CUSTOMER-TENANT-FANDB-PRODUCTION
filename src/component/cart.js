@@ -367,8 +367,7 @@ function Cart({ closeCart }) {
                     : message.data?.redirect_url_mobile
             
                 if (redirectUrl) {
-                    window.open(redirectUrl, "_blank") 
-                    navigate("/activity", { state: { filterActivity: "on going" }})
+                    window.location.href = redirectUrl;
                 }
             })
         }
@@ -564,7 +563,7 @@ function Cart({ closeCart }) {
         <div>
             <div className="item-container-cart p-6 bg-gray-50">
                 <ModernStoreBrand 
-                    storeName="nusas resto"
+                    storeName="mora coffee"
                     location="kp tunngul jaya rt/rw 007/001, serang, Banten"
                     rating={5}
                     totalReviews={1000}

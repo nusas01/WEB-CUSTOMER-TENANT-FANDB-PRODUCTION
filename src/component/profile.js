@@ -101,15 +101,12 @@ export default function Profile() {
     useEffect(() => {
         if (message) {
             dispatch(resetLogoutCustomer())
-            dispatch(successFetchProducts([]))
             dispatch(fetchSuccessGetDataCustomer({}))
-            dispatch(fetchSuccessGetPaymentMethodsCustomer({payment_methods: []}))
-            dispatch(setOrderTypeContext({orderTakeAway: null, tableId: null}))
             dispatch(setLoginStatusCustomer(null))
             dispatch(fetchSuccessGetTransactionOnGoingCustomer([]))
             dispatch(fetchSuccessGetTransactionHistoryCustomer(null))
             dispatch(clearCart())
-            window.location.href = "/"
+            navigate("/")
         }
     }, [message])
 
@@ -131,7 +128,7 @@ export default function Profile() {
 
     useEffect(() => {
         if (!loggedIn) {
-            navigate("/access")
+            navigate("/access", { replace: true })
         }
     }, [])
 

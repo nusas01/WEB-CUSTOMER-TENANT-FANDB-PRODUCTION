@@ -13,6 +13,7 @@ import {
     fetchTransactionHistoryCustomer, 
     fetchTransactionOnGoingCustomer,
     fetchGetDataCustomer,
+    checkStatusTransactionCustomer,
 } from "../actions/get"
 import { SpinnerRelative } from "../helper/spinner"
 import { buttonActivityCustomerSlice } from "../reducers/reducers"
@@ -20,6 +21,7 @@ import {
     Clock, 
     AlertCircle, 
     ChevronRight,
+    RefreshCcw,
     CheckCircle,
     Loader2,
     Package,
@@ -49,7 +51,7 @@ export default function Activity() {
 
     useEffect(() => {
         if (!loggedIn) {
-            navigate("/access")
+            navigate("/access", { replace: true })
         }
     }, [])
 
@@ -180,7 +182,7 @@ export default function Activity() {
                     </div>
 
                     {((buttonActive === 'history' && loadingHistory) || (buttonActive === 'on going' && loading)) && (
-                        <SpinnerRelative h="h-[70vh]"/>
+                        <SpinnerRelative h="h-[70vh]" colors="fill-green-500"/>
                     )}
 
                     {/* HISTORY */}
@@ -387,35 +389,47 @@ export default function Activity() {
 
                                                     {/* Payment Actions */}
                                                     {data.status_transaction !== 'PAID' && (
-                                                        <div className="mt-4 p-4 bg-white rounded-lg border border-amber-200">
-                                                            <div className="flex items-center gap-2 mb-3">
-                                                                <Clock className="w-4 h-4 text-amber-600" />
-                                                                <span className="text-sm text-amber-700 font-medium">
-                                                                    Bayar sebelum {FormatISODate(data.expires_at)}
-                                                                </span>
+                                                            <div className="mt-4 p-4 bg-white rounded-lg border border-amber-200">
+                                                                <div className="flex items-center gap-2 mb-3">
+                                                                    <Clock className="w-4 h-4 text-amber-600" />
+                                                                    <span className="text-sm text-amber-700 font-medium">
+                                                                        Bayar sebelum {FormatISODate(data.expires_at)}
+                                                                    </span>
+                                                                </div>
+
+                                                                {/* Tombol Bayar */}
+                                                                <button
+                                                                    onClick={() => {
+                                                                        if (data.payment_method_type === "EWALLET" && data.channel_code !== 'OVO') {
+                                                                            window.open(data.payment_reference, "_blank")
+                                                                        } else {
+                                                                            handlePembayaran({
+                                                                                id: data.id,
+                                                                                amount: data.amount_price,
+                                                                                methodPembayaran: data.payment_method_type,
+                                                                                exp: data.expires_at,
+                                                                                unixNumber: data.payment_reference,
+                                                                                channel_code: data.channel_code,
+                                                                            })
+                                                                        }
+                                                                    }}
+                                                                    className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg"
+                                                                >
+                                                                    <CreditCard className="w-5 h-5" />
+                                                                    Bayar Sekarang
+                                                                </button>
+
+                                                                {/* Tombol Cek Status */}
+                                                                <button
+                                                                    onClick={() => dispatch(checkStatusTransactionCustomer({transaction_id: data.id}))}
+                                                                    className="mt-3 w-full bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-medium py-2.5 px-6 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border border-gray-300"
+                                                                >
+                                                                    <RefreshCcw className="w-4 h-4 text-gray-600" />
+                                                                    Cek Status Pembayaran
+                                                                </button>
                                                             </div>
-                                                            <button
-                                                                onClick={() => {
-                                                                    if (data.payment_method_type === "EWALLET" && data.channel_code !== 'OVO') {
-                                                                        window.open(data.payment_reference, "_blank") 
-                                                                    } else {
-                                                                        handlePembayaran({
-                                                                            id: data.id,
-                                                                            amount: data.amount_price,
-                                                                            methodPembayaran: data.payment_method_type,
-                                                                            exp: data.expires_at,
-                                                                            unixNumber: data.payment_reference,
-                                                                            channel_code: data.channel_code,
-                                                                        })
-                                                                    }
-                                                                }}
-                                                                className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg"
-                                                            >
-                                                                <CreditCard className="w-5 h-5" />
-                                                                Bayar Sekarang
-                                                            </button>
-                                                        </div>
-                                                    )}
+                                                        )}
+
 
                                                     {data.status_transaction === 'FINISHED' && (
                                                         <div className="flex justify-end mt-4">

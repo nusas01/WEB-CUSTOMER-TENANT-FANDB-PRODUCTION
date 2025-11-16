@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
   forgotPasswordCustomerSlice,
   forgotPasswordInternalSlice,
@@ -13,20 +13,20 @@ import {
   Toast, 
   ToastPortal
 } from './alert'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 
 const ForgotPasswordComponent = ({type}) => {
   const dispatch = useDispatch()
-  const [email, setEmail] = useState('')
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [error, setError] = useState('')
+  const [email, setEmail] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState('');
   const [toast, setToast] = useState(null)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const {resetForgotPasswordCustomer} = forgotPasswordCustomerSlice.actions
   const {
@@ -84,16 +84,16 @@ const ForgotPasswordComponent = ({type}) => {
   const handleSubmit = () => {
     dispatch(resetForgotPasswordInternal())
     dispatch(resetForgotPasswordCustomer())
-    setError('')
+    setError('');
 
     if (!email) {
-      setError('Email address is required')
-      return
+      setError('Email address is required');
+      return;
     }
 
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address')
-      return
+      setError('Please enter a valid email address');
+      return;
     }
 
     if (type === "customer") {
@@ -102,35 +102,41 @@ const ForgotPasswordComponent = ({type}) => {
       dispatch(forgotPasswordInternal({email: email}))
     }
 
-  }
+  };
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col py-12 px-6 sm:px-6 lg:px-8">
-
-        <div className="mt-20 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="min-h-screen bg-gray-50 flex justify-center items-center py-12 px-6 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-12 px-8 shadow-lg sm:rounded-2xl border border-gray-100">
             <div className="text-center">
-              <div className={`mx-auto flex items-center justify-center h-16 w-16 rounded-full ${ type === "customer" ? 'bg-green-100' : 'bg-gray-100' }  mb-6`}>
+              <div className={`mx-auto flex items-center justify-center h-16 w-16 rounded-full ${ type === "customer" ? 'bg-green-100' : 'bg-gray-100' } mb-6`}>
                 <CheckCircle className={`h-8 w-8 ${ type === "customer" ? 'text-green-500' : 'text-gray-900'}`} />
               </div>
-              
+
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
                 Check your email
               </h2>
-              
+
               <p className="text-gray-600 mb-2">
                 We've sent a password reset link to
               </p>
-              
-              <p className={` ${ type === "customer" ? 'text-green-600' : 'text-gray-900'} font-semibold mb-8`}>
+
+              <p className={`${type === "customer" ? 'text-green-600' : 'text-gray-900'} font-semibold mb-8`}>
                 {email}
               </p>
-              
-              <p className="text-sm text-gray-500 mb-8">
+
+              <p className="text-sm text-gray-500 mb-3">
                 Didn't receive the email? Check your spam folder or contact support if you continue to have problems.
               </p>
-              
+
+              <div className="flex items-start gap-2 bg-yellow-50 border border-yellow-300 text-yellow-800 p-3 rounded-lg text-sm mb-8">
+                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <p>
+                  Jika email tidak ditemukan di kotak masuk Anda, silakan periksa juga folder <strong>Spam</strong> atau <strong>Promotions</strong>. Terkadang email reset password dapat masuk ke sana.
+                </p>
+              </div>
+
               <button
                 onClick={() => handleBackToLogin()}
                 className={`w-full flex justify-center items-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 ${ type === 'customer' ? 'focus:ring-green-500' : 'focus:ring-gray-900'} focus:ring-offset-2 transition-colors duration-200`}
@@ -138,11 +144,12 @@ const ForgotPasswordComponent = ({type}) => {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to login
               </button>
+
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -197,8 +204,8 @@ const ForgotPasswordComponent = ({type}) => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => {
-                    setEmail(e.target.value)
-                    if (error) setError('')
+                    setEmail(e.target.value);
+                    if (error) setError('');
                   }}
                 />
               </div>
@@ -239,7 +246,7 @@ const ForgotPasswordComponent = ({type}) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ForgotPasswordComponent
+export default ForgotPasswordComponent;

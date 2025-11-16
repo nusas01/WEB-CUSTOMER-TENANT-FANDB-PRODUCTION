@@ -32,6 +32,7 @@ import {
     searchOrderInternalSlice,
     getSearchTransactionInternalSlice,getDetailTransactionsHistoryCustomerSlice,
     getEmployeesSlice,
+    checkStatusTransactionCustomerSlice,
  } from "../reducers/get.js"
  import {
     statusExpiredTokenSlice,
@@ -271,6 +272,48 @@ export const fetchTransactionOnGoingCustomer = () => {
         } finally {
             dispatch(setLoadingGetTransactionOnGoingCustomer(false))
         }
+    }
+}
+
+const { updateTransactionOnGoingStatusById } = getTransactionOnGoingCustomerSlice.actions
+const { checkTransactionStatusCustomerSuccess, checkTransactionStatusCustomerError, setLoadingCheckStatusTransactionCustomer} = checkStatusTransactionCustomerSlice.actions
+export const checkStatusTransactionCustomer = (data) => {
+    return async (dispatch, getState) => {
+      const { statusExpiredToken } = getState().statusExpiredTokenState
+      if (statusExpiredToken) return 
+
+      dispatch(setLoadingCheckStatusTransactionCustomer(true))
+      try {
+          const response = await axiosInstance.get(`${process.env.REACT_APP_CHECK_STATUS_TRANSACTION}`, { 
+              withCredentials: true,
+              headers: {
+                "x-api-key": process.env.REACT_APP_API_KEY,
+              },
+              params: data,
+          })
+          dispatch(checkTransactionStatusCustomerSuccess(response.data))
+          dispatch(updateTransactionOnGoingStatusById(response?.data))
+      } catch(error) {
+          if (error.response?.data?.code === "TOKEN_EXPIRED") {
+              dispatch(setStatusExpiredToken(true))
+          } 
+
+          if (error.response?.data?.code === "TOKEN_INTERNAL_EXPIRED") {
+            dispatch(setStatusExpiredInternalToken(true))
+          }
+
+          if (error.response?.data?.code === "TOKEN_USER_EXPIRED") {
+            dispatch(setStatusExpiredUserToken(true))
+          }
+
+          if (error.response?.data?.code === "SERVICE_ON_MAINTENANCE") {
+            dispatch(setStatusServiceMaintenance(true))
+          }
+
+          dispatch(checkTransactionStatusCustomerError(error.response?.data?.error))
+      } finally {
+          dispatch(setLoadingCheckStatusTransactionCustomer(false))
+      }
     }
 }
 

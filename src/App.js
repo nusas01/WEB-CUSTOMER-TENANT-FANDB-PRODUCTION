@@ -49,11 +49,6 @@ import {
   loginStatusCustomerSlice,
   logoutInternalSlice,
   logoutCustomerSlice,
-  getProductsCustomerSlice,
-  getDataCustomerSlice,
-  getPaymentMethodsCustomerSlice,
-  getTransactionOnGoingCustomerSlice,
-  getTransactionsHistoryCustomerSlice,
 } from './reducers/get'
 import EmployeeManagement from './casier/employee'
 import CreateEmployee from './casier/createEmployee'
@@ -151,28 +146,25 @@ function AppContent() {
   }, [statusExpiredToken])
 
   // handle expired user token
-  const { successFetchProducts } = getProductsCustomerSlice.actions
-  const { fetchSuccessGetDataCustomer } = getDataCustomerSlice.actions
-  const { fetchSuccessGetPaymentMethodsCustomer } = getPaymentMethodsCustomerSlice.actions
   const { setLoginStatusCustomer } = loginStatusCustomerSlice.actions
-  const { fetchSuccessGetTransactionOnGoingCustomer } = getTransactionOnGoingCustomerSlice.actions
-  const { fetchSuccessGetTransactionHistoryCustomer } = getTransactionsHistoryCustomerSlice.actions
-  
   const { resetLogoutCustomer } = logoutCustomerSlice.actions
   const { clearStatusExpiredUserToken } = statusExpiredUserTokenSlice.actions
   const { statusExpiredUserToken } = useSelector((state) => state.statusExpiredUserTokenState)
   useEffect(() => {
     if (statusExpiredUserToken) {
+      // dispatch(successFetchProducts([]))
+      // dispatch(fetchSuccessGetDataCustomer({}))
+      // dispatch(fetchSuccessGetPaymentMethodsCustomer({payment_methods: []}))
+      // dispatch(setOrderTypeContext({orderTakeAway: null, tableId: null}))
+      // dispatch(setLoginStatusCustomer(null))
+      // dispatch(fetchSuccessGetTransactionOnGoingCustomer([]))
+      // dispatch(fetchSuccessGetTransactionHistoryCustomer(null))
+      // dispatch(clearCart())
+      // window.location.href = "/"
+      navigate("/access");
       dispatch(resetLogoutCustomer())
-      dispatch(successFetchProducts([]))
-      dispatch(fetchSuccessGetDataCustomer({}))
-      dispatch(fetchSuccessGetPaymentMethodsCustomer({payment_methods: []}))
-      dispatch(setOrderTypeContext({orderTakeAway: null, tableId: null}))
-      dispatch(setLoginStatusCustomer(null))
-      dispatch(fetchSuccessGetTransactionOnGoingCustomer([]))
-      dispatch(fetchSuccessGetTransactionHistoryCustomer(null))
-      dispatch(clearCart())
-      window.location.href = "/"
+      dispatch(clearStatusExpiredUserToken())
+      dispatch(setLoginStatusCustomer(false))
     }
   }, [statusExpiredUserToken])
 
