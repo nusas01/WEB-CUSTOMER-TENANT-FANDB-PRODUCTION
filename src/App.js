@@ -22,7 +22,10 @@ import {
   fetchGetDataCustomer, 
   fetchDataEmployeeInternal, 
   fetchAssetsStoreInternal,
+  fetchOrdersInternal,
   fetchTransactionOnGoingCustomer,
+  fetchTransactionCashOnGoingInternal,
+  fetchTransactionNonCashOnGoingInternal, 
 } from './actions/get'
 import { GeneralJournalForm } from './casier/finance/inputGeneralJournal'
 import { useDispatch, useSelector } from 'react-redux'
@@ -81,6 +84,30 @@ function InternalWrapper() {
     if (!dataAssetsStoreInternal || Object.keys(dataAssetsStoreInternal).length === 0) {
       dispatch(fetchAssetsStoreInternal())
     }
+  }, [])
+
+  // fecth order internal store
+  const { dataOrdersInternal } = useSelector((state) => state.persisted.dataOrdersInternal)
+  useEffect(() => {
+    if (!dataOrdersInternal || dataOrdersInternal.length === 0) {
+      dispatch(fetchOrdersInternal())
+    }
+  }, [])
+
+  // get transaction cash on going internal store
+  const {dataTransactionCashInternal} = useSelector((state) => state.persisted.transactionCashOnGoingInternal)
+  useEffect(() => {
+  if (dataTransactionCashInternal.length === 0) {
+      dispatch(fetchTransactionCashOnGoingInternal())
+    }
+  }, [])
+  
+  // get transaction non cash on going internal store
+  const {dataTransactionNonCashInternal} = useSelector((state) => state.persisted.transactionNonCashOnGoingInternal)
+  useEffect(() => {
+      if (dataTransactionNonCashInternal.length === 0) {
+        dispatch(fetchTransactionNonCashOnGoingInternal())
+      }
   }, [])
 
   return <Outlet /> // render semua child route internal

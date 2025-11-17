@@ -279,12 +279,6 @@ export default function Buy() {
                                     Jumlah transfer akan otomatis terisi sesuai dengan total pembayaran pesanan Anda. Pastikan jumlah yang tertera sesuai, lalu pilih Ya
                                 </p>
                             </div>
-                            <div className="flex gap-3">
-                                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">5</span>
-                                <p className="text-gray-700 leading-relaxed">
-                                    Periksa informasi di layar. Pastikan Merchant adalah <span className="font-medium text-gray-900">NusasFood</span> dan detail pesanan sudah benar. Jika sudah sesuai, pilih Ya
-                                </p>
-                            </div>
                         </div>
                     </div>
                 </div>

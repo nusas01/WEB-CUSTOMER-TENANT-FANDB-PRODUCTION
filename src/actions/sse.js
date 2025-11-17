@@ -119,12 +119,12 @@ const SSEOrderInternal = () => {
     useSSE(url, (data) => {
         dispatch(appendOrdersInternal(data))
 
-        if (!data.email || data.email !== '') {
+        if (data?.email && data?.email !== '') {
             dispatch(removeGetAllCreateTransactionById(data.id))
             dispatch(addPaymentSuccessTransactionCashier(data))
         }
 
-        if (!data.username || data.username !== '') {
+        if (data?.username && data?.username !== '') {
             dispatch(removeTransactionNonCashOnGoingInternalById(data.id))
         }
     })

@@ -53,8 +53,8 @@ const handleDownloadQR = async (
           ctx.fillStyle = '#64748b'
           ctx.font = '16px Arial, sans-serif'
           const subtitleText = isTakeAway 
-            ? 'Scan kode QR untuk pesan take away' 
-            : 'Scan kode QR untuk melakukan pemesanan'
+            ? 'Scan QR untuk pesan take away' 
+            : 'Scan QR untuk pesan dari meja Anda'
           ctx.fillText(subtitleText, padding, padding + 75)
 
           // Divider line
@@ -70,14 +70,14 @@ const handleDownloadQR = async (
 
           ctx.fillStyle = '#1e293b'
           ctx.font = 'bold 18px Arial, sans-serif'
-          ctx.fillText('How to Order:', padding, currentY)
+          ctx.fillText('Cara Pesan:', padding, currentY)
           currentY += 35
 
           const steps = [
-            { num: '1', text: 'Open your phone camera' },
-            { num: '2', text: 'Point at the QR code' },
-            { num: '3', text: 'Tap the notification' },
-            { num: '4', text: 'Browse & order easily' }
+            { num: '1', text: 'Buka kamera ponsel Anda' },
+            { num: '2', text: 'Arahkan ke kode QR' },
+            { num: '3', text: 'Ketuk notifikasi yang muncul' },
+            { num: '4', text: 'Pilih menu & pesan' }
           ]
 
           ctx.font = '15px Arial, sans-serif'
@@ -151,15 +151,23 @@ const handleDownloadQR = async (
           ctx.fillStyle = '#92400e'
           ctx.font = 'bold 15px Arial, sans-serif'
           ctx.textAlign = 'left'
-          ctx.fillText('Security Check', padding + 45, securityBoxY + 30)
+          ctx.fillText('Penting', padding + 45, securityBoxY + 30)
 
           ctx.fillStyle = '#78716c'
           ctx.font = '13px Arial, sans-serif'
           const securityLines = [
-            `Verify URL: https://${window.location.hostname}`,
-            'Ensure browser shows "Secure" connection',
-            'Report any suspicious warnings to staff'
-          ]
+            `Pastikan URL: https://${window.location.hostname}`,
+            ...(tableNumber !== null && takeAway === null
+              ? [
+                  'Scan hanya saat Anda sudah berada di lokasi',
+                  'Sistem ini tidak mendukung booking meja',
+                ]
+              : [
+                'Periksa kembali pesanan Anda sebelum konfirmasi',
+                'Qrcode ini tidak mendukung pesanan meja',
+              ]),
+          ];
+
 
           let secY = securityBoxY + 55
           securityLines.forEach(line => {
@@ -247,7 +255,8 @@ const handleDownloadQR = async (
           ctx.fillStyle = '#cbd5e1'
           ctx.font = '11px Arial, sans-serif'
           ctx.textAlign = 'center'
-          ctx.fillText('Your safety and comfort are our priority • Thank you for visiting!', width / 2, height - 20)
+          const marginTop = 10;
+          ctx.fillText('Selamat menikmati hidangan Anda • Terima kasih atas kunjungannya!', width / 2, height - 20 + marginTop)
 
           // === DECORATIVE ELEMENTS ===
           // Top-left corner accent
