@@ -135,6 +135,9 @@ export default function Activity() {
         }
     }, [tableId, orderTakeAway, isClose])
 
+    // handle loading check status transaction customer
+    const { loadingCheckTransactionCustomer } = useSelector((state) => state.checkStatusTransactionCustomerState)
+    
     return (
         <div>
             <div className="container-activity bg-light">
@@ -421,11 +424,29 @@ export default function Activity() {
 
                                                                 {/* Tombol Cek Status */}
                                                                 <button
-                                                                    onClick={() => dispatch(checkStatusTransactionCustomer({transaction_id: data.id}))}
-                                                                    className="mt-3 w-full bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-medium py-2.5 px-6 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 border border-gray-300"
-                                                                >
-                                                                    <RefreshCcw className="w-4 h-4 text-gray-600" />
-                                                                    Cek Status Pembayaran
+                                                                    onClick={() =>
+                                                                        dispatch(
+                                                                        checkStatusTransactionCustomer({ transaction_id: data.id })
+                                                                        )
+                                                                    }
+                                                                    disabled={loadingCheckTransactionCustomer}
+                                                                    className={`mt-3 w-full bg-gradient-to-r from-gray-100 to-gray-200 
+                                                                        hover:from-gray-200 hover:to-gray-300 text-gray-700 font-medium py-2.5 px-6 
+                                                                        rounded-xl transition-all duration-150 flex items-center justify-center gap-2 
+                                                                        border border-gray-300
+                                                                        ${loadingCheckTransactionCustomer ? "opacity-70 cursor-not-allowed" : ""}`}
+                                                                    >
+                                                                    {loadingCheckTransactionCustomer ? (
+                                                                        <>
+                                                                        <Loader2 className="w-4 h-4 animate-spin text-gray-600" />
+                                                                        Memeriksa...
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                        <RefreshCcw className="w-4 h-4 text-gray-600" />
+                                                                        Cek Status Pembayaran
+                                                                        </>
+                                                                    )}
                                                                 </button>
                                                             </div>
                                                         )}
