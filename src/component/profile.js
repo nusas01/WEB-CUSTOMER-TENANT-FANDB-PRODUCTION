@@ -23,7 +23,6 @@ import {
 } from "../reducers/get"
 import { setPasswordCustomerSlice } from "../reducers/patch"
 import { clearCart } from "../reducers/cartSlice"
-import { ModernStoreBrand } from "./model"
 
 function ProfileActivitySkeleton() {
   return (
@@ -202,14 +201,6 @@ export default function Profile() {
                         </div>
                     </ToastPortal>
                 )}
-
-                <ModernStoreBrand 
-                    storeName="nusas resto"
-                    location="kp tunngul jaya rt/rw 007/001, serang, Banten"
-                    rating={5}
-                    totalReviews={1000}
-                    phone="6289524474969"
-                />
 
                 <div className="body-activity">
                     {!loading && !initialLoad ? (

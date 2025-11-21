@@ -4,15 +4,8 @@ import {
   X, 
   AlertTriangle, 
   Trash2,
-  Store,
-  MapPin,
-  ChevronDown,
-  Star,
-  Clock,
-  Share2,
   UtensilsCrossed,
-  ShoppingBag,
-  AlertCircle,
+  Utensils
 } from "lucide-react"
 import { useRef } from "react"
 import {
@@ -173,305 +166,67 @@ export const DeleteEmployeeConfirmation = ({
   )
 }
 
-export const ModernStoreBrand = ({ 
-  storeName,
-  location,
-  isOpen = true,
-  rating = 4.8,
-  totalReviews = 1234,
-  phone
-}) => {
-  const dispatch = useDispatch()
+export const ModernStoreBrand = () => {
+  const dispatch = useDispatch();
 
-  const { setStoreInfoCustomer: setIsMinimized, setModelPosition} = storeInfoCustomerSlice.actions
-  const { statusStoreInfo: isMinimized, modelPosition} = useSelector((state) => state.persisted.storeInfoCustomer)
+  const { numberTable, loading: tableLoading, error: tableError } =
+    useSelector((state) => state.persisted.getNumberTableCustomer);
 
-  useEffect(() => {
-    if (!modelPosition || Object.keys(modelPosition).length === 0) {
-      dispatch(setModelPosition({ x: 25, y: 70 }))
-    }
-  }, [dispatch])
-
-  const {
-    numberTable,
-    loading: tableLoading,
-    error: tableError,
-  } = useSelector((state) => state.persisted.getNumberTableCustomer)
-
-  const { tableId, orderTakeAway } = useSelector((state) => state.persisted.orderType)
+  const { tableId, orderTakeAway } = useSelector(
+    (state) => state.persisted.orderType
+  );
 
   useEffect(() => {
     if (tableId && !numberTable) {
-      dispatch(fetchNumberTableCustomer(tableId))
+      dispatch(fetchNumberTableCustomer(tableId));
     }
-  }, [tableId, dispatch])
+  }, [tableId, dispatch]);
 
-  // Handle share location to WhatsApp
-  const handleShareToWhatsApp = () => {
-    const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`
+  const isInvalid =
+    (!tableId && !orderTakeAway) ||
+    tableError ||
+    (!numberTable && !orderTakeAway && !tableLoading);
 
-    const message = [
-      `🏬 *${storeName}*`,
-      `📍 Lokasi: ${location}`,
-      `⭐ Rating: ${rating} (${totalReviews.toLocaleString()} ulasan)`,
-      `🕒 Status: ${isOpen ? 'Buka' : 'Tutup'} (10:00 - 22:00)`,
-      '',
-      `Lihat di Google Maps: ${googleMapsLink}`,
-      '',
-      `Kunjungi sekarang dan rasakan pelayanan terbaik dari kami! ✨`
-    ].join('\n')
-
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
-  }
-
-  // Determine if we should show table section
-  const isValidTable = numberTable && !tableError && !tableLoading
-
-  const elRef = useRef(null)
-  const dragging = useRef(false)
-  const offsetRef = useRef({ x: 0, y: 0 })
-
-  useEffect(() => {
-    // Pas mount, set posisi awal dari Redux
-    if (elRef.current) {
-      elRef.current.style.transform = `translate3d(${modelPosition.x}px, ${modelPosition.y}px, 0)`
-    }
-  }, [modelPosition])
-
-  useEffect(() => {
-    const onMove = (e) => {
-      if (!dragging.current) return
-      e.preventDefault()
-
-      const clientX = e.clientX ?? e.touches?.[0]?.clientX
-      const clientY = e.clientY ?? e.touches?.[0]?.clientY
-
-      const newX = clientX - offsetRef.current.x
-      const newY = clientY - offsetRef.current.y
-
-      if (elRef.current) {
-        elRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0)`
-      }
-
-      dispatch(setModelPosition({ x: newX, y: newY }))
-    }
-
-    const onEnd = () => {
-      if (!dragging.current) return
-      dragging.current = false
-      if (elRef.current) {
-        elRef.current.style.cursor = 'grab'
-      }
-    }
-
-    window.addEventListener('mousemove', onMove, { passive: false })
-    window.addEventListener('mouseup', onEnd)
-    window.addEventListener('touchmove', onMove, { passive: false })
-    window.addEventListener('touchend', onEnd)
-
-    return () => {
-      window.removeEventListener('mousemove', onMove)
-      window.removeEventListener('mouseup', onEnd)
-      window.removeEventListener('touchmove', onMove)
-      window.removeEventListener('touchend', onEnd)
-    }
-  }, [dispatch])
-
-  const onStart = (e) => {
-    e.preventDefault()
-    dragging.current = true
-
-    const clientX = e.clientX ?? e.touches?.[0]?.clientX
-    const clientY = e.clientY ?? e.touches?.[0]?.clientY
-
-    const rect = elRef.current.getBoundingClientRect()
-    offsetRef.current = {
-      x: clientX - rect.left,
-      y: clientY - rect.top
-    }
-
-    if (elRef.current) {
-      elRef.current.style.cursor = 'grabbing'
-    }
-  }
-  
   return (
-    <div
-      ref={elRef}
-      onMouseDown={onStart}
-      onTouchStart={onStart}
-      style={{
-        position: "fixed",
-        top: "20px",
-        left: "20px",
-        transform: `translate3d(${modelPosition.x}px, ${modelPosition.y}px, 0)`,
-        zIndex: 20,
-        cursor: "grab",
-        touchAction: "none",
-        willChange: "transform",
-        userSelect: "none",
-      }}
-    >
-      <div className="relative group select-none">
-        <div
-          className={`relative bg-white/95 backdrop-blur-sm border border-gray-200 shadow-lg overflow-hidden pointer-events-auto ${
-            isMinimized ? "rounded-xl w-[70px]" : "rounded-2xl w-[260px]"
-          } transition-all duration-300`}
-        >
-          {/* Gradient top bar */}
-          <div className="h-0.5 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
-          </div>
-
-          {/* MINIMIZED VIEW */}
-          {isMinimized ? (
-            <div className="p-3 flex flex-col items-center gap-1">
-              <button
-                onClick={() => dispatch(setIsMinimized(false))}
-                className="flex flex-col items-center gap-1"
-                aria-label="Expand store info"
-              >
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg blur-md opacity-40" />
-                  <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 p-2 rounded-lg">
-                    <Store className="w-4 h-4 text-white" strokeWidth={2.5} />
-                  </div>
-                </div>
-
-                {isOpen && (
-                  <div className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
-                  </div>
-                )}
-
-                {isValidTable && (
-                  <div className="bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                    {numberTable}
-                  </div>
-                )}
-
-                <ChevronDown className="w-4.2 h-4.2 text-gray-400 rotate-90" strokeWidth={2.5} />
-              </button>
-            </div>
-          ) : (
-            /* EXPANDED VIEW */
-            <div className="p-4">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  dispatch(setIsMinimized(true))
-                }}
-                className="absolute top-2 right-2 z-10 p-1 bg-gray-100 hover:bg-gray-200 rounded-md border border-gray-200 transition-all duration-200 btn-minimize"
-                aria-label="Minimize"
-              >
-                <ChevronDown className="w-4.2 h-4.2 text-gray-600 -rotate-90" strokeWidth={2.5} />
-              </button>
-
-              <div className="flex items-start gap-2 mb-3 pr-6">
-                <div className="relative flex-shrink-0">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg blur-md opacity-40" />
-                  <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 p-1.5 rounded-lg">
-                    <Store className="w-4 h-4 text-white" strokeWidth={2.5} />
-                  </div>
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <h1 className="text-sm font-bold text-gray-900 mb-0.5 truncate">{storeName}</h1>
-                  <div className="flex items-center gap-1 text-gray-600 mb-1">
-                    <MapPin className="w-3 h-3 text-green-500 flex-shrink-0" strokeWidth={2.5} />
-                    <span className="text-[10px] truncate">{location}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex items-center gap-0.5 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/50">
-                      <Star className="w-2.5 h-2.5 text-amber-500 fill-amber-500" strokeWidth={2.5} />
-                      <span className="text-[10px] font-bold text-amber-700">{rating}</span>
-                    </div>
-                    <span className="text-[9px] text-gray-500">({totalReviews.toLocaleString()})</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Status */}
-              <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
-                <div
-                  className={`flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-semibold ${
-                    isOpen
-                      ? "bg-green-50 text-green-700 border border-green-200"
-                      : "bg-red-50 text-red-700 border border-red-200"
-                  }`}
-                >
-                  <Clock className="w-3 h-3" strokeWidth={2.5} />
-                  <span>{isOpen ? "Buka" : "Tutup"}</span>
-                </div>
-                <div className="text-[9px] text-gray-600">
-                  <span className="font-medium">10:00</span> - <span className="font-medium">22:00</span>
-                </div>
-              </div>
-
-              {/* Table Info */}
-              <div className="mb-2 pb-2 border-b border-gray-100">
-                {orderTakeAway ? (
-                  <div className="bg-gradient-to-br from-amber-500 to-yellow-600 rounded-lg p-2 text-white text-xs font-medium">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-1">
-                        <ShoppingBag className="w-3.5 h-3.5" strokeWidth={2.5} />
-                        <span>Take Away</span>
-                      </div>
-                      <span className="text-[9px] bg-white/20 px-1.5 py-0.5 rounded">Verified</span>
-                    </div>
-                  </div>
-                ) : tableId && numberTable ? (
-                  <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-lg p-2 text-white text-xs font-medium">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-1">
-                        <UtensilsCrossed className="w-3.5 h-3.5" strokeWidth={2.5} />
-                        <span>Meja {numberTable}</span>
-                      </div>
-                      <span className="text-[9px] bg-white/20 px-1.5 py-0.5 rounded">Verified</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="px-2 py-1.5 bg-red-50 border border-red-200 rounded-lg">
-                    <div className="flex items-start gap-1">
-                      <AlertCircle className="w-3.5 h-3.5 text-red-600 mt-0.5" strokeWidth={2.5} />
-                      <p className="text-[9px] text-red-700">
-                        Gagal memuat data meja. Coba scan ulang QR code.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Share */}
-              <button
-                onClick={handleShareToWhatsApp}
-                className="w-full bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 active:scale-95 transition-transform"
-              >
-                <Share2 className="w-3.5 h-3.5" strokeWidth={2.5} />
-                Bagikan Lokasi
-              </button>
-
-              <div className="mt-2 flex justify-center text-[9px] text-gray-500 gap-1 items-center">
-                <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" />
-                <span>Verified Store</span>
-              </div>
-            </div>
-          )}
+    <div className="text-green-700 flex justify-center items-center mx-auto
+        w-[80%] 
+        px-0
+        max-[990px]:w-[90%]
+        max-[700px]:w-full max-[700px]:px-[10px]
+        pt-2"
+      >
+      {/* Loading */}
+      {tableLoading && (
+        <div className="flex w-full justify-center items-center gap-2 bg-green-100 px-4 py-2 rounded-xl text-xs font-semibold shadow-sm border border-green-200">
+          <Loader2 size={14} className="animate-spin" />
+          <span>Sedang memuat...</span>
         </div>
-      </div>
+      )}
 
-      <style jsx>{`
-        @keyframes shimmer {
-          0% {
-            transform: translateX(-100%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `}</style>
+      {/* Take Away */}
+      {!tableLoading && orderTakeAway && (
+        <div className="flex w-full justify-center items-center gap-2 bg-green-100 px-4 py-2 rounded-xl text-xs font-semibold shadow-sm border border-green-200">
+          <UtensilsCrossed size={14} />
+          <span>Pesanan Dibawa Pulang</span>
+        </div>
+      )}
+
+      {/* Dine In */}
+      {!tableLoading && !orderTakeAway && tableId && numberTable && (
+        <div className="flex w-full justify-center items-center gap-2 bg-green-100 px-4 py-2 rounded-xl text-xs font-semibold shadow-sm border border-green-200">
+          <Utensils size={14} />
+          <span>Meja {numberTable}</span>
+        </div>
+      )}
+
+      {/* Invalid */}
+      {!tableLoading && isInvalid && (
+        <div className="flex w-full justify-center items-center gap-2 bg-red-100 px-4 py-2 rounded-xl text-xs font-semibold text-red-700 border border-red-200 shadow-sm">
+          <AlertTriangle size={14} />
+          <span>Order tidak valid — Scan ulang QR Code</span>
+        </div>
+      )}
+
     </div>
-  )
-}
+  );
+};

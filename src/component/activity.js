@@ -29,9 +29,6 @@ import {
 } from 'lucide-react'
 import {getDetailTransactionsHistoryCustomerSlice} from '../reducers/get'
 import { setOrderTypeContext, setIsClose } from "../reducers/reducers"
-import {
-    ModernStoreBrand
-} from './model'
 
 export default function Activity() {
     const dispatch = useDispatch()
@@ -152,13 +149,6 @@ export default function Activity() {
                 )}
 
                 <div className="body-activity p-6">
-                    <ModernStoreBrand 
-                        storeName="nusas resto"
-                        location="kp tunngul jaya rt/rw 007/001, serang, Banten"
-                        rating={5}
-                        totalReviews={1000}
-                        phone="6289524474969"
-                    />
                     <div className="container-button-activity">
                         <button 
                             onClick={() => handleButtonActivity("on going")}

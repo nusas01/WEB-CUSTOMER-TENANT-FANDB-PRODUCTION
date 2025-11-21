@@ -26,6 +26,7 @@ import {
 import {
   ModernStoreBrand
 } from "./model"
+import { RestaurantFooter } from "./footer"
 
 function Home() {
   const dispatch = useDispatch()
@@ -541,15 +542,8 @@ function Home() {
         </ToastPortal>
         )}
 
-      <ModernStoreBrand 
-        storeName="nusas resto"
-        location="kp tunngul jaya rt/rw 007/001, serang, Banten"
-        rating={5}
-        totalReviews={1000}
-        phone="6289524474969"
-      />
-
       <div className="container-bg items-center mx-auto max-w-[600px]">
+        <ModernStoreBrand/>
         <div className={containerClass === "container-main-cart" ? "container-home" : `container-home-mobile`}>
           {datas.map((item, categoryIndex) => (
             <div
@@ -737,7 +731,9 @@ function Home() {
             </div>
           ))}
         </div>
-        
+      
+        <RestaurantFooter/>
+
         <BottomNavbar/>
       </div>
 

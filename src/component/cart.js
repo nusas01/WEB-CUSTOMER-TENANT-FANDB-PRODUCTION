@@ -31,7 +31,6 @@ import {createTransactionCustomerSlice} from "../reducers/post"
 import { setOrderTypeContext, setIsClose } from "../reducers/reducers"
 import { loginStatusCustomer } from "../actions/get"
 import { getPaymentMethodsCustomerSlice } from "../reducers/get"
-import { ModernStoreBrand } from "./model"
 
 function Cart({ closeCart }) {
     const [notesId, setNotesId] = useState('')
@@ -562,13 +561,6 @@ function Cart({ closeCart }) {
         {/* section item cart */}
         <div>
             <div className="item-container-cart p-6 bg-gray-50">
-                <ModernStoreBrand 
-                    storeName="mora coffee"
-                    location="kp tunngul jaya rt/rw 007/001, serang, Banten"
-                    rating={5}
-                    totalReviews={1000}
-                    phone="6289524474969"
-                />
                 {items.length > 0 ? items.map((item, index) => (
                     <div
                     key={index}
