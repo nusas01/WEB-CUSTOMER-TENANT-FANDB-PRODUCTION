@@ -26,7 +26,7 @@ import {
 import {
   ModernStoreBrand
 } from "./model"
-import { RestaurantFooter } from "./footer"
+import RestaurantFooter from "./footer"
 
 function Home() {
   const dispatch = useDispatch()

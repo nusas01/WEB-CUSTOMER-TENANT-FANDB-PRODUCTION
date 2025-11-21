@@ -13,7 +13,7 @@ export default function RestaurantFooter() {
             <div className="bg-white p-2.5 rounded-lg">
               <Utensils className="h-7 w-7 text-emerald-600" />
             </div>
-            <h3 className="text-2xl font-bold">Warung Nasi Goreng</h3>
+            <h3 className="text-2xl font-bold">nusas resto</h3>
           </div>
           <p className="text-gray-300 text-base leading-relaxed mb-5">
             Menyajikan hidangan nusantara dengan cita rasa autentik dan bahan berkualitas tinggi untuk kepuasan Anda.
